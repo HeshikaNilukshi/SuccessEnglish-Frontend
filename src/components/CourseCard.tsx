@@ -1,5 +1,4 @@
-import type { Course } from '../actions/courses'
-import { formatDate } from '../utils/format-datetime'
+import { formatDate } from '@/utils/format-datetime'
 
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
 
@@ -8,8 +7,7 @@ export default function CourseCard({ course, index }: { course: Course, index: n
 
   return (
     <article
-      className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-7 opacity-0 animate-fade-in-up"
-      style={{ animationDelay: `${index * 100}ms` }}
+      className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-7"
     >
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-indigo via-accent-violet to-accent-pink rounded-t-2xl opacity-80 group-hover:opacity-100 transition-opacity" />
 

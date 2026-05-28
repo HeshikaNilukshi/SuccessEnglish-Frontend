@@ -1,5 +1,4 @@
-import type { Course } from '../actions/courses'
-import CourseCard from './CourseCard'
+import CourseCard from '@/components/CourseCard'
 
 interface CourseGridProps {
   courses: Course[]
@@ -56,7 +55,7 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
 
       {/* Error state: Visual dialogue component */}
       {!loading && error && (
-        <div className="max-w-md mx-auto text-center p-8 rounded-2xl glass-panel border-accent-indigo/20 shadow-xl space-y-6 animate-fade-in-up">
+        <div className="max-w-md mx-auto text-center p-8 rounded-2xl glass-panel border-accent-indigo/20 shadow-xl space-y-6">
           <div className="w-16 h-16 rounded-full bg-accent-indigo/10 border border-accent-indigo/20 flex items-center justify-center text-3xl mx-auto">
             ⚠️
           </div>
@@ -80,7 +79,7 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
 
       {/* Empty State: Welcoming view */}
       {!loading && !error && courses.length === 0 && (
-        <div className="max-w-md mx-auto text-center p-12 rounded-2xl glass-panel space-y-6 animate-fade-in-up">
+        <div className="max-w-md mx-auto text-center p-12 rounded-2xl glass-panel space-y-6">
           <div className="text-5xl">🌱</div>
           <div className="space-y-2">
             <h3 className="text-xl font-bold text-white">Coming Soon!</h3>
