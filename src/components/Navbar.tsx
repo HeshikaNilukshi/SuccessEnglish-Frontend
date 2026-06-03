@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
 
 const NAV_LINKS = [
   { label: 'Courses', to: '/#courses' },
@@ -12,6 +13,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [activeHash, setActiveHash] = useState('')
   const location = useLocation()
+  const { user, logout } = useAuth()
 
   // Floating navbar style on scroll
   useEffect(() => {
@@ -124,16 +126,42 @@ export default function Navbar() {
 
           {/* ── Desktop CTAs ── */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
-            <button type="button" className="group relative px-5 py-2 text-sm font-semibold rounded-xl overflow-hidden cursor-pointer">
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-300" />
-              <span className="absolute inset-[1px] rounded-[11px] bg-[#060813]" />
-              <span className="relative text-white/80 group-hover:text-white transition-colors duration-200">Sign In</span>
-            </button>
-            <button type="button" className="relative px-5 py-2 text-sm font-semibold rounded-xl text-white overflow-hidden cursor-pointer group">
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet" />
-              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(105deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)] bg-[length:200%_100%]" />
-              <span className="relative">Get Started</span>
-            </button>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="relative w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center bg-gradient-to-br from-accent-indigo to-accent-violet shadow-[0_0_10px_rgba(99,102,241,0.2)] select-none">
+                    <span className="text-white font-bold text-sm uppercase">{user.name.charAt(0)}</span>
+                  </div>
+                  <span className="text-sm font-medium text-white/80">{user.name}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="px-4 py-2 text-sm font-semibold rounded-xl text-text-secondary hover:text-white hover:bg-white/[0.05] transition-all duration-200 cursor-pointer"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/signin"
+                  className="group relative px-5 py-2 text-sm font-semibold rounded-xl overflow-hidden cursor-pointer"
+                >
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-300" />
+                  <span className="absolute inset-[1px] rounded-[11px] bg-[#060813]" />
+                  <span className="relative text-white/80 group-hover:text-white transition-colors duration-200">Sign In</span>
+                </Link>
+                <Link
+                  to="/register"
+                  className="relative px-5 py-2 text-sm font-semibold rounded-xl text-white overflow-hidden cursor-pointer group"
+                >
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet" />
+                  <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(105deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)] bg-[length:200%_100%]" />
+                  <span className="relative">Get Started</span>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* ── Mobile Hamburger ── */}
@@ -171,15 +199,44 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="flex flex-col items-center gap-3 mt-10 w-full px-10">
-            <button type="button" className="w-full max-w-xs py-3.5 rounded-2xl text-base font-semibold text-white/80 border border-white/10 hover:border-accent-indigo/40 hover:text-white transition-all duration-200 cursor-pointer">
-              Sign In
-            </button>
-            <button type="button" className="relative w-full max-w-xs py-3.5 rounded-2xl text-base font-bold text-white overflow-hidden cursor-pointer">
-              <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet rounded-2xl" />
-              <span className="relative">Get Started</span>
-            </button>
-          </div>
+          {user ? (
+            <div className="flex flex-col items-center gap-4 mt-10 w-full px-10">
+              <div className="flex items-center gap-3 bg-white/[0.04] px-4 py-3 rounded-2xl w-full max-w-xs border border-white/[0.05]">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-accent-indigo to-accent-violet shrink-0 select-none">
+                  <span className="text-white font-bold text-base uppercase">{user.name.charAt(0)}</span>
+                </div>
+                <div className="text-left overflow-hidden">
+                  <p className="text-sm font-semibold text-white truncate">{user.name}</p>
+                  <p className="text-xs text-text-muted truncate">{user.email}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setIsOpen(false); logout(); }}
+                className="w-full max-w-xs py-3.5 rounded-2xl text-base font-semibold text-text-secondary border border-white/10 hover:border-accent-indigo/40 hover:text-white transition-all duration-200 cursor-pointer"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3 mt-10 w-full px-10">
+              <Link
+                to="/signin"
+                className="w-full max-w-xs py-3.5 rounded-2xl text-base font-semibold text-white/80 border border-white/10 hover:border-accent-indigo/40 hover:text-white transition-all duration-200 cursor-pointer text-center"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/register"
+                className="relative w-full max-w-xs py-3.5 rounded-2xl text-base font-bold text-white overflow-hidden cursor-pointer text-center"
+                onClick={() => setIsOpen(false)}
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet rounded-2xl" />
+                <span className="relative">Get Started</span>
+              </Link>
+            </div>
+          )}
         </nav>
       </div>
     </>

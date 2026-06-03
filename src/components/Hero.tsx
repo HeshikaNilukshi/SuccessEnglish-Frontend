@@ -1,4 +1,12 @@
 export default function Hero() {
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    const el = document.getElementById(id)
+    if (el) {
+      e.preventDefault()
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <section className="relative overflow-hidden pt-24 pb-16 md:pt-45 md:pb-28">
       <div className="absolute inset-0 radial-glow-main pointer-events-none -z-10" />
@@ -25,12 +33,14 @@ export default function Hero() {
         <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
           <a 
             href="#courses" 
+            onClick={(e) => handleAnchorClick(e, 'courses')}
             className="px-8 py-4 rounded-full text-base font-semibold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_30px_rgba(99,102,241,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 w-full sm:w-auto"
           >
             Explore Courses
           </a>
           <a 
             href="#about" 
+            onClick={(e) => handleAnchorClick(e, 'about')}
             className="px-8 py-4 rounded-full text-base font-semibold text-white bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 w-full sm:w-auto"
           >
             Learn More

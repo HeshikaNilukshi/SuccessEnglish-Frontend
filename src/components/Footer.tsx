@@ -1,5 +1,17 @@
+import { Link } from 'react-router-dom'
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, to: string) => {
+    const hash = to.split('#')[1]
+    if (!hash) return
+    const el = document.getElementById(hash)
+    if (el) {
+      e.preventDefault()
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <footer className="relative bg-bg-secondary border-t border-white/[0.04] py-16 z-10">
@@ -24,16 +36,16 @@ export default function Footer() {
           <h3 className="text-white font-semibold text-sm tracking-wider uppercase">Quick Links</h3>
           <ul className="space-y-2 text-sm text-text-secondary">
             <li>
-              <a href="#courses" className="hover:text-white transition-colors duration-200">All Courses</a>
+              <Link to="/#courses" onClick={(e) => handleNavClick(e, '/#courses')} className="hover:text-white transition-colors duration-200">All Courses</Link>
             </li>
             <li>
-              <a href="#about" className="hover:text-white transition-colors duration-200">About Our Academy</a>
+              <Link to="/#about" onClick={(e) => handleNavClick(e, '/#about')} className="hover:text-white transition-colors duration-200">About Our Academy</Link>
             </li>
             <li>
-              <a href="#admission" className="hover:text-white transition-colors duration-200">Admissions</a>
+              <Link to="/#contact" onClick={(e) => handleNavClick(e, '/#contact')} className="hover:text-white transition-colors duration-200">Admissions</Link>
             </li>
             <li>
-              <a href="#contact" className="hover:text-white transition-colors duration-200">Contact Support</a>
+              <Link to="/#contact" onClick={(e) => handleNavClick(e, '/#contact')} className="hover:text-white transition-colors duration-200">Contact Support</Link>
             </li>
           </ul>
         </div>
@@ -52,7 +64,9 @@ export default function Footer() {
           <div className="flex items-center gap-4 pt-2">
             {/* Social SVGs */}
             <a 
-              href="#" 
+              href="https://facebook.com" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-accent-indigo/20 hover:border-accent-indigo/50 transition-all duration-300"
               aria-label="Facebook"
             >
@@ -61,7 +75,9 @@ export default function Footer() {
               </svg>
             </a>
             <a 
-              href="#" 
+              href="https://youtube.com" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-accent-indigo/20 hover:border-accent-indigo/50 transition-all duration-300"
               aria-label="YouTube"
             >
@@ -70,7 +86,9 @@ export default function Footer() {
               </svg>
             </a>
             <a 
-              href="#" 
+              href="https://instagram.com" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-accent-indigo/20 hover:border-accent-indigo/50 transition-all duration-300"
               aria-label="Instagram"
             >
