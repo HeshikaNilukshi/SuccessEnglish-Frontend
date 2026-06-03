@@ -53,40 +53,31 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
         </div>
       )}
 
-      {/* Error state: Visual dialogue component */}
-      {!loading && error && (
-        <div className="max-w-md mx-auto text-center p-8 rounded-2xl glass-panel border-accent-indigo/20 shadow-xl space-y-6">
-          <div className="w-16 h-16 rounded-full bg-accent-indigo/10 border border-accent-indigo/20 flex items-center justify-center text-3xl mx-auto">
-            ⚠️
+      {/* Empty / Error State: Welcoming "Coming Soon" vibe */}
+      {!loading && (error || courses.length === 0) && (
+        <div className="max-w-md mx-auto text-center p-12 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+          <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/10">
+            <span className="text-4xl animate-pulse">✨</span>
+            <div className="absolute inset-0 bg-gradient-to-tr from-accent-indigo/10 to-accent-violet/10 rounded-2xl blur-md" />
           </div>
-          <div className="space-y-2">
-            <h3 className="text-xl font-bold text-white">Oops, Fetching Failed</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              We couldn't connect to our course repository API. Please make sure the backend server is running and try again.
+          <div className="space-y-3">
+            <h3 className="text-2xl font-bold text-white tracking-tight">Courses Coming Soon</h3>
+            <p className="text-sm text-text-secondary leading-relaxed max-w-sm mx-auto">
+              Our academic advisors are crafting top-tier courses as we speak. Check back shortly to embark on your new learning journey.
             </p>
           </div>
           {onRetry && (
             <button
               type="button"
               onClick={onRetry}
-              className="px-6 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.35)] transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+              className="mt-2 px-6 py-2.5 rounded-full text-xs font-semibold text-white bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
             >
-              Try Again
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M21 3v5h-5" />
+              </svg>
+              Refresh Status
             </button>
           )}
-        </div>
-      )}
-
-      {/* Empty State: Welcoming view */}
-      {!loading && !error && courses.length === 0 && (
-        <div className="max-w-md mx-auto text-center p-12 rounded-2xl glass-panel space-y-6">
-          <div className="text-5xl">🌱</div>
-          <div className="space-y-2">
-            <h3 className="text-xl font-bold text-white">Coming Soon!</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              Our academic advisors are crafting top-tier courses as we speak. Check back shortly to embark on your new learning journey.
-            </p>
-          </div>
         </div>
       )}
 

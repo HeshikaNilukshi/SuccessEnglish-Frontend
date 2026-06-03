@@ -1,4 +1,3 @@
-import { formatDate } from '@/utils/format-datetime'
 
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
 
@@ -27,9 +26,6 @@ export default function CourseCard({ course, index }: { course: Course, index: n
       </div>
 
       <div className="mt-8 pt-4 border-t border-white/[0.04] flex items-center justify-between text-xs">
-        <span className="text-text-muted font-medium">
-          Created {formatDate(course.createdAt)}
-        </span>
         <span className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
           Explore Details <span className="text-sm">&rarr;</span>
         </span>

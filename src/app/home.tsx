@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Hero from '@/components/Hero'
 import CourseGrid from '@/components/CourseGrid'
+import AboutUs from '@/components/AboutUs'
+import ContactUs from '@/components/ContactUs'
 import { fetchCourses } from '@/actions/courses'
 
 export default function HomePage() {
@@ -38,6 +40,8 @@ export default function HomePage() {
         error={error}
         onRetry={loadCourses}
       />
+      <AboutUs />
+      <ContactUs />
     </div>
   )
 }
