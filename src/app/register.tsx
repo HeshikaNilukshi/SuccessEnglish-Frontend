@@ -16,7 +16,7 @@ export default function RegisterPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/')
+      navigate('/student')
     }
   }, [user, navigate])
 
@@ -43,7 +43,7 @@ export default function RegisterPage() {
 
     try {
       await register({ name, email, password })
-      navigate('/')
+      navigate('/student')
     } catch (err: any) {
       console.error(err)
       setError(err.message || 'Registration failed. Please try again.')

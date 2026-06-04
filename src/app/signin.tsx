@@ -14,7 +14,7 @@ export default function SignInPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/')
+      navigate('/student')
     }
   }, [user, navigate])
 
@@ -30,7 +30,7 @@ export default function SignInPage() {
 
     try {
       await login({ email, password })
-      navigate('/')
+      navigate('/student')
     } catch (err: any) {
       console.error(err)
       setError(err.message || 'Invalid credentials or connection error.')

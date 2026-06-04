@@ -27,4 +27,20 @@ interface RegisterData {
   email: string;
   password: string;
 }
+
+interface Enrollment {
+  id: string;
+  userId: string;
+  courseId: string;
+  receiptUrl: string;
+  receiptPublicId: string;
+  verified: boolean;
+  createdAt: string;
+  course: {
+    id: string;
+    name: string;
+    description: string | null;
+    createdAt: string;
+  };
+}
 
