@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchMyEnrollments } from '@/actions/courses'
 import DashboardCourseCard from '@/components/DashboardCourseCard'
+import ProfilePopover from '@/components/ui/ProfilePopover'
 
 export default function StudentDashboard() {
   const { user, token } = useAuth()
@@ -31,7 +32,7 @@ export default function StudentDashboard() {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
       {/* ── Dashboard Header ── */}
-      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-16 border-b border-white/[0.04] pb-8 animate-fade-in-up">
+      <header className="relative z-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-16 border-b border-white/[0.04] pb-8 animate-fade-in-up">
         <div className="space-y-2">
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
             Welcome, <span className="gradient-text-accent">{user?.name}</span>!
@@ -41,16 +42,7 @@ export default function StudentDashboard() {
           </p>
         </div>
 
-        {/* User Profile & Sign Out */}
-        <div className="flex items-center gap-4 bg-white/[0.02] border border-white/[0.05] p-3 rounded-2xl self-start sm:self-auto shadow-inner">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-accent-indigo to-accent-violet shrink-0 select-none">
-            <span className="text-white font-bold text-base uppercase">{user?.name.charAt(0)}</span>
-          </div>
-          <div className="text-left leading-tight">
-            <p className="text-sm font-semibold text-white truncate max-w-[120px]">{user?.name}</p>
-            <p className="text-[11px] text-text-muted truncate max-w-[120px]">{user?.email}</p>
-          </div>
-        </div>
+        <ProfilePopover user={user} />
       </header>
 
       {/* ── Main Section ── */}
