@@ -30,7 +30,7 @@ export default function StudentDashboard() {
   }, [token])
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16">
       {/* ── Dashboard Header ── */}
       <header className="relative z-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-16 border-b border-white/[0.04] pb-8 animate-fade-in-up">
         <div className="space-y-2">
@@ -140,14 +140,14 @@ export default function StudentDashboard() {
       </main>
 
       {/* Footer link back to homepage */}
-      <footer className="mt-20 pt-8 border-t border-white/[0.04] text-center">
+      {/* <footer className="mt-20 pt-8 border-t border-white/[0.04] text-center">
         <a
           href="/"
           className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1"
         >
           <span>&larr;</span> Back to home portal
         </a>
-      </footer>
+      </footer> */}
     </div>
   )
 }

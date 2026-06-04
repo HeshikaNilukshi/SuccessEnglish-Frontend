@@ -10,6 +10,7 @@ interface User {
   name: string;
   email: string;
   role: 'ADMIN' | 'TEACHER' | 'STUDENT';
+  createdAt?: string;
 }
 
 interface AuthResponse {
