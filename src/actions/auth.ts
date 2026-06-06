@@ -1,22 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL as string;
-
-async function handleResponse(res: Response) {
-  if (!res.ok) {
-    let errorMessage = `Request failed: ${res.statusText} (${res.status})`;
-    try {
-      const data = await res.json();
-      if (data.errors && Array.isArray(data.errors)) {
-        errorMessage = data.errors.map((err: any) => err.msg || err.message).join(', ');
-      } else if (data.message) {
-        errorMessage = data.message;
-      }
-    } catch {
-      // JSON parsing failed, keep default message
-    }
-    throw new Error(errorMessage);
-  }
-  return res.json();
-}
+import { API_BASE, handleResponse } from './api';
 
 export async function loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
   const res = await fetch(`${API_BASE}/auth/login`, {

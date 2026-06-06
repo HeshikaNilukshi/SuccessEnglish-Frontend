@@ -1,12 +1,12 @@
 interface Course {
-  id: string;
+  id: number;
   name: string;
   description: string | null;
   createdAt: string;
 }
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   role: 'ADMIN' | 'TEACHER' | 'STUDENT';
@@ -30,15 +30,15 @@ interface RegisterData {
 }
 
 interface Enrollment {
-  id: string;
-  userId: string;
-  courseId: string;
+  id: number;
+  userId: number;
+  courseId: number;
   receiptUrl: string;
   receiptPublicId: string;
   verified: boolean;
   createdAt: string;
   course: {
-    id: string;
+    id: number;
     name: string;
     description: string | null;
     createdAt: string;

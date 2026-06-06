@@ -1,11 +1,8 @@
-const API_BASE = import.meta.env.VITE_API_URL as string;
+import { API_BASE, handleResponse } from './api';
 
 export async function fetchCourses(): Promise<Course[]> {
   const res = await fetch(`${API_BASE}/courses`);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch courses: ${res.statusText} (${res.status})`);
-  }
-  return res.json();
+  return handleResponse(res);
 }
 
 export async function fetchMyEnrollments(token: string): Promise<Enrollment[]> {
@@ -15,8 +12,5 @@ export async function fetchMyEnrollments(token: string): Promise<Enrollment[]> {
       'Content-Type': 'application/json',
     },
   });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch enrollments: ${res.statusText} (${res.status})`);
-  }
-  return res.json();
+  return handleResponse(res);
 }
