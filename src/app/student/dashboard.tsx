@@ -31,7 +31,6 @@ export default function StudentDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16">
-      {/* ── Dashboard Header ── */}
       <header className="relative z-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-16 border-b border-white/[0.04] pb-8 animate-fade-in-up">
         <div className="space-y-2">
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
@@ -45,7 +44,6 @@ export default function StudentDashboard() {
         <ProfilePopover user={user} />
       </header>
 
-      {/* ── Main Section ── */}
       <main className="space-y-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
         <div className="flex items-center justify-between">
           <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">
@@ -139,15 +137,14 @@ export default function StudentDashboard() {
         )}
       </main>
 
-      {/* Footer link back to homepage */}
-      {/* <footer className="mt-20 pt-8 border-t border-white/[0.04] text-center">
+      <footer className="mt-20 pt-8 border-t border-white/[0.04] text-center">
         <a
           href="/"
           className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1"
         >
           <span>&larr;</span> Back to home portal
         </a>
-      </footer> */}
+      </footer>
     </div>
   )
 }

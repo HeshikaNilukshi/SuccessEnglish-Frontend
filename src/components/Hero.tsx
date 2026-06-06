@@ -18,18 +18,15 @@ export default function Hero() {
           Sri Lanka's Premium English Academy
         </div>
 
-        {/* Hero Title */}
         <h1 className="animate-fade-in-up [animation-delay:150ms] text-4xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] max-w-4xl">
           Master English <br className="hidden md:inline" />
           <span className="gradient-text-accent">With Absolute Confidence</span>
         </h1>
 
-        {/* Hero Description */}
         <p className="mt-6 text-base md:text-xl text-text-secondary leading-relaxed max-w-2xl">
           Elevate your vocabulary, writing skills, and pronunciation through our modern student-first learning academy. Accelerate your career and personal growth.
         </p>
 
-        {/* Hero Actions */}
         <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
           <a 
             href="#courses" 
@@ -47,7 +44,6 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Achievements / Stats bar */}
         <div className="mt-20 w-full max-w-5xl border-t border-white/[0.04] pt-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-white">99%</div>

@@ -1,10 +1,8 @@
 export default function ContactUs() {
   return (
     <section id="contact" className="py-24 max-w-7xl mx-auto px-6 md:px-12 relative z-10 scroll-mt-24">
-      {/* Background Decorative Glow */}
       <div className="absolute top-[40%] left-[-15%] w-[450px] h-[450px] bg-accent-violet/5 rounded-full blur-[140px] pointer-events-none -z-10" />
 
-      {/* Header */}
       <div className="text-center space-y-4 mb-16">
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
           Get in <span className="gradient-text-accent">Touch with Us</span>
@@ -20,7 +18,6 @@ export default function ContactUs() {
         <div className="lg:col-span-5 space-y-6 flex flex-col justify-center">
           <h3 className="text-xl font-bold text-white mb-2">Academy Contacts</h3>
           
-          {/* Phone Detail */}
           <div className="glass-panel p-5 rounded-xl border border-white/[0.04] flex items-start gap-4">
             <div className="w-10 h-10 rounded-lg bg-accent-indigo/10 border border-accent-indigo/20 flex items-center justify-center text-lg text-accent-indigo shrink-0">
               📞
@@ -32,7 +29,6 @@ export default function ContactUs() {
             </div>
           </div>
 
-          {/* Email Detail */}
           <div className="glass-panel p-5 rounded-xl border border-white/[0.04] flex items-start gap-4">
             <div className="w-10 h-10 rounded-lg bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center text-lg text-accent-violet shrink-0">
               ✉️
@@ -44,7 +40,6 @@ export default function ContactUs() {
             </div>
           </div>
 
-          {/* Address Detail */}
           <div className="glass-panel p-5 rounded-xl border border-white/[0.04] flex items-start gap-4">
             <div className="w-10 h-10 rounded-lg bg-accent-pink/10 border border-accent-pink/20 flex items-center justify-center text-lg text-accent-pink shrink-0">
               📍
@@ -56,7 +51,6 @@ export default function ContactUs() {
             </div>
           </div>
 
-          {/* Working Hours */}
           <div className="glass-panel p-5 rounded-xl border border-white/[0.04] flex items-start gap-4">
             <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-lg text-emerald-400 shrink-0">
               ⏰
@@ -69,9 +63,7 @@ export default function ContactUs() {
           </div>
         </div>
 
-        {/* Right column: Interactive Social/Connect Cards */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* WhatsApp Card */}
           <a
             href="https://wa.me/94771234567"
             target="_blank"
@@ -94,7 +86,6 @@ export default function ContactUs() {
             </div>
           </a>
 
-          {/* Facebook Card */}
           <a
             href="https://facebook.com"
             target="_blank"
@@ -117,7 +108,6 @@ export default function ContactUs() {
             </div>
           </a>
 
-          {/* Instagram Card */}
           <a
             href="https://instagram.com"
             target="_blank"
@@ -140,7 +130,6 @@ export default function ContactUs() {
             </div>
           </a>
 
-          {/* YouTube Card */}
           <a
             href="https://youtube.com"
             target="_blank"

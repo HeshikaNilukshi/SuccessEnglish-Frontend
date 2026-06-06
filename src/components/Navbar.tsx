@@ -13,23 +13,19 @@ export default function Navbar() {
   const [activeHash, setActiveHash] = useState('')
   const location = useLocation()
 
-  // Floating navbar style on scroll
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close mobile menu on route change
   useEffect(() => { setIsOpen(false) }, [location])
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  // Highlight active nav link based on which section is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -66,7 +62,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── Main Header ── */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ${
           scrolled ? 'pt-3' : 'pt-5'
@@ -83,7 +78,6 @@ export default function Navbar() {
             <span className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-full bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
           )}
 
-          {/* ── Brand ── */}
           <Link
             to="/"
             className="flex items-center gap-3 group shrink-0 z-50"
@@ -105,7 +99,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* ── Desktop Nav ── */}
           <nav className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <a
@@ -122,7 +115,6 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* ── Desktop CTAs ── */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
             <Link
               to="/signin"
@@ -142,7 +134,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* ── Mobile Hamburger ── */}
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
@@ -155,7 +146,6 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* ── Mobile Full-Screen Menu ── */}
       <div
         className={`fixed inset-0 z-40 md:hidden flex flex-col transition-all duration-500 ease-in-out ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'

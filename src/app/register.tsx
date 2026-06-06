@@ -54,15 +54,12 @@ export default function RegisterPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-bg-primary text-text-primary px-4 selection:bg-accent-indigo/30 overflow-hidden py-12">
-      {/* Glow Effects */}
       <div className="absolute inset-0 radial-glow-main pointer-events-none z-0" />
       <div className="absolute inset-0 dot-pattern pointer-events-none z-0 opacity-50" />
       <div className="absolute top-[-10%] right-[10%] w-[600px] h-[600px] bg-accent-indigo/8 rounded-full blur-[160px] pointer-events-none z-0" />
       <div className="absolute bottom-[-10%] left-[10%] w-[500px] h-[500px] bg-accent-violet/6 rounded-full blur-[160px] pointer-events-none z-0" />
 
-      {/* Main card */}
       <div className="relative z-10 w-full max-w-md animate-fade-in-up">
-        {/* Brand Link */}
         <div className="flex justify-center mb-8">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.25)]">
@@ -76,9 +73,7 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        {/* Card Panel */}
         <div className="glass-panel rounded-2xl p-8 border border-white/[0.06] shadow-card relative overflow-hidden group">
-          {/* Top glow border accent */}
           <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/35 to-transparent" />
           
           <div className="mb-6">
@@ -189,7 +184,6 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Back Link */}
         <div className="text-center mt-6">
           <Link to="/" className="text-xs text-text-muted hover:text-white transition-colors duration-200 flex items-center justify-center gap-1.5">
             <span>←</span> Back to Home

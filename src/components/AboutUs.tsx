@@ -1,12 +1,10 @@
 export default function AboutUs() {
   return (
     <section id="about" className="py-24 max-w-7xl mx-auto px-6 md:px-12 relative z-10 scroll-mt-24">
-      {/* Decorative Blur Backgrounds */}
       <div className="absolute top-[20%] right-[-10%] w-[350px] h-[350px] bg-accent-indigo/5 rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="absolute bottom-[10%] left-[-10%] w-[300px] h-[300px] bg-accent-pink/5 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-        {/* Left column: Text Content */}
         <div className="lg:col-span-5 space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-indigo/10 border border-accent-indigo/20 text-xs font-semibold tracking-wide text-accent-indigo">
             About Our Academy
@@ -40,9 +38,7 @@ export default function AboutUs() {
           </div>
         </div>
 
-        {/* Right column: Highlights Grid */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {/* Pillar 1 */}
           <div className="glass-panel glass-panel-hover p-8 rounded-2xl border border-white/[0.04] flex flex-col justify-between h-full">
             <div>
               <div className="w-12 h-12 rounded-xl bg-accent-indigo/10 border border-accent-indigo/20 flex items-center justify-center text-xl mb-6">
@@ -55,7 +51,6 @@ export default function AboutUs() {
             </div>
           </div>
 
-          {/* Pillar 2 */}
           <div className="glass-panel glass-panel-hover p-8 rounded-2xl border border-white/[0.04] flex flex-col justify-between h-full">
             <div>
               <div className="w-12 h-12 rounded-xl bg-accent-violet/10 border border-accent-violet/20 flex items-center justify-center text-xl mb-6">
@@ -68,7 +63,6 @@ export default function AboutUs() {
             </div>
           </div>
 
-          {/* Pillar 3 */}
           <div className="glass-panel glass-panel-hover p-8 rounded-2xl border border-white/[0.04] flex flex-col justify-between h-full">
             <div>
               <div className="w-12 h-12 rounded-xl bg-accent-pink/10 border border-accent-pink/20 flex items-center justify-center text-xl mb-6">
@@ -81,7 +75,6 @@ export default function AboutUs() {
             </div>
           </div>
 
-          {/* Pillar 4 */}
           <div className="glass-panel glass-panel-hover p-8 rounded-2xl border border-white/[0.04] flex flex-col justify-between h-full">
             <div>
               <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-xl mb-6">

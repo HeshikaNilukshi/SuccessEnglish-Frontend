@@ -10,7 +10,6 @@ interface CourseGridProps {
 export default function CourseGrid({ courses, loading, error, onRetry }: CourseGridProps) {
   return (
     <section id="courses" className="py-24 max-w-7xl mx-auto px-6 md:px-12 relative z-10 scroll-mt-24">
-      {/* Grid Header */}
       <div className="text-center space-y-4 mb-16">
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
           Explore Our <span className="gradient-text-accent">Premium Courses</span>
@@ -21,7 +20,6 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
         </p>
       </div>
 
-      {/* Loading state: Skeleton grid */}
       {loading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {[...Array(6)].map((_, i) => (
@@ -29,21 +27,15 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
               key={i}
               className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-white/[0.04] p-7 h-[250px] flex flex-col justify-between"
             >
-              {/* Shimmer loading mask */}
               <div className="absolute inset-0 shimmer-overlay animate-shimmer" />
 
               <div className="space-y-4">
-                {/* Icon bubble skeleton */}
                 <div className="w-12 h-12 rounded-xl bg-white/5 animate-pulse" />
-                {/* Title skeleton */}
                 <div className="h-6 w-3/4 rounded bg-white/5 animate-pulse" />
-                {/* Description line 1 skeleton */}
                 <div className="h-4 w-full rounded bg-white/5 animate-pulse" />
-                {/* Description line 2 skeleton */}
                 <div className="h-4 w-5/6 rounded bg-white/5 animate-pulse" />
               </div>
 
-              {/* Footer skeleton */}
               <div className="pt-4 border-t border-white/[0.04] flex justify-between items-center">
                 <div className="h-3 w-1/3 rounded bg-white/5 animate-pulse" />
                 <div className="h-3 w-1/4 rounded bg-white/5 animate-pulse" />
@@ -53,7 +45,6 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
         </div>
       )}
 
-      {/* Empty / Error State: Welcoming "Coming Soon" vibe */}
       {!loading && (error || courses.length === 0) && (
         <div className="max-w-md mx-auto text-center p-12 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
           <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/10">
@@ -81,7 +72,6 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
         </div>
       )}
 
-      {/* Active Grid Listings */}
       {!loading && !error && courses.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.map((course, idx) => (

@@ -16,7 +16,6 @@ export default function Footer() {
   return (
     <footer className="relative bg-bg-secondary border-t border-white/[0.04] py-16 z-10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-        {/* Brand Info */}
         <div className="md:col-span-2 space-y-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent-indigo to-accent-violet flex items-center justify-center text-white font-bold text-base shadow-[0_0_15px_rgba(99,102,241,0.25)]">
@@ -31,7 +30,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Quick Links */}
         <div className="space-y-4">
           <h3 className="text-white font-semibold text-sm tracking-wider uppercase">Quick Links</h3>
           <ul className="space-y-2 text-sm text-text-secondary">
@@ -50,7 +48,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Social / Contact */}
         <div className="space-y-4">
           <h3 className="text-white font-semibold text-sm tracking-wider uppercase">Connect</h3>
           <ul className="space-y-2 text-sm text-text-secondary">
@@ -62,7 +59,6 @@ export default function Footer() {
             </li>
           </ul>
           <div className="flex items-center gap-4 pt-2">
-            {/* Social SVGs */}
             <a 
               href="https://facebook.com" 
               target="_blank"

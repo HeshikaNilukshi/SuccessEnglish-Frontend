@@ -13,21 +13,17 @@ export default function SignOutModal({ isOpen, onClose }: SignOutModalProps) {
 
   return createPortal(
     <>
-      {/* Modal Backdrop */}
       <div
         className="fixed inset-0 bg-[#060813]/70 backdrop-blur-md z-50 transition-opacity duration-300 animate-fade-in"
         onClick={onClose}
       />
-      {/* Modal Content */}
       <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
         <div
           className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden"
         >
-          {/* Header accent line — red tint */}
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-red-500/35 to-transparent" />
           <div className="absolute top-[-20%] left-[20%] w-[200px] h-[200px] bg-red-500/8 rounded-full blur-[60px] pointer-events-none" />
 
-          {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
@@ -38,7 +34,6 @@ export default function SignOutModal({ isOpen, onClose }: SignOutModalProps) {
             </svg>
           </button>
 
-          {/* Icon */}
           <div className="relative w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden flex items-center justify-center bg-red-500/10 border border-red-500/20 shadow-lg shadow-red-500/10">
             <svg className="w-9 h-9 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -50,7 +45,6 @@ export default function SignOutModal({ isOpen, onClose }: SignOutModalProps) {
             Are you sure you want to sign out? You'll need to log back in to access your courses.
           </p>
 
-          {/* Actions */}
           <div className="flex gap-3">
             <button
               type="button"
