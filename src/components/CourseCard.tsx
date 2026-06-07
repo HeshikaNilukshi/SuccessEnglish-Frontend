@@ -1,4 +1,6 @@
 
+import { Link } from 'react-router-dom'
+
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
 
 export default function CourseCard({ course, index }: { course: Course, index: number }) {
@@ -26,9 +28,9 @@ export default function CourseCard({ course, index }: { course: Course, index: n
       </div>
 
       <div className="mt-8 pt-4 border-t border-white/[0.04] flex items-center justify-between text-xs">
-        <span className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
+        <Link to={`/student/enrollment/${course.id}`} className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1 cursor-pointer">
           Explore Details <span className="text-sm">&rarr;</span>
-        </span>
+        </Link>
       </div>
     </article>
   )

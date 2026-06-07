@@ -11,6 +11,7 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 import StudentDashboard from '@/app/student/dashboard'
 import { AuthProvider } from '@/contexts/AuthContext'
 import StudentProfile from '@/app/student/profile'
+import StudentEnrollment from '@/app/student/enrollment'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
             <Route element={<StudentLayout />}>
               <Route index element={<StudentDashboard />} />
               <Route path="profile" element={<StudentProfile />} />
+              <Route path="enrollment/:courseId" element={<StudentEnrollment />} />
             </Route>
           </Route>
         </Routes>

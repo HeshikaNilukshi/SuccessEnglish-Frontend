@@ -14,3 +14,8 @@ export async function fetchMyEnrollments(token: string): Promise<Enrollment[]> {
   });
   return handleResponse(res);
 }
+
+export async function fetchCourse(id: number): Promise<Course> {
+  const res = await fetch(`${API_BASE}/courses/${id}`);
+  return handleResponse(res);
+}

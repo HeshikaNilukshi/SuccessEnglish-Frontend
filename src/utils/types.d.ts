@@ -2,6 +2,7 @@ interface Course {
   id: number;
   name: string;
   description: string | null;
+  price: number;
   createdAt: string;
 }
 
@@ -41,6 +42,7 @@ interface Enrollment {
     id: number;
     name: string;
     description: string | null;
+    price: number;
     createdAt: string;
   };
 }
