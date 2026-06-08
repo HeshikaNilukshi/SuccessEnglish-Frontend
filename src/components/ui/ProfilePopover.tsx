@@ -41,7 +41,7 @@ export default function ProfilePopover({ user }: { user: User | null }) {
 
             <div className="p-2 space-y-0.5">
               <Link
-                to="/student/profile"
+                to={user?.role === 'TEACHER' ? '/teacher/profile' : user?.role === 'ADMIN' ? '/admin/profile' : '/student/profile'}
                 onClick={() => setIsOpen(false)}
                 className="relative z-10 group w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-left cursor-pointer hover:bg-accent-indigo/10"
               >

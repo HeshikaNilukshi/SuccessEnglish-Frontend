@@ -11,7 +11,10 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
   const icon = courseIcons[index % courseIcons.length]
 
   return (
-    <article className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-7">
+    <Link
+      to={`/teacher/${course.id}`}
+      className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-7 text-left cursor-pointer"
+    >
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-indigo via-accent-violet to-accent-pink rounded-t-2xl opacity-80 group-hover:opacity-100 transition-opacity" />
 
       <div className="space-y-4">
@@ -35,13 +38,12 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
 
       <div className="mt-8 pt-4 border-t border-white/[0.04] flex items-center justify-between text-xs text-text-muted">
         <span>Created {new Date(course.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-        <Link
-          to={`/teacher/${course.id}`}
-          className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1 cursor-pointer"
+        <div
+          className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1"
         >
           Manage Course <span className="text-sm">&rarr;</span>
-        </Link>
+        </div>
       </div>
-    </article>
+    </Link>
   )
 }

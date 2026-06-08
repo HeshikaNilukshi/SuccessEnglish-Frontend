@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
 
 const NAV_LINKS = [
   { label: 'Courses', to: '/#courses' },
@@ -8,6 +9,7 @@ const NAV_LINKS = [
 ]
 
 export default function Navbar() {
+  const { user } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeHash, setActiveHash] = useState('')
@@ -117,7 +119,7 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-3 shrink-0">
             <Link
-              to="/signin"
+              to={user ? (user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student') : '/login'}
               className="group relative px-5 py-2 text-sm font-semibold rounded-xl overflow-hidden cursor-pointer"
             >
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-300" />
@@ -125,7 +127,7 @@ export default function Navbar() {
               <span className="relative text-white/80 group-hover:text-white transition-colors duration-200">Sign In</span>
             </Link>
             <Link
-              to="/register"
+              to={user ? (user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student') : '/register'}
               className="relative px-5 py-2 text-sm font-semibold rounded-xl text-white overflow-hidden cursor-pointer group"
             >
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet" />
@@ -169,14 +171,14 @@ export default function Navbar() {
           ))}
           <div className="flex flex-col items-center gap-3 mt-10 w-full px-10">
             <Link
-              to="/signin"
+              to={user ? (user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student') : '/login'}
               className="w-full max-w-xs py-3.5 rounded-2xl text-base font-semibold text-white/80 border border-white/10 hover:border-accent-indigo/40 hover:text-white transition-all duration-200 cursor-pointer text-center"
               onClick={() => setIsOpen(false)}
             >
               Sign In
             </Link>
             <Link
-              to="/register"
+              to={user ? (user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student') : '/register'}
               className="relative w-full max-w-xs py-3.5 rounded-2xl text-base font-bold text-white overflow-hidden cursor-pointer text-center"
               onClick={() => setIsOpen(false)}
             >

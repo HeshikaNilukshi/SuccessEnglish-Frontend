@@ -5,12 +5,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/contexts/AuthContext'
 import Layout from '@/layout'
 import HomePage from '@/app/home'
-import SignInPage from '@/app/signin'
+import LoginPage from '@/app/login'
 import RegisterPage from '@/app/register'
 import StudentLayout from '@/StudentLayout'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import StudentDashboard from '@/app/student/dashboard'
-import StudentProfile from '@/app/student/profile'
+import ProfilePage from '@/app/profile'
 import StudentEnrollment from '@/app/student/enrollment'
 import StudentCourseContent from '@/app/student/courseContent'
 import StudentVideoPage from '@/app/student/video'
@@ -36,12 +36,12 @@ createRoot(document.getElementById('root')!).render(
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
           </Route>
-          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/student" element={<ProtectedRoute />}>
             <Route element={<StudentLayout />}>
               <Route index element={<StudentDashboard />} />
-              <Route path="profile" element={<StudentProfile />} />
+              <Route path="profile" element={<ProfilePage />} />
               <Route path="enrollment/:courseId" element={<StudentEnrollment />} />
               <Route path=":courseId" element={<StudentCourseContent />} />
               <Route path=":courseId/videos/:videoId" element={<StudentVideoPage />} />
@@ -50,6 +50,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/teacher" element={<TeacherRoute />}>
             <Route element={<TeacherLayout />}>
               <Route index element={<TeacherDashboard />} />
+              <Route path="profile" element={<ProfilePage />} />
               <Route path="courses/new" element={<CreateCourse />} />
               <Route path=":courseId" element={<TeacherCourseContent />} />
               <Route path=":courseId/videos/new" element={<CreateVideo />} />

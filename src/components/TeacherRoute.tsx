@@ -23,7 +23,7 @@ export default function TeacherRoute() {
   }
 
   if (!user || user.role !== 'TEACHER') {
-    return <Navigate to="/signin" replace />
+    return <Navigate to="/login" replace />
   }
 
   return <Outlet />

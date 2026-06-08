@@ -156,9 +156,10 @@ export default function StudentCourseContent() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {videos.map((video) => (
-                  <article
+                  <Link
                     key={video.id}
-                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px]"
+                    to={`/student/${course.id}/videos/${video.id}`}
+                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
                   >
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-indigo to-accent-violet rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
                     
@@ -179,14 +180,13 @@ export default function StudentCourseContent() {
 
                     <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
                       <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
-                      <Link
-                        to={`/student/${course.id}/videos/${video.id}`}
+                      <div
                         className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
                       >
                         Watch Video &rarr;
-                      </Link>
+                      </div>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}
@@ -206,9 +206,10 @@ export default function StudentCourseContent() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {exams.map((exam) => (
-                  <article
+                  <Link
                     key={exam.id}
-                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px]"
+                    to={`/student/${course.id}/exams/${exam.id}`}
+                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
                   >
                     <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-violet to-accent-pink rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
                     
@@ -229,14 +230,13 @@ export default function StudentCourseContent() {
 
                     <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
                       <span>Questions: {exam._count?.questions ?? 0}</span>
-                      <Link
-                        to={`/student/${course.id}/exams/${exam.id}`}
+                      <div
                         className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
                       >
                         Start Exam &rarr;
-                      </Link>
+                      </div>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}

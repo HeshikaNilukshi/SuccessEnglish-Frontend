@@ -16,7 +16,8 @@ export default function RegisterPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/student')
+      const path = user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student'
+      navigate(path)
     }
   }, [user, navigate])
 
@@ -43,11 +44,9 @@ export default function RegisterPage() {
 
     try {
       await register({ name, email, password })
-      navigate('/student')
     } catch (err: any) {
       console.error(err)
       setError(err.message || 'Registration failed. Please try again.')
-    } finally {
       setIsSubmitting(false)
     }
   }
@@ -178,7 +177,7 @@ export default function RegisterPage() {
 
           <div className="mt-8 text-center text-xs text-text-secondary">
             Already have an account?{' '}
-            <Link to="/signin" className="font-semibold text-accent-indigo hover:text-accent-violet transition-colors duration-200">
+            <Link to="/login" className="font-semibold text-accent-indigo hover:text-accent-violet transition-colors duration-200">
               Sign In
             </Link>
           </div>

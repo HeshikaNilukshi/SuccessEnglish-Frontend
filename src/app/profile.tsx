@@ -5,16 +5,19 @@ import { formatDate } from '@/utils/format-datetime'
 import StudentProfileForm from '@/components/student-profile-form'
 import SignOutModal from '@/components/ui/SignOutModal'
 
-export default function StudentProfile() {
+export default function ProfilePage() {
   const { user } = useAuth()
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false)
+
+  const backTarget = user?.role === 'TEACHER' ? '/teacher' : user?.role === 'ADMIN' ? '/admin' : '/student'
+  const isStudent = user?.role === 'STUDENT' || !user?.role
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8">
       <header className="relative z-20 flex flex-col gap-4 mb-12 border-b border-white/[0.04] pb-6 animate-fade-in-up">
         <div>
           <Link
-            to="/student"
+            to={backTarget}
             className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Dashboard
@@ -43,7 +46,9 @@ export default function StudentProfile() {
                 <h2 className="text-2xl font-bold text-white tracking-tight">{user?.name}</h2>
                 
                 <div className="space-y-1">
-                  <div className="text-[10px] uppercase tracking-wider text-text-muted">Student ID</div>
+                  <div className="text-[10px] uppercase tracking-wider text-text-muted">
+                    {isStudent ? 'Student ID' : 'User ID'}
+                  </div>
                   <div className="font-mono text-sm md:text-base font-semibold text-text-primary bg-white/[0.03] border border-white/[0.06] px-3.5 py-1.5 rounded-xl select-all inline-block max-w-full truncate">
                     {user?.id}
                   </div>

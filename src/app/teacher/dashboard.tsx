@@ -31,18 +31,27 @@ export default function TeacherDashboard() {
   }, [user])
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16">
-      <header className="relative z-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-16 border-b border-white/[0.04] pb-8">
-        <div className="space-y-2">
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-            Teacher Panel, <span className="gradient-text-accent">{user?.name}</span>
-          </h1>
-          <p className="text-text-secondary text-sm md:text-base">
-            Manage your courses, content, and student exams.
-          </p>
+    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
+      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-white/[0.04] pb-6">
+        <div>
+          <Link
+            to="/"
+            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+          >
+            &larr; Back to home portal
+          </Link>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div className="space-y-2">
+              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+                Teacher Panel, <span className="gradient-text-accent">{user?.name}</span>
+              </h1>
+              <p className="text-text-secondary text-sm md:text-base">
+                Manage your courses, content, and student exams.
+              </p>
+            </div>
+            <ProfilePopover user={user} />
+          </div>
         </div>
-
-        <ProfilePopover user={user} />
       </header>
 
       <main className="space-y-8">
@@ -130,14 +139,6 @@ export default function TeacherDashboard() {
         )}
       </main>
 
-      <footer className="mt-20 pt-8 border-t border-white/[0.04] text-center">
-        <Link
-          to="/"
-          className="text-xs text-text-muted hover:text-white transition-colors duration-200"
-        >
-          &larr; Back to home portal
-        </Link>
-      </footer>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
-export default function SignInPage() {
+export default function LoginPage() {
   const { user, login } = useAuth()
   const navigate = useNavigate()
 
@@ -14,7 +14,8 @@ export default function SignInPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/student')
+      const path = user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student'
+      navigate(path)
     }
   }, [user, navigate])
 
@@ -30,11 +31,9 @@ export default function SignInPage() {
 
     try {
       await login({ email, password })
-      navigate('/student')
     } catch (err: any) {
       console.error(err)
       setError(err.message || 'Invalid credentials or connection error.')
-    } finally {
       setIsSubmitting(false)
     }
   }
@@ -65,7 +64,7 @@ export default function SignInPage() {
           
           <div className="mb-6">
             <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Welcome Back</h1>
-            <p className="text-sm text-text-secondary">Sign in to access your course materials and exams.</p>
+            <p className="text-sm text-text-secondary">Sign in to access your dashboard.</p>
           </div>
 
           {error && (
