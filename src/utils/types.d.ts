@@ -3,6 +3,7 @@ interface Course {
   name: string;
   description: string | null;
   price: number;
+  createdBy: number;
   createdAt: string;
 }
 

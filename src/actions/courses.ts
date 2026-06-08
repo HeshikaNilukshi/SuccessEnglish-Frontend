@@ -53,3 +53,220 @@ export async function fetchExamsByCourse(token: string, courseId: number): Promi
   });
   return handleResponse(res);
 }
+
+export async function createCourse(
+  token: string,
+  data: { name: string; description: string; price: number }
+): Promise<Course> {
+  const res = await fetch(`${API_BASE}/courses`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+}
+
+export interface UploadSignatureResponse {
+  signature: string;
+  timestamp: number;
+  folder: string;
+  api_key: string;
+  cloud_name: string;
+}
+
+export async function fetchUploadSignature(token: string): Promise<UploadSignatureResponse> {
+  const res = await fetch(`${API_BASE}/videos/upload-signature`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export async function saveVideoDetails(
+  token: string,
+  data: { courseId: number; title: string; videoUrl: string; publicId: string }
+): Promise<Video> {
+  const res = await fetch(`${API_BASE}/videos`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+}
+
+export interface CreateQuestionInput {
+  questionText: string;
+  correctAnswer: string;
+  marks: number;
+}
+
+export interface CreateExamInput {
+  title: string;
+  courseId: number;
+  duration: number;
+  questions: CreateQuestionInput[];
+}
+
+export async function createExam(token: string, data: CreateExamInput): Promise<Exam> {
+  const res = await fetch(`${API_BASE}/exams`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+}
+
+export async function fetchExamDetails(token: string, examId: number): Promise<Exam & { questions: any[] }> {
+  const res = await fetch(`${API_BASE}/exams/${examId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export interface CourseStudentResponse {
+  id: number;
+  userId: number;
+  courseId: number;
+  receiptUrl: string;
+  receiptPublicId: string;
+  verified: boolean;
+  createdAt: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
+
+export async function fetchStudentsByCourse(token: string, courseId: number): Promise<CourseStudentResponse[]> {
+  const res = await fetch(`${API_BASE}/courses/${courseId}/students`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export interface ExamAttemptResponse {
+  id: number;
+  examId: number;
+  studentId: number;
+  score: number | null;
+  createdAt: string;
+  student: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  exam: {
+    id: number;
+    title: string;
+  };
+}
+
+export async function fetchAllResultsByCourse(token: string, courseId: number): Promise<ExamAttemptResponse[]> {
+  const res = await fetch(`${API_BASE}/exams/course/${courseId}/results`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export interface StudentAttemptResponse {
+  id: number;
+  examId: number;
+  studentId: number;
+  score: number | null;
+  createdAt: string;
+  exam: {
+    id: number;
+    title: string;
+  };
+}
+
+export async function fetchStudentResultsByCourse(
+  token: string,
+  courseId: number,
+  studentId: number
+): Promise<StudentAttemptResponse[]> {
+  const res = await fetch(`${API_BASE}/exams/course/${courseId}/student/${studentId}/results`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export interface ExamAttemptDetail {
+  id: number;
+  examId: number;
+  studentId: number;
+  score: number | null;
+  createdAt: string;
+  student: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  exam: {
+    id: number;
+    title: string;
+    courseId: number;
+  };
+  answers: Array<{
+    id: number;
+    questionId: number;
+    studentAnswer: string;
+    awardedMarks: number | null;
+    question: {
+      id: number;
+      questionText: string;
+      correctAnswer: string;
+      marks: number;
+    };
+  }>;
+}
+
+export async function fetchAttemptWithAnswers(token: string, attemptId: number): Promise<ExamAttemptDetail> {
+  const res = await fetch(`${API_BASE}/exams/attempt/${attemptId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export async function updateAttemptMarks(
+  token: string,
+  attemptId: number,
+  answers: Array<{ answerId: number; awardedMarks: number }>
+): Promise<any> {
+  const res = await fetch(`${API_BASE}/exams/attempt/${attemptId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ answers }),
+  });
+  return handleResponse(res);
+}

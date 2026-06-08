@@ -1,0 +1,140 @@
+import { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
+import { fetchStudentsByCourse, type CourseStudentResponse } from '@/actions/courses'
+
+export default function CourseStudents() {
+  const { courseId } = useParams<{ courseId: string }>()
+  const { token } = useAuth()
+
+  const [students, setStudents] = useState<CourseStudentResponse[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadStudents = async () => {
+      if (!courseId || !token) return
+      try {
+        setLoading(true)
+        setError(null)
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) {
+          throw new Error('Invalid Course ID')
+        }
+
+        const data = await fetchStudentsByCourse(token, id)
+        setStudents(data)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load students.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadStudents()
+  }, [courseId, token])
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-6 pt-16 pb-8 animate-pulse">
+        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
+        <div className="h-10 w-80 bg-white/5 rounded mb-10" />
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-16 bg-white/5 rounded-xl" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
+          ⚠️
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-white">Error</h3>
+          <p className="text-text-secondary text-sm leading-relaxed">{error}</p>
+        </div>
+        <Link
+          to={`/teacher/${courseId}`}
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+        >
+          Back to Course
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto px-6 pt-16 pb-16">
+      <header className="mb-10 border-b border-white/[0.04] pb-6">
+        <Link
+          to={`/teacher/${courseId}`}
+          className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+        >
+          &larr; Back to Course
+        </Link>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
+          Enrolled Students
+        </h1>
+        <p className="text-text-secondary text-sm">
+          A list of all students currently enrolled in this course.
+        </p>
+      </header>
+
+      <main>
+        {students.length === 0 ? (
+          <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+            <span className="text-4xl block">👥</span>
+            <h3 className="text-lg font-bold text-white">No Students Enrolled</h3>
+            <p className="text-xs text-text-secondary">
+              No students have requested or been verified for enrollment in this course yet.
+            </p>
+          </div>
+        ) : (
+          <div className="glass-panel rounded-2xl border border-white/[0.04] overflow-hidden">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/[0.04] bg-white/[0.02]">
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Student Name</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Email Address</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Status</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
+                {students.map((student) => (
+                  <tr key={student.id} className="hover:bg-white/[0.01] transition-colors">
+                    <td className="px-6 py-4 text-sm font-semibold text-white">{student.user.name}</td>
+                    <td className="px-6 py-4 text-sm text-text-secondary">{student.user.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
+                        student.verified
+                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                          : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                      }`}>
+                        {student.verified ? 'Verified' : 'Pending'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link
+                        to={`/teacher/${courseId}/student/${student.user.id}`}
+                        className="text-xs font-bold text-accent-indigo hover:text-accent-indigo/80 transition-colors"
+                      >
+                        View Results &rarr;
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
