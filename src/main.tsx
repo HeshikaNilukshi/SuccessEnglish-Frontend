@@ -10,7 +10,7 @@ import RegisterPage from '@/app/register'
 import StudentLayout from '@/StudentLayout'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import StudentDashboard from '@/app/student/dashboard'
-import ProfilePage from '@/app/profile'
+import ProfilePage from '@/app/shared/profile'
 import StudentEnrollment from '@/app/student/enrollment'
 import StudentCourseContent from '@/app/student/courseContent'
 import StudentVideoPage from '@/app/student/video'
@@ -27,6 +27,18 @@ import CourseStudents from '@/app/teacher/students'
 import CourseResults from '@/app/teacher/courseResults'
 import StudentSpecificResults from '@/app/teacher/studentResults'
 import GradeExamAttempt from '@/app/teacher/gradeAttempt'
+import AdminLayout from '@/AdminLayout'
+import AdminRoute from '@/components/AdminRoute'
+import AdminDashboard from '@/app/admin/dashboard'
+import UserProfile from '@/app/shared/UserProfile'
+import AdminAdminsList from '@/app/admin/users/admins'
+import AdminTeachersList from '@/app/admin/users/teachers'
+import AdminStudentsList from '@/app/admin/users/students'
+import UserCreateForm from '@/app/admin/users/UserCreateForm'
+import AdminCoursesList from '@/app/admin/courses'
+import AdminEnrollments from '@/app/admin/enrollments'
+import AdminEnrollmentDetail from '@/app/admin/enrollmentDetail'
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -58,9 +70,26 @@ createRoot(document.getElementById('root')!).render(
               <Route path=":courseId/exams/new" element={<CreateExam />} />
               <Route path=":courseId/exams/:examId" element={<TeacherExamView />} />
               <Route path=":courseId/students" element={<CourseStudents />} />
+              <Route path="student/:id/profile" element={<UserProfile />} />
               <Route path=":courseId/results" element={<CourseResults />} />
               <Route path=":courseId/student/:studentId" element={<StudentSpecificResults />} />
               <Route path="attempt/:attemptId" element={<GradeExamAttempt />} />
+            </Route>
+          </Route>
+          <Route path="/admin" element={<AdminRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="admins" element={<AdminAdminsList />} />
+              <Route path="admins/new" element={<UserCreateForm role="ADMIN" />} />
+              <Route path="teachers" element={<AdminTeachersList />} />
+              <Route path="teachers/new" element={<UserCreateForm role="TEACHER" />} />
+              <Route path="students" element={<AdminStudentsList />} />
+              <Route path="students/new" element={<UserCreateForm role="STUDENT" />} />
+              <Route path="user/:id" element={<UserProfile />} />
+              <Route path="courses" element={<AdminCoursesList />} />
+              <Route path="enrollments" element={<AdminEnrollments />} />
+              <Route path="enrollments/:id" element={<AdminEnrollmentDetail />} />
+              <Route path="profile" element={<ProfilePage />} />
             </Route>
           </Route>
         </Routes>

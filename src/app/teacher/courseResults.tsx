@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAllResultsByCourse, type ExamAttemptResponse } from '@/actions/courses'
 
 export default function CourseResults() {
+  const navigate = useNavigate()
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
 
@@ -103,13 +104,16 @@ export default function CourseResults() {
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Student</th>
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Exam Title</th>
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Date Taken</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Score</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Score</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.04]">
                 {results.map((attempt) => (
-                  <tr key={attempt.id} className="hover:bg-white/[0.01] transition-colors">
+                  <tr
+                    key={attempt.id}
+                    onClick={() => navigate(`/teacher/attempt/${attempt.id}`)}
+                    className="hover:bg-white/[0.03] transition-colors duration-150 cursor-pointer"
+                  >
                     <td className="px-6 py-4 text-sm font-semibold text-white">{attempt.student.name}</td>
                     <td className="px-6 py-4 text-sm text-text-secondary">{attempt.exam.title}</td>
                     <td className="px-6 py-4 text-sm text-text-muted">
@@ -121,20 +125,12 @@ export default function CourseResults() {
                         minute: '2-digit',
                       })}
                     </td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-6 py-4 text-sm text-right">
                       {attempt.score === null ? (
                         <span className="text-amber-400 font-medium">Pending Grading</span>
                       ) : (
                         <span className="text-emerald-400 font-bold">{attempt.score} Marks</span>
                       )}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Link
-                        to={`/teacher/attempt/${attempt.id}`}
-                        className="text-xs font-bold text-accent-indigo hover:text-accent-indigo/80 transition-colors"
-                      >
-                        {attempt.score === null ? 'Grade Now' : 'Update Grade'} &rarr;
-                      </Link>
                     </td>
                   </tr>
                 ))}

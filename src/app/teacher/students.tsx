@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchStudentsByCourse, type CourseStudentResponse } from '@/actions/courses'
 
 export default function CourseStudents() {
+  const navigate = useNavigate()
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
 
@@ -102,16 +103,27 @@ export default function CourseStudents() {
                 <tr className="border-b border-white/[0.04] bg-white/[0.02]">
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Student Name</th>
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Email Address</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Status</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.04]">
                 {students.map((student) => (
-                  <tr key={student.id} className="hover:bg-white/[0.01] transition-colors">
-                    <td className="px-6 py-4 text-sm font-semibold text-white">{student.user.name}</td>
+                  <tr
+                    key={student.id}
+                    onClick={() => navigate(`/teacher/${courseId}/student/${student.user.id}`)}
+                    className="hover:bg-white/[0.03] transition-colors duration-150 cursor-pointer"
+                  >
+                    <td className="px-6 py-4 text-sm font-semibold text-white">
+                      <Link
+                        to={`/teacher/student/${student.user.id}/profile`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="hover:underline hover:text-accent-indigo transition-colors"
+                      >
+                        {student.user.name}
+                      </Link>
+                    </td>
                     <td className="px-6 py-4 text-sm text-text-secondary">{student.user.email}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-right">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
                         student.verified
                           ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
@@ -119,14 +131,6 @@ export default function CourseStudents() {
                       }`}>
                         {student.verified ? 'Verified' : 'Pending'}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Link
-                        to={`/teacher/${courseId}/student/${student.user.id}`}
-                        className="text-xs font-bold text-accent-indigo hover:text-accent-indigo/80 transition-colors"
-                      >
-                        View Results &rarr;
-                      </Link>
                     </td>
                   </tr>
                 ))}

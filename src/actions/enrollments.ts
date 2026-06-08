@@ -19,3 +19,34 @@ export async function requestEnrollment(
 
   return handleResponse(res);
 }
+
+export async function fetchAllEnrollments(token: string): Promise<Enrollment[]> {
+  const res = await fetch(`${API_BASE}/enrollments`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export async function verifyEnrollment(
+  token: string,
+  id: number,
+  verified: boolean
+): Promise<Enrollment> {
+  const res = await fetch(`${API_BASE}/enrollments/${id}/verify`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ verified }),
+  });
+  return handleResponse(res);
+}
+
+export async function fetchEnrollmentById(token: string, id: number): Promise<Enrollment | undefined> {
+  const all = await fetchAllEnrollments(token);
+  return all.find(e => e.id === id);
+}
