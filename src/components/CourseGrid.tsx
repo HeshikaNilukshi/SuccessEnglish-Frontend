@@ -5,9 +5,10 @@ interface CourseGridProps {
   loading: boolean
   error: string | null
   onRetry?: () => void
+  enrolledCourseIds?: number[]
 }
 
-export default function CourseGrid({ courses, loading, error, onRetry }: CourseGridProps) {
+export default function CourseGrid({ courses, loading, error, onRetry, enrolledCourseIds }: CourseGridProps) {
   return (
     <section id="courses" className="py-24 max-w-7xl mx-auto px-6 md:px-12 relative z-10 scroll-mt-24">
       <div className="text-center space-y-4 mb-16">
@@ -75,7 +76,12 @@ export default function CourseGrid({ courses, loading, error, onRetry }: CourseG
       {!loading && !error && courses.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.map((course, idx) => (
-            <CourseCard key={course.id} course={course} index={idx} />
+            <CourseCard
+              key={course.id}
+              course={course}
+              index={idx}
+              isEnrolled={enrolledCourseIds?.includes(course.id) ?? false}
+            />
           ))}
         </div>
       )}

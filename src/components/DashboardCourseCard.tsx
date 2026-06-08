@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
 
 interface DashboardCourseCardProps {
@@ -45,9 +47,12 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
       <div className="mt-8 pt-4 border-t border-white/[0.04] flex items-center justify-between text-xs text-text-muted">
         <span>Joined {new Date(enrollment.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
         {isVerified ? (
-          <span className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1 cursor-pointer">
+          <Link
+            to={`/student/${enrollment.course.id}`}
+            className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1 cursor-pointer"
+          >
             Access Course <span className="text-sm">&rarr;</span>
-          </span>
+          </Link>
         ) : (
           <span className="text-text-muted italic">Awaiting Approval</span>
         )}

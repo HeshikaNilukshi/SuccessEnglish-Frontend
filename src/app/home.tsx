@@ -3,10 +3,13 @@ import Hero from '@/components/Hero'
 import CourseGrid from '@/components/CourseGrid'
 import AboutUs from '@/components/AboutUs'
 import ContactUs from '@/components/ContactUs'
-import { fetchCourses } from '@/actions/courses'
+import { fetchCourses, fetchMyEnrollments } from '@/actions/courses'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function HomePage() {
+  const { token, user } = useAuth()
   const [courses, setCourses] = useState<Course[]>([])
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -28,6 +31,23 @@ export default function HomePage() {
     loadCourses()
   }, [])
 
+  useEffect(() => {
+    const loadEnrollments = async () => {
+      if (!token || user?.role !== 'STUDENT') {
+        setEnrolledCourseIds([])
+        return
+      }
+      try {
+        const enrollments = await fetchMyEnrollments(token)
+        const ids = enrollments.map(e => e.courseId)
+        setEnrolledCourseIds(ids)
+      } catch (err) {
+        console.error('Failed to load user enrollments on home page:', err)
+      }
+    }
+    loadEnrollments()
+  }, [token, user])
+
   return (
     <div className="relative">
       <div className="absolute top-[800px] left-[-15%] w-[600px] h-[600px] bg-accent-pink/5 rounded-full blur-[160px] pointer-events-none z-0" />
@@ -39,6 +59,7 @@ export default function HomePage() {
         loading={loading}
         error={error}
         onRetry={loadCourses}
+        enrolledCourseIds={enrolledCourseIds}
       />
       <AboutUs />
       <ContactUs />

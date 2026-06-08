@@ -46,4 +46,26 @@ interface Enrollment {
     createdAt: string;
   };
 }
+
+interface Video {
+  id: number;
+  courseId: number;
+  title: string;
+  videoUrl: string;
+  publicId: string;
+  createdAt: string;
+}
+
+interface Exam {
+  id: number;
+  title: string;
+  duration: number;
+  courseId: number;
+  createdBy: number;
+  createdAt: string;
+  _count?: {
+    questions: number;
+  };
+}
+
 

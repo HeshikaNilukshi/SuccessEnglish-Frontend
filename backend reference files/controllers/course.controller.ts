@@ -38,9 +38,31 @@ export const getAllCourses = async (req: Request, res: Response): Promise<void> 
 };
 
 export const getCourse = async (req: Request, res: Response): Promise<void> => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
+
   const id = parseInt(req.params.id as string, 10);
 
   try {
+    // If student, check verified enrollment
+    if (req.user.role === 'STUDENT') {
+      const enrollment = await prisma.enrollment.findUnique({
+        where: {
+          userId_courseId: {
+            userId: req.user.id,
+            courseId: id,
+          },
+        },
+      });
+
+      if (!enrollment || !enrollment.verified) {
+        res.status(403).json({ message: 'Access denied: You must be a verified enrolled student' });
+        return;
+      }
+    }
+
     const course = await prisma.course.findUnique({
       where: { id },
       include: {

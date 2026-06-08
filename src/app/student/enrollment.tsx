@@ -20,14 +20,14 @@ export default function StudentEnrollment() {
 
   useEffect(() => {
     const loadCourse = async () => {
-      if (!courseId) return
+      if (!courseId || !token) return
       try {
         setLoading(true)
         const id = parseInt(courseId, 10)
         if (isNaN(id)) {
           throw new Error('Invalid Course ID')
         }
-        const data = await fetchCourse(id)
+        const data = await fetchCourse(id, token)
         setCourse(data)
       } catch (err: any) {
         setError(err.message || 'Failed to load course details')
@@ -36,7 +36,7 @@ export default function StudentEnrollment() {
       }
     }
     loadCourse()
-  }, [courseId])
+  }, [courseId, token])
 
   const handleFileChange = (file: File) => {
     if (!file.type.startsWith('image/')) {

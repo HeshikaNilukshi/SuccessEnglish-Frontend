@@ -12,6 +12,8 @@ import StudentDashboard from '@/app/student/dashboard'
 import { AuthProvider } from '@/contexts/AuthContext'
 import StudentProfile from '@/app/student/profile'
 import StudentEnrollment from '@/app/student/enrollment'
+import StudentCourseContent from '@/app/student/courseContent'
+import StudentVideoPage from '@/app/student/video'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -28,6 +30,8 @@ createRoot(document.getElementById('root')!).render(
               <Route index element={<StudentDashboard />} />
               <Route path="profile" element={<StudentProfile />} />
               <Route path="enrollment/:courseId" element={<StudentEnrollment />} />
+              <Route path=":courseId" element={<StudentCourseContent />} />
+              <Route path=":courseId/videos/:videoId" element={<StudentVideoPage />} />
             </Route>
           </Route>
         </Routes>
