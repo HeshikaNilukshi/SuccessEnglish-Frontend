@@ -143,46 +143,46 @@ export default function UserProfile() {
         {/* User Information & Form Area */}
         <div className="relative overflow-hidden rounded-2xl glass-panel border border-white/[0.04] p-8 shadow-xl">
           <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
-          
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-            {/* Avatar & Side Meta */}
-            <div className="flex flex-col items-center shrink-0 w-full md:w-48 text-center border-b md:border-b-0 md:border-r border-white/[0.04] pb-6 md:pb-0 md:pr-8">
-              <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] mb-4">
-                <span className="text-white font-extrabold text-2xl uppercase">
-                  {profileUser.name?.charAt(0) ?? 'U'}
-                </span>
-              </div>
-              <span className="text-[9px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/25 mb-4">
-                {profileUser.role}
-              </span>
-              <div className="space-y-1 text-center w-full">
-                <div className="text-[9px] uppercase tracking-wider text-text-muted">User ID</div>
-                <div className="font-mono text-xs text-text-secondary truncate max-w-full bg-white/[0.03] px-2 py-1 rounded">
-                  {profileUser.id}
+
+          {isAdminView ? (
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              {/* Avatar & Side Meta */}
+              <div className="flex flex-col items-center shrink-0 w-full md:w-48 text-center border-b md:border-b-0 md:border-r border-white/[0.04] pb-6 md:pb-0 md:pr-8">
+                <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] mb-4">
+                  <span className="text-white font-extrabold text-2xl uppercase">
+                    {profileUser.name?.charAt(0) ?? 'U'}
+                  </span>
+                </div>
+                <div className="space-y-1 text-center w-full">
+                  <div className="text-[9px] uppercase tracking-wider text-text-muted">User ID</div>
+                  <div className="font-mono text-xs text-text-secondary truncate max-w-full bg-white/[0.03] px-2 py-1 rounded">
+                    {profileUser.id}
+                  </div>
+                  <span className="text-[9px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/25 mb-4">
+                    {profileUser.role}
+                  </span>
+                </div>
+                <div className="text-[10px] text-text-muted mt-4">
+                  Registered: <span className="text-text-secondary font-medium">{formatDate(profileUser.createdAt || '')}</span>
                 </div>
               </div>
-              <div className="text-[10px] text-text-muted mt-4">
-                Registered: <span className="text-text-secondary font-medium">{formatDate(profileUser.createdAt || '')}</span>
-              </div>
-            </div>
 
-            {/* Editable Form (Admin Only) or Read-Only details */}
-            <div className="flex-grow w-full">
-              {error && (
-                <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-sm">
-                  <span className="text-sm shrink-0">⚠️</span>
-                  <span>{error}</span>
-                </div>
-              )}
+              {/* Editable Form (Admin Only) */}
+              <div className="flex-grow w-full">
+                {error && (
+                  <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-sm">
+                    <span className="text-sm shrink-0">⚠️</span>
+                    <span>{error}</span>
+                  </div>
+                )}
 
-              {success && (
-                <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-sm">
-                  <span className="text-sm shrink-0">✓</span>
-                  <span>{success}</span>
-                </div>
-              )}
+                {success && (
+                  <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-sm">
+                    <span className="text-sm shrink-0">✓</span>
+                    <span>{success}</span>
+                  </div>
+                )}
 
-              {isAdminView ? (
                 <form onSubmit={handleUpdate} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
@@ -241,22 +241,39 @@ export default function UserProfile() {
                     </button>
                   </div>
                 </form>
-              ) : (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-1">
-                      <div className="text-[10px] uppercase tracking-wider text-text-muted">Full Name</div>
-                      <div className="text-sm font-bold text-white">{profileUser.name}</div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-[10px] uppercase tracking-wider text-text-muted">Email Address</div>
-                      <div className="text-sm text-text-secondary">{profileUser.email}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-6 items-center">
+              {/* Left side: Avatar */}
+              <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] shrink-0">
+                <span className="text-white font-extrabold text-3xl uppercase">
+                  {profileUser.name?.charAt(0) ?? 'U'}
+                </span>
+              </div>
+
+              {/* Right side: Details */}
+              <div className="flex-grow text-center sm:text-left space-y-2.5">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                  {profileUser.name}
+                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:justify-start gap-2 sm:gap-4 text-sm sm:text-base text-text-secondary">
+                  <span className="font-semibold text-white/90">{profileUser.email}</span>
+                  <span className="hidden sm:inline text-white/10">•</span>
+                  <span className="font-mono bg-white/[0.04] px-2.5 py-0.5 rounded text-xs text-text-secondary border border-white/[0.04] inline-block self-center">
+                    Student ID: {profileUser.id}
+                  </span>
+                  <span className="hidden sm:inline text-white/10">•</span>
+                  <span className="text-[9px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/25">
+                    {profileUser.role}
+                  </span>
+                </div>
+                <div className="text-xs text-text-muted">
+                  Registered on <span className="text-text-secondary font-medium">{formatDate(profileUser.createdAt || '')}</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Courses Area (Shown Below Information) */}
@@ -302,28 +319,41 @@ export default function UserProfile() {
               {profileUser.enrollments && profileUser.enrollments.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {profileUser.enrollments.map((enrollment: any) => (
-                    <Link
+                    <div
                       key={enrollment.id}
-                      to={isAdminView ? `/admin/courses/${enrollment.course.id}` : `/teacher/${enrollment.course.id}`}
-                      className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-0.5 active:scale-[0.98] transition-all group flex flex-col justify-between"
+                      onClick={() => navigate(isAdminView ? `/admin/courses/${enrollment.course.id}` : `/teacher/${enrollment.course.id}`)}
+                      className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-0.5 active:scale-[0.98] transition-all group flex flex-col justify-between cursor-pointer text-left"
                     >
                       <div>
                         <h4 className="text-sm font-bold text-white group-hover:text-accent-indigo transition-colors duration-200">
                           {enrollment.course.name}
                         </h4>
-                        <span className={`inline-block mt-2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${
-                          enrollment.verified 
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                            : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                        }`}>
+                        <span className={`inline-block mt-2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${enrollment.verified
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                          }`}>
                           {enrollment.verified ? 'Verified' : 'Pending Verification'}
                         </span>
                       </div>
-                      <div className="mt-4 flex items-center justify-between text-xs text-text-muted">
+                      <div className="mt-4 flex items-center justify-between text-[11px] text-text-muted">
                         <span>Enrolled on: {formatDate(enrollment.createdAt)}</span>
-                        <span className="text-accent-indigo group-hover:text-white transition-colors duration-200">View &rarr;</span>
+                        <div className="flex items-center gap-3">
+                          {!isAdminView && enrollment.course.createdBy === currentUser?.id && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                navigate(`/teacher/${enrollment.course.id}/student/${profileUser.id}`)
+                              }}
+                              className="px-2 py-1 rounded bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/20 hover:bg-accent-indigo hover:text-white transition-all text-[10px] font-semibold cursor-pointer"
+                            >
+                              Results
+                            </button>
+                          )}
+                          <span className="text-accent-indigo group-hover:text-white transition-colors duration-200">View &rarr;</span>
+                        </div>
                       </div>
-                    </Link>
+                    </div>
                   ))}
                 </div>
               ) : (

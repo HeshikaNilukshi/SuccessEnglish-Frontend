@@ -270,3 +270,57 @@ export async function updateAttemptMarks(
   });
   return handleResponse(res);
 }
+
+export async function updateVideo(
+  token: string,
+  videoId: number,
+  data: { title?: string; videoUrl?: string; publicId?: string }
+): Promise<Video> {
+  const res = await fetch(`${API_BASE}/videos/${videoId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+}
+
+export async function deleteVideo(token: string, videoId: number): Promise<any> {
+  const res = await fetch(`${API_BASE}/videos/${videoId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export async function updateExam(
+  token: string,
+  examId: number,
+  data: { title?: string; duration?: number; questions?: CreateQuestionInput[] }
+): Promise<Exam> {
+  const res = await fetch(`${API_BASE}/exams/${examId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+}
+
+export async function deleteExam(token: string, examId: number): Promise<any> {
+  const res = await fetch(`${API_BASE}/exams/${examId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}

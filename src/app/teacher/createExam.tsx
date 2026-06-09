@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { createExam, type CreateQuestionInput } from '@/actions/courses'
+import { createExam, updateExam, fetchExamDetails, type CreateQuestionInput } from '@/actions/courses'
 
 export default function CreateExam() {
-  const { courseId } = useParams<{ courseId: string }>()
+  const { courseId, examId } = useParams<{ courseId: string; examId?: string }>()
   const { token } = useAuth()
   const navigate = useNavigate()
+
+  const isEditing = !!examId
 
   const [title, setTitle] = useState('')
   const [duration, setDuration] = useState('0')
@@ -15,6 +17,30 @@ export default function CreateExam() {
   ])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadExamData = async () => {
+      if (!isEditing || !examId || !token) return
+      try {
+        setSubmitting(true)
+        setError(null)
+        const data = await fetchExamDetails(token, parseInt(examId, 10))
+        setTitle(data.title)
+        setDuration(data.duration.toString())
+        setQuestions(data.questions.map(q => ({
+          questionText: q.questionText,
+          correctAnswer: q.correctAnswer,
+          marks: q.marks
+        })))
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load exam details.')
+      } finally {
+        setSubmitting(false)
+      }
+    }
+    loadExamData()
+  }, [examId, token, isEditing])
 
   const handleAddQuestion = () => {
     setQuestions([...questions, { questionText: '', correctAnswer: '', marks: 5 }])
@@ -77,16 +103,25 @@ export default function CreateExam() {
     setError(null)
 
     try {
-      await createExam(token, {
-        title,
-        courseId: parseInt(courseId, 10),
-        duration: durationMins,
-        questions,
-      })
-      navigate(`/teacher/${courseId}`)
+      if (isEditing && examId) {
+        await updateExam(token, parseInt(examId, 10), {
+          title,
+          duration: durationMins,
+          questions,
+        })
+        navigate(`/teacher/${courseId}/exams/${examId}`)
+      } else {
+        await createExam(token, {
+          title,
+          courseId: parseInt(courseId, 10),
+          duration: durationMins,
+          questions,
+        })
+        navigate(`/teacher/${courseId}`)
+      }
     } catch (err: any) {
       console.error(err)
-      setError(err.message || 'Failed to create exam.')
+      setError(err.message || `Failed to ${isEditing ? 'save' : 'create'} exam.`)
       setSubmitting(false)
     }
   }
@@ -95,16 +130,16 @@ export default function CreateExam() {
     <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
       <header className="mb-10 border-b border-white/[0.04] pb-6">
         <Link
-          to={`/teacher/${courseId}`}
+          to={isEditing && examId ? `/teacher/${courseId}/exams/${examId}` : `/teacher/${courseId}`}
           className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
         >
-          &larr; Back to Course
+          &larr; Back to {isEditing ? 'Exam' : 'Course'}
         </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">
-          Create Assessment Exam
+        <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans">
+          {isEditing ? 'Edit Assessment Exam' : 'Create Assessment Exam'}
         </h1>
         <p className="text-text-secondary text-sm">
-          Define exam title, time limit, and enter questions with correct answers.
+          {isEditing ? 'Modify exam details and update questions.' : 'Define exam title, time limit, and enter questions with correct answers.'}
         </p>
       </header>
 
@@ -228,7 +263,7 @@ export default function CreateExam() {
             disabled={submitting}
             className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all disabled:opacity-50 cursor-pointer"
           >
-            {submitting ? 'Creating Exam...' : 'Publish Exam'}
+            {submitting ? (isEditing ? 'Saving...' : 'Creating Exam...') : (isEditing ? 'Save Changes' : 'Publish Exam')}
           </button>
         </form>
       </main>

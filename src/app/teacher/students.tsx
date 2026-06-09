@@ -110,17 +110,11 @@ export default function CourseStudents() {
                 {students.map((student) => (
                   <tr
                     key={student.id}
-                    onClick={() => navigate(`/teacher/${courseId}/student/${student.user.id}`)}
+                    onClick={() => navigate(`/teacher/student/${student.user.id}/profile`)}
                     className="hover:bg-white/[0.03] transition-colors duration-150 cursor-pointer"
                   >
                     <td className="px-6 py-4 text-sm font-semibold text-white">
-                      <Link
-                        to={`/teacher/student/${student.user.id}/profile`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="hover:underline hover:text-accent-indigo transition-colors"
-                      >
-                        {student.user.name}
-                      </Link>
+                      {student.user.name}
                     </td>
                     <td className="px-6 py-4 text-sm text-text-secondary">{student.user.email}</td>
                     <td className="px-6 py-4 text-right">

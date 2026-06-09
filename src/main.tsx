@@ -19,7 +19,6 @@ import TeacherRoute from '@/components/TeacherRoute'
 import TeacherDashboard from '@/app/teacher/dashboard'
 import CreateCourse from '@/app/teacher/createCourse'
 import TeacherCourseContent from '@/app/teacher/courseContent'
-import CreateVideo from '@/app/teacher/createVideo'
 import TeacherVideoPage from '@/app/teacher/video'
 import CreateExam from '@/app/teacher/createExam'
 import TeacherExamView from '@/app/teacher/exam'
@@ -65,10 +64,10 @@ createRoot(document.getElementById('root')!).render(
               <Route path="profile" element={<ProfilePage />} />
               <Route path="courses/new" element={<CreateCourse />} />
               <Route path=":courseId" element={<TeacherCourseContent />} />
-              <Route path=":courseId/videos/new" element={<CreateVideo />} />
               <Route path=":courseId/videos/:videoId" element={<TeacherVideoPage />} />
               <Route path=":courseId/exams/new" element={<CreateExam />} />
               <Route path=":courseId/exams/:examId" element={<TeacherExamView />} />
+              <Route path=":courseId/exams/:examId/edit" element={<CreateExam />} />
               <Route path=":courseId/students" element={<CourseStudents />} />
               <Route path="student/:id/profile" element={<UserProfile />} />
               <Route path=":courseId/results" element={<CourseResults />} />
