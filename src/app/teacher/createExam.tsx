@@ -12,6 +12,7 @@ export default function CreateExam() {
 
   const [title, setTitle] = useState('')
   const [duration, setDuration] = useState('0')
+  const [passMark, setPassMark] = useState('0')
   const [questions, setQuestions] = useState<CreateQuestionInput[]>([
     { questionText: '', correctAnswer: '', marks: 5 }
   ])
@@ -27,6 +28,7 @@ export default function CreateExam() {
         const data = await fetchExamDetails(token, parseInt(examId, 10))
         setTitle(data.title)
         setDuration(data.duration.toString())
+        setPassMark(data.passMark ? data.passMark.toString() : '0')
         setQuestions(data.questions.map(q => ({
           questionText: q.questionText,
           correctAnswer: q.correctAnswer,
@@ -78,6 +80,12 @@ export default function CreateExam() {
       return
     }
 
+    const passMarkVal = parseInt(passMark, 10)
+    if (isNaN(passMarkVal) || passMarkVal < 0) {
+      setError('Pass mark must be 0 or a positive number')
+      return
+    }
+
     if (questions.length === 0) {
       setError('At least one question is required')
       return
@@ -107,6 +115,7 @@ export default function CreateExam() {
         await updateExam(token, parseInt(examId, 10), {
           title,
           duration: durationMins,
+          passMark: passMarkVal,
           questions,
         })
         navigate(`/teacher/${courseId}/exams/${examId}`)
@@ -115,6 +124,7 @@ export default function CreateExam() {
           title,
           courseId: parseInt(courseId, 10),
           duration: durationMins,
+          passMark: passMarkVal,
           questions,
         })
         navigate(`/teacher/${courseId}`)
@@ -152,7 +162,7 @@ export default function CreateExam() {
           )}
 
           <div className="glass-panel p-8 rounded-2xl border border-white/[0.04] space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
                   Exam Title
@@ -175,6 +185,19 @@ export default function CreateExam() {
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
+                  disabled={submitting}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+                  Pass Mark
+                </label>
+                <input
+                  type="number"
+                  value={passMark}
+                  onChange={(e) => setPassMark(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
                   disabled={submitting}
                 />

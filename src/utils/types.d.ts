@@ -61,6 +61,7 @@ interface Exam {
   id: number;
   title: string;
   duration: number;
+  passMark: number;
   courseId: number;
   createdBy: number;
   createdAt: string;

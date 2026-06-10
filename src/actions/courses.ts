@@ -112,6 +112,7 @@ export interface CreateExamInput {
   title: string;
   courseId: number;
   duration: number;
+  passMark: number;
   questions: CreateQuestionInput[];
 }
 
@@ -301,7 +302,7 @@ export async function deleteVideo(token: string, videoId: number): Promise<any> 
 export async function updateExam(
   token: string,
   examId: number,
-  data: { title?: string; duration?: number; questions?: CreateQuestionInput[] }
+  data: { title?: string; duration?: number; passMark?: number; questions?: CreateQuestionInput[] }
 ): Promise<Exam> {
   const res = await fetch(`${API_BASE}/exams/${examId}`, {
     method: 'PUT',
@@ -321,6 +322,39 @@ export async function deleteExam(token: string, examId: number): Promise<any> {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
+  });
+  return handleResponse(res);
+}
+
+export interface StartExamResponse {
+  attemptId: number;
+  startedAt: string;
+  deadline: string | null;
+}
+
+export async function startExamAttempt(token: string, examId: number): Promise<StartExamResponse> {
+  const res = await fetch(`${API_BASE}/exams/${examId}/start`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export async function submitExamAttempt(
+  token: string,
+  examId: number,
+  answers: Array<{ questionId: number; studentAnswer: string }>
+): Promise<any> {
+  const res = await fetch(`${API_BASE}/exams/${examId}/submit`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ answers }),
   });
   return handleResponse(res);
 }

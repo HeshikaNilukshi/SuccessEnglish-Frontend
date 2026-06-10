@@ -14,6 +14,7 @@ import ProfilePage from '@/app/shared/profile'
 import StudentEnrollment from '@/app/student/enrollment'
 import StudentCourseContent from '@/app/student/courseContent'
 import StudentVideoPage from '@/app/student/video'
+import StudentExamFlow from '@/app/student/examFlow'
 import TeacherLayout from '@/TeacherLayout'
 import TeacherRoute from '@/components/TeacherRoute'
 import TeacherDashboard from '@/app/teacher/dashboard'
@@ -56,6 +57,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="enrollment/:courseId" element={<StudentEnrollment />} />
               <Route path=":courseId" element={<StudentCourseContent />} />
               <Route path=":courseId/videos/:videoId" element={<StudentVideoPage />} />
+              <Route path=":courseId/exams/:examId" element={<StudentExamFlow />} />
             </Route>
           </Route>
           <Route path="/teacher" element={<TeacherRoute />}>
