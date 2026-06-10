@@ -9,7 +9,7 @@ export default function GradeExamAttempt() {
   const navigate = useNavigate()
 
   const [attempt, setAttempt] = useState<ExamAttemptDetail | null>(null)
-  const [grades, setGrades] = useState<Array<{ answerId: number; awardedMarks: number }>>([])
+  const [grades, setGrades] = useState<Array<{ answerId: number; isCorrect: boolean | null }>>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -31,7 +31,7 @@ export default function GradeExamAttempt() {
         
         const initialGrades = data.answers.map((ans) => ({
           answerId: ans.id,
-          awardedMarks: ans.awardedMarks !== null ? ans.awardedMarks : (ans.studentAnswer.trim().toLowerCase() === ans.question.correctAnswer.trim().toLowerCase() ? ans.question.marks : 0),
+          isCorrect: ans.isCorrect ?? null,
         }))
         setGrades(initialGrades)
       } catch (err: any) {
@@ -45,13 +45,9 @@ export default function GradeExamAttempt() {
     loadAttempt()
   }, [attemptId, token])
 
-  const handleGradeChange = (answerId: number, val: string, maxMarks: number) => {
-    let numVal = parseInt(val, 10) || 0
-    if (numVal < 0) numVal = 0
-    if (numVal > maxMarks) numVal = maxMarks
-
+  const handleToggleCorrect = (answerId: number, val: boolean) => {
     setGrades(
-      grades.map((g) => (g.answerId === answerId ? { ...g, awardedMarks: numVal } : g))
+      grades.map((g) => (g.answerId === answerId ? { ...g, isCorrect: val } : g))
     )
   }
 
@@ -112,11 +108,28 @@ export default function GradeExamAttempt() {
     )
   }
 
-  const currentScore = grades.reduce((acc, curr) => acc + curr.awardedMarks, 0)
+  const currentScore = attempt.answers.reduce((acc, ans) => {
+    const gradeItem = grades.find((g) => g.answerId === ans.id)
+    return acc + (gradeItem?.isCorrect ? ans.question.marks : 0)
+  }, 0)
   const totalPossibleScore = attempt.answers.reduce((acc, curr) => acc + curr.question.marks, 0)
 
   return (
-    <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
+    <div className="max-w-3xl mx-auto px-6 pt-28 pb-16 relative">
+      {/* Sticky Score Banner */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-white/[0.04] py-4 shadow-md animate-fade-in">
+        <div className="max-w-3xl mx-auto px-6 flex justify-between items-center">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Grading Exam Attempt</span>
+            <span className="text-sm font-bold text-white truncate max-w-[200px] md:max-w-md">{attempt.student.name}</span>
+          </div>
+          <div className="bg-bg-secondary border border-white/5 rounded-xl px-4 py-2 text-right">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
+            <span className="text-lg font-extrabold text-emerald-400">{currentScore} / {totalPossibleScore}</span>
+          </div>
+        </div>
+      </div>
+
       <header className="mb-10 border-b border-white/[0.04] pb-6">
         <button
           onClick={() => navigate(-1)}
@@ -124,19 +137,13 @@ export default function GradeExamAttempt() {
         >
           &larr; Go Back
         </button>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
-              Grade Exam Attempt
-            </h1>
-            <p className="text-text-secondary text-sm">
-              Review answers submitted by <span className="font-semibold text-white">{attempt.student.name}</span> ({attempt.student.email}) for <span className="font-semibold text-white">{attempt.exam.title}</span>.
-            </p>
-          </div>
-          <div className="bg-bg-secondary border border-white/5 rounded-xl px-4 py-3 text-right">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
-            <span className="text-xl font-extrabold text-emerald-400">{currentScore} / {totalPossibleScore}</span>
-          </div>
+        <div className="space-y-4">
+          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
+            Grade Exam Attempt
+          </h1>
+          <p className="text-text-secondary text-sm">
+            Review answers submitted by <span className="font-semibold text-white">{attempt.student.name}</span> ({attempt.student.email}) for <span className="font-semibold text-white">{attempt.exam.title}</span>.
+          </p>
         </div>
       </header>
 
@@ -151,8 +158,17 @@ export default function GradeExamAttempt() {
           <div className="space-y-6">
             {attempt.answers.map((ans, idx) => {
               const gradeItem = grades.find((g) => g.answerId === ans.id)
-              const awardedMarks = gradeItem ? gradeItem.awardedMarks : 0
-              const isCorrectMatch = ans.studentAnswer.trim().toLowerCase() === ans.question.correctAnswer.trim().toLowerCase()
+              const isCorrectVal = gradeItem ? gradeItem.isCorrect : null
+
+              const studentAnswerContainerClass = () => {
+                if (isCorrectVal === true) {
+                  return 'p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400'
+                }
+                if (isCorrectVal === false) {
+                  return 'p-4 rounded-lg bg-rose-500/5 border border-rose-500/10 text-xs text-rose-400'
+                }
+                return 'p-4 rounded-lg bg-white/[0.02] border border-white/5 text-xs text-white'
+              }
 
               return (
                 <div
@@ -161,23 +177,31 @@ export default function GradeExamAttempt() {
                 >
                   <div className="flex justify-between items-center pb-2 border-b border-white/[0.04]">
                     <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
-                    <span className="text-xs text-text-muted">Max: {ans.question.marks} Marks</span>
+                    <span className="text-xs text-text-muted">
+                      {ans.question.marks} Marks
+                    </span>
                   </div>
 
                   <p className="text-sm font-semibold text-white">
                     {ans.question.questionText}
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-lg bg-white/[0.02] border border-white/5 text-xs">
-                      <span className="font-bold uppercase tracking-wider text-[9px] text-text-muted block mb-1">
+                  <div className="space-y-4">
+                    {/* Student's Answer */}
+                    <div className={studentAnswerContainerClass()}>
+                      <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${
+                        isCorrectVal === true 
+                          ? 'text-emerald-500' 
+                          : isCorrectVal === false 
+                            ? 'text-rose-400' 
+                            : 'text-text-muted'
+                      }`}>
                         Student's Answer
                       </span>
-                      <span className={isCorrectMatch ? 'text-emerald-400 font-semibold' : 'text-rose-400'}>
-                        {ans.studentAnswer}
-                      </span>
+                      <span>{ans.studentAnswer}</span>
                     </div>
 
+                    {/* Correct Answer */}
                     <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400">
                       <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-500 block mb-1">
                         Correct Answer
@@ -186,25 +210,32 @@ export default function GradeExamAttempt() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center pt-2">
-                    <span className="text-xs text-text-secondary">
-                      Status: {isCorrectMatch ? (
-                        <span className="text-emerald-400 font-semibold">Exact Match ✓</span>
-                      ) : (
-                        <span className="text-rose-400 font-semibold">Mismatch ✗</span>
-                      )}
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <label className="text-xs text-text-secondary">Awarded Marks:</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max={ans.question.marks}
-                        value={awardedMarks}
-                        onChange={(e) => handleGradeChange(ans.id, e.target.value, ans.question.marks)}
-                        className="w-16 px-2.5 py-1 rounded bg-bg-secondary border border-white/10 focus:border-accent-indigo outline-none text-center text-sm text-white"
+                  <div className="flex justify-end pt-2">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleCorrect(ans.id, true)}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                          isCorrectVal === true
+                            ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
+                            : 'bg-white/5 border-white/10 text-text-secondary hover:text-white hover:bg-white/10'
+                        }`}
                         disabled={submitting}
-                      />
+                      >
+                        ✓ Correct ({ans.question.marks} Marks)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleCorrect(ans.id, false)}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                          isCorrectVal === false
+                            ? 'bg-rose-500/10 border-rose-500 text-rose-400'
+                            : 'bg-white/5 border-white/10 text-text-secondary hover:text-white hover:bg-white/10'
+                        }`}
+                        disabled={submitting}
+                      >
+                        ✗ Incorrect (0 Marks)
+                      </button>
                     </div>
                   </div>
                 </div>

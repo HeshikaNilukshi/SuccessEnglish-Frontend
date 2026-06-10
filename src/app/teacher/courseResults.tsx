@@ -126,7 +126,7 @@ export default function CourseResults() {
                       })}
                     </td>
                     <td className="px-6 py-4 text-sm text-right">
-                      {attempt.score === null ? (
+                      {!attempt.isGraded ? (
                         <span className="text-amber-400 font-medium">Pending Grading</span>
                       ) : (
                         <span className="text-emerald-400 font-bold">{attempt.score} Marks</span>

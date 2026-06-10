@@ -168,6 +168,7 @@ export interface ExamAttemptResponse {
   examId: number;
   studentId: number;
   score: number | null;
+  isGraded: boolean;
   createdAt: string;
   student: {
     id: number;
@@ -195,6 +196,7 @@ export interface StudentAttemptResponse {
   examId: number;
   studentId: number;
   score: number | null;
+  isGraded: boolean;
   createdAt: string;
   exam: {
     id: number;
@@ -221,6 +223,7 @@ export interface ExamAttemptDetail {
   examId: number;
   studentId: number;
   score: number | null;
+  isGraded: boolean;
   createdAt: string;
   student: {
     id: number;
@@ -236,7 +239,7 @@ export interface ExamAttemptDetail {
     id: number;
     questionId: number;
     studentAnswer: string;
-    awardedMarks: number | null;
+    isCorrect: boolean | null;
     question: {
       id: number;
       questionText: string;
@@ -259,7 +262,7 @@ export async function fetchAttemptWithAnswers(token: string, attemptId: number):
 export async function updateAttemptMarks(
   token: string,
   attemptId: number,
-  answers: Array<{ answerId: number; awardedMarks: number }>
+  answers: Array<{ answerId: number; isCorrect: boolean | null }>
 ): Promise<any> {
   const res = await fetch(`${API_BASE}/exams/attempt/${attemptId}`, {
     method: 'PUT',
