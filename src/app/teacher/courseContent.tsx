@@ -188,31 +188,12 @@ export default function TeacherCourseContent() {
               >
                 📊 Exam Results
               </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setNewVideoTitle('')
-                  setNewVideoFile(null)
-                  setAddVideoError(null)
-                  setAddVideoProgress(null)
-                  setIsAddVideoOpen(true)
-                }}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-white/10 active:scale-[0.98] transition-all cursor-pointer"
-              >
-                + Add Video
-              </button>
-              <Link
-                to={`/teacher/${course.id}/exams/new`}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-violet to-accent-pink hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] transition-all"
-              >
-                + Add Exam
-              </Link>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="flex justify-start mb-8">
+      <div className="flex justify-between items-center mb-8">
         <div className="bg-bg-secondary/80 border border-white/[0.04] rounded-xl p-1 flex gap-1.5 w-full max-w-[320px] shadow-card">
           <button
             type="button"
@@ -236,6 +217,31 @@ export default function TeacherCourseContent() {
           >
             📝 Exams ({exams.length})
           </button>
+        </div>
+
+        <div>
+          {activeTab === 'videos' ? (
+            <button
+              type="button"
+              onClick={() => {
+                setNewVideoTitle('')
+                setNewVideoFile(null)
+                setAddVideoError(null)
+                setAddVideoProgress(null)
+                setIsAddVideoOpen(true)
+              }}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-white/10 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              + Add Video
+            </button>
+          ) : (
+            <Link
+              to={`/teacher/${course.id}/exams/new`}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-violet to-accent-pink hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] transition-all"
+            >
+              + Add Exam
+            </Link>
+          )}
         </div>
       </div>
 

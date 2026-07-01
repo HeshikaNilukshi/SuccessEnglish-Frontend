@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse } from '@/actions/courses'
+import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchMyResultsByCourse, type StudentAttemptResponse } from '@/actions/courses'
 
 export default function StudentCourseContent() {
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const [course, setCourse] = useState<Course | null>(null)
   const [videos, setVideos] = useState<Video[]>([])
   const [exams, setExams] = useState<Exam[]>([])
+  const [results, setResults] = useState<StudentAttemptResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'videos' | 'exams'>('videos')
+  const [activeTab, setActiveTab] = useState<'videos' | 'exams' | 'results'>(location.state?.activeTab || 'videos')
 
   useEffect(() => {
     const loadContent = async () => {
@@ -25,16 +28,18 @@ export default function StudentCourseContent() {
           throw new Error('Invalid Course ID')
         }
 
-        // Fetch course details, videos, and exams in parallel
-        const [courseData, videosData, examsData] = await Promise.all([
+        // Fetch course details, videos, exams, and results in parallel
+        const [courseData, videosData, examsData, resultsData] = await Promise.all([
           fetchCourse(id, token),
           fetchVideosByCourse(token, id),
-          fetchExamsByCourse(token, id)
+          fetchExamsByCourse(token, id),
+          fetchMyResultsByCourse(token, id)
         ])
 
         setCourse(courseData)
         setVideos(videosData)
         setExams(examsData)
+        setResults(resultsData)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load course content. Please try again.')
@@ -115,7 +120,7 @@ export default function StudentCourseContent() {
 
       {/* Modern Pill Tabs */}
       <div className="flex justify-start mb-8 animate-fade-in-up animate-delay-100">
-        <div className="bg-bg-secondary/80 border border-white/[0.04] rounded-xl p-1 flex gap-1.5 w-full max-w-[320px] shadow-card">
+        <div className="bg-bg-secondary/80 border border-white/[0.04] rounded-xl p-1 flex gap-1.5 w-full max-w-[420px] shadow-card">
           <button
             type="button"
             onClick={() => setActiveTab('videos')}
@@ -137,6 +142,17 @@ export default function StudentCourseContent() {
             }`}
           >
             📝 Exams ({exams.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('results')}
+            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
+              activeTab === 'results'
+                ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
+                : 'text-text-secondary hover:text-white hover:bg-white/[0.02]'
+            }`}
+          >
+            📊 Results ({results.length})
           </button>
         </div>
       </div>
@@ -227,7 +243,7 @@ export default function StudentCourseContent() {
                         {exam.title}
                       </h3>
                     </div>
-
+ 
                     <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
                       <span>Questions: {exam._count?.questions ?? 0}</span>
                       <div
@@ -238,6 +254,72 @@ export default function StudentCourseContent() {
                     </div>
                   </Link>
                 ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'results' && (
+          <div>
+            {results.length === 0 ? (
+              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+                <span className="text-4xl block">📊</span>
+                <h3 className="text-lg font-bold text-white">No Exam Attempts Yet</h3>
+                <p className="text-xs text-text-secondary">
+                  You have not attempted any exams for this course yet.
+                </p>
+              </div>
+            ) : (
+              <div className="glass-panel rounded-2xl border border-white/[0.04] overflow-hidden">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/[0.04] bg-white/[0.02]">
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Exam Title</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Date Taken</th>
+                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Score / Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.04]">
+                    {results.map((attempt) => {
+                      const rowClickable = attempt.isGraded
+                      return (
+                        <tr
+                          key={attempt.id}
+                          onClick={() => {
+                            if (rowClickable) {
+                              navigate(`/student/attempt/${attempt.id}`)
+                            }
+                          }}
+                          className={`transition-colors duration-150 ${
+                            rowClickable 
+                              ? 'hover:bg-white/[0.03] cursor-pointer' 
+                              : 'cursor-default opacity-75'
+                          }`}
+                        >
+                          <td className="px-6 py-4 text-sm font-semibold text-white">
+                            {attempt.exam.title}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-text-muted">
+                            {new Date(attempt.createdAt).toLocaleDateString(undefined, {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-right">
+                            {!attempt.isGraded ? (
+                              <span className="text-amber-400 font-medium">Pending Grading</span>
+                            ) : (
+                              <span className="text-emerald-400 font-bold">{attempt.score} Marks</span>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>

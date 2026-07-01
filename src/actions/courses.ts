@@ -218,6 +218,19 @@ export async function fetchStudentResultsByCourse(
   return handleResponse(res);
 }
 
+export async function fetchMyResultsByCourse(
+  token: string,
+  courseId: number
+): Promise<StudentAttemptResponse[]> {
+  const res = await fetch(`${API_BASE}/exams/course/${courseId}/my-results`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
 export interface ExamAttemptDetail {
   id: number;
   examId: number;
@@ -240,6 +253,9 @@ export interface ExamAttemptDetail {
     questionId: number;
     studentAnswer: string;
     isCorrect: boolean | null;
+    marksAwarded: number | null;
+    similarity: number | null;
+    feedback: string | null;
     question: {
       id: number;
       questionText: string;
@@ -262,7 +278,12 @@ export async function fetchAttemptWithAnswers(token: string, attemptId: number):
 export async function updateAttemptMarks(
   token: string,
   attemptId: number,
-  answers: Array<{ answerId: number; isCorrect: boolean | null }>
+  answers: Array<{
+    answerId: number;
+    marksAwarded: number | null;
+    similarity?: number | null;
+    feedback?: string | null;
+  }>
 ): Promise<any> {
   const res = await fetch(`${API_BASE}/exams/attempt/${attemptId}`, {
     method: 'PUT',
@@ -271,6 +292,28 @@ export async function updateAttemptMarks(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ answers }),
+  });
+  return handleResponse(res);
+}
+
+export async function evaluateAttemptWithAI(token: string, attemptId: number): Promise<any> {
+  const res = await fetch(`${API_BASE}/exams/attempt/${attemptId}/evaluate-ai`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
+export async function evaluateAnswerWithAI(token: string, answerId: number): Promise<any> {
+  const res = await fetch(`${API_BASE}/exams/answer/${answerId}/evaluate-ai`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
   });
   return handleResponse(res);
 }

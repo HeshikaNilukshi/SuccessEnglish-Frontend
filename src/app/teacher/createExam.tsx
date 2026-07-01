@@ -162,35 +162,36 @@ export default function CreateExam() {
           )}
 
           <div className="glass-panel p-8 rounded-2xl border border-white/[0.04] space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-                  Exam Title
-                </label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g., Grammar Pop Quiz 1"
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
-                  disabled={submitting}
-                />
-              </div>
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+                Exam Title
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g., Grammar Pop Quiz 1"
+                className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+                disabled={submitting}
+              />
+            </div>
 
-              <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-                  Duration (Minutes, 0 for unlimited)
+                  Duration in minutes
                 </label>
                 <input
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
+                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
                   disabled={submitting}
                 />
+                <span className="text-xs text-text-secondary px-1">(0 for unlimited)</span>
               </div>
 
-              <div className="space-y-2">
+              <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
                   Pass Mark
                 </label>
@@ -198,7 +199,7 @@ export default function CreateExam() {
                   type="number"
                   value={passMark}
                   onChange={(e) => setPassMark(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
+                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
                   disabled={submitting}
                 />
               </div>

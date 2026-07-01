@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchAttemptWithAnswers, updateAttemptMarks, type ExamAttemptDetail } from '@/actions/courses'
+import { 
+  fetchAttemptWithAnswers, 
+  updateAttemptMarks, 
+  evaluateAttemptWithAI, 
+  evaluateAnswerWithAI, 
+  type ExamAttemptDetail 
+} from '@/actions/courses'
 
 export default function GradeExamAttempt() {
   const { attemptId } = useParams<{ attemptId: string }>()
@@ -9,11 +15,20 @@ export default function GradeExamAttempt() {
   const navigate = useNavigate()
 
   const [attempt, setAttempt] = useState<ExamAttemptDetail | null>(null)
-  const [grades, setGrades] = useState<Array<{ answerId: number; isCorrect: boolean | null }>>([])
+  const [grades, setGrades] = useState<Array<{ 
+    answerId: number; 
+    marksAwarded: number | null; 
+    similarity?: number | null; 
+    feedback?: string | null; 
+  }>>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+
+  // AI grading states
+  const [isGradingAll, setIsGradingAll] = useState(false)
+  const [gradingAnswerIds, setGradingAnswerIds] = useState<Record<number, boolean>>({})
 
   useEffect(() => {
     const loadAttempt = async () => {
@@ -31,7 +46,9 @@ export default function GradeExamAttempt() {
         
         const initialGrades = data.answers.map((ans) => ({
           answerId: ans.id,
-          isCorrect: ans.isCorrect ?? null,
+          marksAwarded: ans.marksAwarded ?? (ans.isCorrect === true ? ans.question.marks : ans.isCorrect === false ? 0 : null),
+          similarity: ans.similarity,
+          feedback: ans.feedback,
         }))
         setGrades(initialGrades)
       } catch (err: any) {
@@ -45,22 +62,108 @@ export default function GradeExamAttempt() {
     loadAttempt()
   }, [attemptId, token])
 
-  const handleToggleCorrect = (answerId: number, val: boolean) => {
-    setGrades(
-      grades.map((g) => (g.answerId === answerId ? { ...g, isCorrect: val } : g))
+  const handleGradeChange = (answerId: number, val: number | null) => {
+    setGrades((prev) =>
+      prev.map((g) => (g.answerId === answerId ? { ...g, marksAwarded: val } : g))
     )
+  }
+
+  const handleFeedbackChange = (answerId: number, val: string) => {
+    setGrades((prev) =>
+      prev.map((g) => (g.answerId === answerId ? { ...g, feedback: val } : g))
+    )
+  }
+
+  const handleGradeAllWithAI = async () => {
+    if (!token || !attemptId) return
+    setIsGradingAll(true)
+    setError(null)
+    setSuccess(null)
+    try {
+      const results = await evaluateAttemptWithAI(token, parseInt(attemptId, 10))
+      // results is an array of { answerId, similarity, marks, feedback }
+      setGrades((prevGrades) =>
+        prevGrades.map((g) => {
+          const aiRes = results.find((r: any) => r.answerId === g.answerId)
+          if (aiRes) {
+            return {
+              ...g,
+              marksAwarded: aiRes.marks,
+              feedback: aiRes.feedback,
+              similarity: aiRes.similarity,
+            }
+          }
+          return g
+        })
+      )
+      setSuccess('AI grading completed for all answers! Please review and submit.')
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message || 'AI grading failed.')
+    } finally {
+      setIsGradingAll(false)
+    }
+  }
+
+  const handleGradeOneWithAI = async (answerId: number) => {
+    if (!token) return
+    setGradingAnswerIds((prev) => ({ ...prev, [answerId]: true }))
+    setError(null)
+    setSuccess(null)
+    try {
+      const aiRes = await evaluateAnswerWithAI(token, answerId)
+      // aiRes is { similarity, marks, feedback }
+      setGrades((prevGrades) =>
+        prevGrades.map((g) =>
+          g.answerId === answerId
+            ? {
+                ...g,
+                marksAwarded: aiRes.marks,
+                feedback: aiRes.feedback,
+                similarity: aiRes.similarity,
+              }
+            : g
+        )
+      )
+      setSuccess('AI grading completed for this answer!')
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message || 'AI grading failed for this answer.')
+    } finally {
+      setGradingAnswerIds((prev) => ({ ...prev, [answerId]: false }))
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!token || !attempt) return
 
+    const ungradedAnswers = grades.filter((g) => g.marksAwarded === null)
+    if (ungradedAnswers.length > 0) {
+      setError(`Please grade all questions before submitting. (${ungradedAnswers.length} left)`)
+      return
+    }
+
     setSubmitting(true)
     setError(null)
     setSuccess(null)
 
     try {
-      await updateAttemptMarks(token, attempt.id, grades)
+      const payload = grades.map((g) => {
+        const item: any = {
+          answerId: g.answerId,
+          marksAwarded: g.marksAwarded,
+        }
+        if (g.similarity !== undefined && g.similarity !== null) {
+          item.similarity = g.similarity
+        }
+        if (g.feedback !== undefined && g.feedback !== null) {
+          item.feedback = g.feedback
+        }
+        return item
+      })
+
+      await updateAttemptMarks(token, attempt.id, payload)
       setSuccess('Grades updated successfully!')
       setTimeout(() => {
         navigate(`/teacher/${attempt.exam.courseId}/results`)
@@ -110,7 +213,7 @@ export default function GradeExamAttempt() {
 
   const currentScore = attempt.answers.reduce((acc, ans) => {
     const gradeItem = grades.find((g) => g.answerId === ans.id)
-    return acc + (gradeItem?.isCorrect ? ans.question.marks : 0)
+    return acc + (gradeItem?.marksAwarded ?? 0)
   }, 0)
   const totalPossibleScore = attempt.answers.reduce((acc, curr) => acc + curr.question.marks, 0)
 
@@ -123,9 +226,25 @@ export default function GradeExamAttempt() {
             <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Grading Exam Attempt</span>
             <span className="text-sm font-bold text-white truncate max-w-[200px] md:max-w-md">{attempt.student.name}</span>
           </div>
-          <div className="bg-bg-secondary border border-white/5 rounded-xl px-4 py-2 text-right">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
-            <span className="text-lg font-extrabold text-emerald-400">{currentScore} / {totalPossibleScore}</span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleGradeAllWithAI}
+              disabled={isGradingAll || submitting}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-accent-indigo hover:bg-accent-indigo/80 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5 shadow-md shadow-accent-indigo/10"
+            >
+              {isGradingAll ? (
+                <>
+                  <span className="animate-spin">⏳</span> Grading...
+                </>
+              ) : (
+                <>✨ Grade Attempt With AI</>
+              )}
+            </button>
+            <div className="bg-bg-secondary border border-white/5 rounded-xl px-4 py-2 text-right">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
+              <span className="text-lg font-extrabold text-emerald-400">{currentScore} / {totalPossibleScore}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -158,13 +277,16 @@ export default function GradeExamAttempt() {
           <div className="space-y-6">
             {attempt.answers.map((ans, idx) => {
               const gradeItem = grades.find((g) => g.answerId === ans.id)
-              const isCorrectVal = gradeItem ? gradeItem.isCorrect : null
+              const marks = gradeItem ? gradeItem.marksAwarded : null
 
               const studentAnswerContainerClass = () => {
-                if (isCorrectVal === true) {
+                if (marks === ans.question.marks) {
                   return 'p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400'
                 }
-                if (isCorrectVal === false) {
+                if (marks !== null && marks > 0) {
+                  return 'p-4 rounded-lg bg-amber-500/5 border border-amber-500/10 text-xs text-amber-400'
+                }
+                if (marks === 0) {
                   return 'p-4 rounded-lg bg-rose-500/5 border border-rose-500/10 text-xs text-rose-400'
                 }
                 return 'p-4 rounded-lg bg-white/[0.02] border border-white/5 text-xs text-white'
@@ -190,11 +312,13 @@ export default function GradeExamAttempt() {
                     {/* Student's Answer */}
                     <div className={studentAnswerContainerClass()}>
                       <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${
-                        isCorrectVal === true 
+                        marks === ans.question.marks 
                           ? 'text-emerald-500' 
-                          : isCorrectVal === false 
-                            ? 'text-rose-400' 
-                            : 'text-text-muted'
+                          : (marks !== null && marks > 0)
+                            ? 'text-amber-500' 
+                            : marks === 0
+                              ? 'text-rose-400' 
+                              : 'text-text-muted'
                       }`}>
                         Student's Answer
                       </span>
@@ -210,32 +334,67 @@ export default function GradeExamAttempt() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end pt-2">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleToggleCorrect(ans.id, true)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                          isCorrectVal === true
-                            ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
-                            : 'bg-white/5 border-white/10 text-text-secondary hover:text-white hover:bg-white/10'
-                        }`}
-                        disabled={submitting}
-                      >
-                        ✓ Correct ({ans.question.marks} Marks)
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleToggleCorrect(ans.id, false)}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                          isCorrectVal === false
-                            ? 'bg-rose-500/10 border-rose-500 text-rose-400'
-                            : 'bg-white/5 border-white/10 text-text-secondary hover:text-white hover:bg-white/10'
-                        }`}
-                        disabled={submitting}
-                      >
-                        ✗ Incorrect (0 Marks)
-                      </button>
+                  <div className="space-y-4 pt-4 border-t border-white/[0.04]">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                      {/* Numeric Grade Input */}
+                      <div className="flex-1 space-y-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
+                          Marks Awarded (Max: {ans.question.marks})
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            min={0}
+                            max={ans.question.marks}
+                            value={marks ?? ''}
+                            onChange={(e) => {
+                              const val = e.target.value === '' ? null : Math.min(ans.question.marks, Math.max(0, parseInt(e.target.value, 10)))
+                              handleGradeChange(ans.id, val)
+                            }}
+                            placeholder="Enter marks"
+                            className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent-indigo transition-colors w-32"
+                            disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                          />
+                          <span className="text-sm text-text-muted">/ {ans.question.marks} Marks</span>
+                        </div>
+                      </div>
+
+                      {/* AI Evaluation Button */}
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => handleGradeOneWithAI(ans.id)}
+                          disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                          className="px-4 py-2.5 rounded-xl text-xs font-bold text-accent-indigo bg-accent-indigo/10 border border-accent-indigo/20 hover:bg-accent-indigo/20 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5"
+                        >
+                          {gradingAnswerIds[ans.id] ? (
+                            <>
+                              <span className="animate-spin">⏳</span> Grading...
+                            </>
+                          ) : (
+                            <>✨ Grade with AI</>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Feedback and Similarity Section */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
+                        Feedback {gradeItem?.similarity !== undefined && gradeItem?.similarity !== null && (
+                          <span className="text-emerald-400 font-normal normal-case ml-2">
+                            (AI Similarity: {Math.round(gradeItem.similarity * 100)}%)
+                          </span>
+                        )}
+                      </label>
+                      <textarea
+                        value={gradeItem?.feedback ?? ''}
+                        onChange={(e) => handleFeedbackChange(ans.id, e.target.value)}
+                        placeholder="Add comments or feedback for the student..."
+                        rows={2}
+                        className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-text-muted focus:outline-none focus:border-accent-indigo transition-colors resize-none"
+                        disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                      />
                     </div>
                   </div>
                 </div>
@@ -245,7 +404,7 @@ export default function GradeExamAttempt() {
 
           <button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || isGradingAll}
             className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all disabled:opacity-50 cursor-pointer"
           >
             {submitting ? 'Saving...' : 'Submit Grades'}

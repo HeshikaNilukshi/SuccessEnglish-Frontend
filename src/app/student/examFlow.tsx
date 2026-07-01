@@ -177,7 +177,7 @@ export default function StudentExamFlow() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
+      <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
         <div className="w-10 h-10 rounded-full border-4 border-accent-indigo border-t-transparent animate-spin" />
         <span className="text-sm text-text-secondary">Loading exam details...</span>
       </div>
@@ -206,6 +206,38 @@ export default function StudentExamFlow() {
 
   // --- STATE 1: PRE-EXAM SCREEN ---
   if (step === 'info') {
+    const isSubmitted = exam?.attempt?.submitted || false
+    const isDeadlinePassed = exam?.attempt?.deadlinePassed || false
+    const alreadyDone = isSubmitted || isDeadlinePassed
+
+    if (alreadyDone) {
+      return (
+        <div className="min-h-screen flex items-center justify-center px-6">
+          <div className="w-full max-w-md text-center p-12 rounded-2xl glass-panel border border-white/[0.04] shadow-xl space-y-6">
+            <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-accent-indigo text-3xl">
+              📝
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold text-white">
+                {isSubmitted ? 'Exam Already Submitted' : 'Submission Deadline Passed'}
+              </h3>
+              <p className="text-text-secondary text-sm leading-relaxed">
+                {isSubmitted 
+                  ? 'You have already submitted this exam assessment.' 
+                  : 'The submission deadline for this exam has passed.'}
+              </p>
+            </div>
+            <button
+              onClick={() => navigate(`/student/${courseId}`, { state: { activeTab: 'results' } })}
+              className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all cursor-pointer text-center"
+            >
+              View Results
+            </button>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
         <header className="mb-8 border-b border-white/[0.04] pb-6">
