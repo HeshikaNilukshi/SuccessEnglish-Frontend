@@ -39,30 +39,30 @@ export default function StudentVideoPage() {
     return (
       <div className="max-w-5xl mx-auto px-6 md:px-12 pt-10 pb-8 animate-pulse flex flex-col items-stretch">
         {/* Back Link skeleton */}
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
         {/* Title skeleton */}
-        <div className="h-10 w-96 bg-white/5 rounded mb-8" />
+        <div className="h-10 w-96 bg-black/5 rounded mb-8" />
         {/* Video Player Box skeleton */}
-        <div className="w-full aspect-video bg-white/5 rounded-2xl border border-white/[0.04] shadow-2xl" />
+        <div className="w-full aspect-video bg-black/5 rounded-2xl border border-border-subtle shadow-2xl" />
       </div>
     )
   }
 
   if (error || !video) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Video Unreachable</h3>
+          <h3 className="text-xl font-bold text-text-primary">Video Unreachable</h3>
           <p className="text-text-secondary text-sm leading-relaxed">
             {error || 'The video you are trying to view is unavailable or access is restricted.'}
           </p>
         </div>
         <Link
           to={`/student/${courseId}`}
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course Content
         </Link>
@@ -76,11 +76,11 @@ export default function StudentVideoPage() {
         <div>
           <Link
             to={`/student/${courseId}`}
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to course content
           </Link>
-          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-white">
+          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary">
             {video.title}
           </h1>
         </div>
@@ -91,7 +91,7 @@ export default function StudentVideoPage() {
         {/* Colorful glow effect sitting behind player */}
         <div className="absolute inset-0 bg-gradient-to-tr from-accent-indigo/10 via-accent-violet/5 to-accent-pink/5 rounded-2xl blur-3xl opacity-50 -z-10" />
 
-        <div className="w-full aspect-video rounded-2xl overflow-hidden glass-panel border border-white/[0.06] shadow-2xl relative bg-black/60">
+        <div className="w-full aspect-video rounded-2xl overflow-hidden glass-panel border border-border-subtle shadow-2xl relative bg-black/60">
           <iframe
             src={video.videoUrl}
             title={video.title}

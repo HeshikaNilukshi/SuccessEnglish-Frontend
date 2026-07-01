@@ -59,8 +59,8 @@ export default function Navbar() {
   const navLinkClass = (to: string) =>
     'relative px-4 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ' +
     (isActive(to)
-      ? 'text-white bg-white/[0.08]'
-      : 'text-text-secondary hover:text-white hover:bg-white/[0.05]')
+      ? 'text-text-primary bg-black/5'
+      : 'text-text-secondary hover:text-text-primary hover:bg-black/5')
 
   return (
     <>
@@ -72,7 +72,7 @@ export default function Navbar() {
         <div
           className={`relative flex items-center justify-between gap-8 rounded-2xl mx-6 px-4 py-2.5 transition-all duration-500 w-full max-w-7xl ${
             scrolled
-              ? 'bg-[#060813]/80 backdrop-blur-2xl border border-white/[0.07] shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.03)]'
+              ? 'bg-bg-secondary/80 backdrop-blur-2xl border border-border-subtle shadow-[0_8px_32px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0, 0, 0, 0.05)]'
               : 'bg-transparent border border-transparent'
           }`}
         >
@@ -94,9 +94,9 @@ export default function Navbar() {
             <div className="relative w-9 h-9 rounded-xl overflow-hidden flex items-center justify-center shrink-0">
               <div className="absolute inset-0 bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink opacity-90" />
               <span className="relative text-white font-extrabold text-base tracking-tight select-none">S</span>
-              <span className="absolute top-0.5 left-1 w-3 h-1 bg-white/25 rounded-full blur-[2px]" />
+              <span className="absolute top-0.5 left-1 w-3 h-1 bg-black/5 rounded-full blur-[2px]" />
             </div>
-            <span className="text-[15px] font-semibold tracking-tight text-white/90 whitespace-nowrap">
+            <span className="text-[15px] font-semibold tracking-tight text-text-primary/90 whitespace-nowrap">
               Success <span className="gradient-text-accent font-bold">English</span>
             </span>
           </Link>
@@ -123,8 +123,8 @@ export default function Navbar() {
               className="group relative px-5 py-2 text-sm font-semibold rounded-xl overflow-hidden cursor-pointer"
             >
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet opacity-[0.15] group-hover:opacity-[0.25] transition-opacity duration-300" />
-              <span className="absolute inset-[1px] rounded-[11px] bg-[#060813]" />
-              <span className="relative text-white/80 group-hover:text-white transition-colors duration-200">Sign In</span>
+              <span className="absolute inset-[1px] rounded-[11px] bg-bg-secondary" />
+              <span className="relative text-text-primary/80 group-hover:text-text-primary transition-colors duration-200">Sign In</span>
             </Link>
             <Link
               to={user ? (user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student') : '/register'}
@@ -139,11 +139,11 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden z-50 flex flex-col justify-center items-center w-9 h-9 rounded-lg text-white focus:outline-none cursor-pointer"
+            className="md:hidden z-50 flex flex-col justify-center items-center w-9 h-9 rounded-lg text-text-primary focus:outline-none cursor-pointer"
             aria-label="Toggle Menu"
           >
-            <span className={`block h-[1.5px] w-5 bg-white/80 rounded-full transition-all duration-300 origin-center ${isOpen ? 'rotate-45 translate-y-[3.5px]' : ''}`} />
-            <span className={`block h-[1.5px] w-5 bg-white/80 rounded-full mt-[5px] transition-all duration-300 origin-center ${isOpen ? '-rotate-45 -translate-y-[3.5px]' : ''}`} />
+            <span className={`block h-[1.5px] w-5 bg-text-primary rounded-full transition-all duration-300 origin-center ${isOpen ? 'rotate-45 translate-y-[3.5px]' : ''}`} />
+            <span className={`block h-[1.5px] w-5 bg-text-primary rounded-full mt-[5px] transition-all duration-300 origin-center ${isOpen ? '-rotate-45 -translate-y-[3.5px]' : ''}`} />
           </button>
         </div>
       </header>
@@ -152,7 +152,7 @@ export default function Navbar() {
         className={`fixed inset-0 z-40 md:hidden flex flex-col transition-all duration-500 ease-in-out ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
-        style={{ background: 'rgba(6,8,19,0.97)', backdropFilter: 'blur(24px)' }}
+        style={{ background: 'rgba(248, 250, 252, 0.97)', backdropFilter: 'blur(24px)' }}
       >
         <div className="absolute inset-0 radial-glow-main pointer-events-none" />
         <nav className="flex flex-col items-center justify-center h-full gap-2">
@@ -161,7 +161,7 @@ export default function Navbar() {
               key={link.label}
               href={link.to}
               className={`text-3xl font-bold transition-all duration-200 px-8 py-3 rounded-2xl ${
-                isActive(link.to) ? 'text-white bg-white/[0.06]' : 'text-white/50 hover:text-white hover:bg-white/[0.04]'
+                isActive(link.to) ? 'text-text-primary bg-black/5' : 'text-text-primary/50 hover:text-text-primary hover:bg-black/5'
               }`}
               style={{ transitionDelay: `${i * 40}ms` }}
               onClick={(e) => { setIsOpen(false); handleNavClick(e, link.to) }}
@@ -172,7 +172,7 @@ export default function Navbar() {
           <div className="flex flex-col items-center gap-3 mt-10 w-full px-10">
             <Link
               to={user ? (user.role === 'TEACHER' ? '/teacher' : user.role === 'ADMIN' ? '/admin' : '/student') : '/login'}
-              className="w-full max-w-xs py-3.5 rounded-2xl text-base font-semibold text-white/80 border border-white/10 hover:border-accent-indigo/40 hover:text-white transition-all duration-200 cursor-pointer text-center"
+              className="w-full max-w-xs py-3.5 rounded-2xl text-base font-semibold text-text-primary/80 border border-border-subtle hover:border-accent-indigo/40 hover:text-text-primary transition-all duration-200 cursor-pointer text-center"
               onClick={() => setIsOpen(false)}
             >
               Sign In

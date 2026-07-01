@@ -52,25 +52,25 @@ export default function AdminCoursesList() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-white/[0.04] pb-6 animate-fade-in-up">
+      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
         <div>
           {selectedCourse ? (
             <button
               onClick={() => setSelectedCourse(null)}
-              className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-none outline-none"
+              className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-none outline-none"
             >
               &larr; Back to Courses List
             </button>
           ) : (
             <Link
               to="/admin"
-              className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+              className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
             >
               &larr; Back to Dashboard
             </Link>
           )}
 
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
             {selectedCourse ? selectedCourse.name : 'System'}{' '}
             <span className="gradient-text-accent">
               {selectedCourse ? 'Enrolled Students' : 'Courses'}
@@ -100,7 +100,7 @@ export default function AdminCoursesList() {
                 <button
                   type="button"
                   onClick={loadCourses}
-                  className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+                  className="px-5 py-2 rounded-xl text-xs font-semibold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
                 >
                   Try Again
                 </button>
@@ -117,14 +117,14 @@ export default function AdminCoursesList() {
                   <button
                     key={course.id}
                     onClick={() => handleSelectCourse(course)}
-                    className="text-left group relative flex flex-col justify-between rounded-2xl glass-panel p-6 hover:-translate-y-1 hover:border-white/10 active:scale-[0.98] transition-all duration-300 shadow-xl cursor-pointer"
+                    className="text-left group relative flex flex-col justify-between rounded-2xl glass-panel p-6 hover:-translate-y-1 hover:border-border-subtle active:scale-[0.98] transition-all duration-300 shadow-xl cursor-pointer"
                   >
                     <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/20 to-transparent" />
                     
                     <div className="space-y-4">
                       <div>
                         <span className="text-[10px] font-mono text-text-muted">COURSE ID: {course.id}</span>
-                        <h2 className="text-lg font-bold tracking-tight text-white group-hover:text-accent-indigo transition-colors duration-200 mt-1">
+                        <h2 className="text-lg font-bold tracking-tight text-text-primary group-hover:text-accent-indigo transition-colors duration-200 mt-1">
                           {course.name}
                         </h2>
                         <p className="text-xs text-text-secondary leading-relaxed mt-2 line-clamp-3">
@@ -133,9 +133,9 @@ export default function AdminCoursesList() {
                       </div>
                     </div>
 
-                    <div className="pt-6 mt-6 border-t border-white/[0.04] flex items-center justify-between text-xs font-semibold">
+                    <div className="pt-6 mt-6 border-t border-border-subtle flex items-center justify-between text-xs font-semibold">
                       <span className="text-text-primary">LKR {parseFloat(course.price as any).toLocaleString()}</span>
-                      <span className="text-accent-indigo group-hover:text-white transition-colors duration-200">
+                      <span className="text-accent-indigo group-hover:text-text-primary transition-colors duration-200">
                         View Enrolled Students &rarr;
                       </span>
                     </div>
@@ -159,7 +159,7 @@ export default function AdminCoursesList() {
                 <button
                   type="button"
                   onClick={() => handleSelectCourse(selectedCourse)}
-                  className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+                  className="px-5 py-2 rounded-xl text-xs font-semibold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
                 >
                   Try Again
                 </button>
@@ -171,12 +171,12 @@ export default function AdminCoursesList() {
             )}
 
             {!loadingStudents && !studentsError && students.length > 0 && (
-              <div className="relative overflow-hidden rounded-2xl border border-white/[0.04] glass-panel shadow-xl">
+              <div className="relative overflow-hidden rounded-2xl border border-border-subtle glass-panel shadow-xl">
                 <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-white/[0.04] bg-white/[0.01]">
+                      <tr className="border-b border-border-subtle bg-black/5">
                         <th className="p-5 text-xs font-bold uppercase tracking-wider text-text-secondary">Student ID</th>
                         <th className="p-5 text-xs font-bold uppercase tracking-wider text-text-secondary">Name</th>
                         <th className="p-5 text-xs font-bold uppercase tracking-wider text-text-secondary">Email</th>
@@ -189,10 +189,10 @@ export default function AdminCoursesList() {
                         <tr
                           key={item.id}
                           onClick={() => navigate(`/admin/user/${item.user.id}`)}
-                          className="hover:bg-white/[0.03] transition-colors duration-150 cursor-pointer"
+                          className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
                         >
                           <td className="p-5 text-sm font-semibold text-text-primary font-mono">{item.user.id}</td>
-                          <td className="p-5 text-sm font-bold text-white">{item.user.name}</td>
+                          <td className="p-5 text-sm font-bold text-text-primary">{item.user.name}</td>
                           <td className="p-5 text-sm text-text-secondary">{item.user.email}</td>
                           <td className="p-5 text-sm text-text-muted">{formatDate(item.createdAt)}</td>
                           <td className="p-5 text-sm text-right">

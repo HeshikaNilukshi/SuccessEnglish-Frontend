@@ -138,14 +138,14 @@ export default function CreateExam() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
-      <header className="mb-10 border-b border-white/[0.04] pb-6">
+      <header className="mb-10 border-b border-border-subtle pb-6">
         <Link
           to={isEditing && examId ? `/teacher/${courseId}/exams/${examId}` : `/teacher/${courseId}`}
-          className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
         >
           &larr; Back to {isEditing ? 'Exam' : 'Course'}
         </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans">
+        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary font-sans">
           {isEditing ? 'Edit Assessment Exam' : 'Create Assessment Exam'}
         </h1>
         <p className="text-text-secondary text-sm">
@@ -161,7 +161,7 @@ export default function CreateExam() {
             </div>
           )}
 
-          <div className="glass-panel p-8 rounded-2xl border border-white/[0.04] space-y-6">
+          <div className="glass-panel p-8 rounded-2xl border border-border-subtle space-y-6">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
                 Exam Title
@@ -171,7 +171,7 @@ export default function CreateExam() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., Grammar Pop Quiz 1"
-                className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+                className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                 disabled={submitting}
               />
             </div>
@@ -185,7 +185,7 @@ export default function CreateExam() {
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
+                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
                   disabled={submitting}
                 />
                 <span className="text-xs text-text-secondary px-1">(0 for unlimited)</span>
@@ -199,7 +199,7 @@ export default function CreateExam() {
                   type="number"
                   value={passMark}
                   onChange={(e) => setPassMark(e.target.value)}
-                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
+                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
                   disabled={submitting}
                 />
               </div>
@@ -207,14 +207,14 @@ export default function CreateExam() {
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-lg font-bold text-white">Questions</h2>
+            <h2 className="text-lg font-bold text-text-primary">Questions</h2>
 
             {questions.map((q, idx) => (
               <div
                 key={idx}
-                className="relative glass-panel p-6 rounded-xl border border-white/[0.04] space-y-4"
+                className="relative glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
               >
-                <div className="flex justify-between items-center pb-2 border-b border-white/[0.04]">
+                <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
                   <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
                   {questions.length > 1 && (
                     <button
@@ -237,7 +237,7 @@ export default function CreateExam() {
                     value={q.questionText}
                     onChange={(e) => handleQuestionChange(idx, 'questionText', e.target.value)}
                     placeholder="e.g., What is the past participle of 'go'?"
-                    className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+                    className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                     disabled={submitting}
                   />
                 </div>
@@ -252,7 +252,7 @@ export default function CreateExam() {
                       value={q.correctAnswer}
                       onChange={(e) => handleQuestionChange(idx, 'correctAnswer', e.target.value)}
                       placeholder="e.g., gone"
-                      className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+                      className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                       disabled={submitting}
                     />
                   </div>
@@ -264,7 +264,7 @@ export default function CreateExam() {
                       type="number"
                       value={q.marks}
                       onChange={(e) => handleQuestionChange(idx, 'marks', e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all"
+                      className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
                       disabled={submitting}
                     />
                   </div>
@@ -275,7 +275,7 @@ export default function CreateExam() {
             <button
               type="button"
               onClick={handleAddQuestion}
-              className="w-full py-3 border border-dashed border-white/10 hover:border-white/20 rounded-xl text-xs font-bold text-text-secondary hover:text-white transition-all cursor-pointer bg-white/[0.01]"
+              className="w-full py-3 border border-dashed border-border-subtle hover:border-border-subtle rounded-xl text-xs font-bold text-text-secondary hover:text-text-primary transition-all cursor-pointer bg-black/5"
               disabled={submitting}
             >
               + Add Question

@@ -123,13 +123,13 @@ export default function TeacherCourseContent() {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
-        <div className="h-10 w-80 bg-white/5 rounded mb-3" />
-        <div className="h-4 w-60 bg-white/5 rounded mb-10" />
-        <div className="h-12 w-80 bg-white/5 rounded-xl mb-8" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
+        <div className="h-10 w-80 bg-black/5 rounded mb-3" />
+        <div className="h-4 w-60 bg-black/5 rounded mb-10" />
+        <div className="h-12 w-80 bg-black/5 rounded-xl mb-8" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-white/5 rounded-xl border border-white/[0.04] p-5 flex flex-col justify-between" />
+            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between" />
           ))}
         </div>
       </div>
@@ -138,17 +138,17 @@ export default function TeacherCourseContent() {
 
   if (error || !course) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Error</h3>
+          <h3 className="text-xl font-bold text-text-primary">Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{error || 'Course content unavailable.'}</p>
         </div>
         <Link
           to="/teacher"
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Panel
         </Link>
@@ -158,17 +158,17 @@ export default function TeacherCourseContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-white/[0.04] pb-6">
+      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6">
         <div>
           <Link
             to="/teacher"
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             &larr; Back to Panel
           </Link>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-2">
+              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-2">
                 {course.name}
               </h1>
               <p className="text-text-secondary text-sm max-w-2xl leading-relaxed">
@@ -178,13 +178,13 @@ export default function TeacherCourseContent() {
             <div className="flex flex-wrap gap-3">
               <Link
                 to={`/teacher/${course.id}/students`}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+                className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all"
               >
                 👥 View Students
               </Link>
               <Link
                 to={`/teacher/${course.id}/results`}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+                className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all"
               >
                 📊 Exam Results
               </Link>
@@ -194,14 +194,14 @@ export default function TeacherCourseContent() {
       </header>
 
       <div className="flex justify-between items-center mb-8">
-        <div className="bg-bg-secondary/80 border border-white/[0.04] rounded-xl p-1 flex gap-1.5 w-full max-w-[320px] shadow-card">
+        <div className="bg-bg-secondary/80 border border-border-subtle rounded-xl p-1 flex gap-1.5 w-full max-w-[320px] shadow-card">
           <button
             type="button"
             onClick={() => setActiveTab('videos')}
             className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
               activeTab === 'videos'
                 ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-white hover:bg-white/[0.02]'
+                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
             }`}
           >
             🎥 Videos ({videos.length})
@@ -212,7 +212,7 @@ export default function TeacherCourseContent() {
             className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
               activeTab === 'exams'
                 ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-white hover:bg-white/[0.02]'
+                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
             }`}
           >
             📝 Exams ({exams.length})
@@ -230,7 +230,7 @@ export default function TeacherCourseContent() {
                 setAddVideoProgress(null)
                 setIsAddVideoOpen(true)
               }}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-white/10 active:scale-[0.98] transition-all cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer"
             >
               + Add Video
             </button>
@@ -249,9 +249,9 @@ export default function TeacherCourseContent() {
         {activeTab === 'videos' && (
           <div>
             {videos.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
                 <span className="text-4xl block">🎬</span>
-                <h3 className="text-lg font-bold text-white">No Videos Uploaded</h3>
+                <h3 className="text-lg font-bold text-text-primary">No Videos Uploaded</h3>
                 <p className="text-xs text-text-secondary">
                   Add a lecture video to this course using the action buttons above.
                 </p>
@@ -268,7 +268,7 @@ export default function TeacherCourseContent() {
                     
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-lg group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
                           🎥
                         </div>
                         <span className="text-[10px] font-mono text-text-muted">
@@ -276,12 +276,12 @@ export default function TeacherCourseContent() {
                         </span>
                       </div>
                       
-                      <h3 className="text-base font-bold text-white tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
+                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
                         {video.title}
                       </h3>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
+                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
                       <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
                       <div
                         className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
@@ -299,9 +299,9 @@ export default function TeacherCourseContent() {
         {activeTab === 'exams' && (
           <div>
             {exams.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
                 <span className="text-4xl block">✍️</span>
-                <h3 className="text-lg font-bold text-white">No Exams Created</h3>
+                <h3 className="text-lg font-bold text-text-primary">No Exams Created</h3>
                 <p className="text-xs text-text-secondary">
                   Create a course assessment using the Add Exam button above.
                 </p>
@@ -318,7 +318,7 @@ export default function TeacherCourseContent() {
                     
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-lg group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
+                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
                           📝
                         </div>
                         <span className="text-[10px] font-mono text-text-muted">
@@ -326,12 +326,12 @@ export default function TeacherCourseContent() {
                         </span>
                       </div>
                       
-                      <h3 className="text-base font-bold text-white tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
+                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
                         {exam.title}
                       </h3>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
+                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
                       <span>Questions: {exam._count?.questions ?? 0}</span>
                       <div
                         className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
@@ -355,21 +355,21 @@ export default function TeacherCourseContent() {
             onClick={() => !isSavingVideo && setIsAddVideoOpen(false)}
           />
           <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
-            <div className="relative w-full max-w-lg rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in overflow-hidden">
+            <div className="relative w-full max-w-lg rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in overflow-hidden">
               <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
               
               <button
                 type="button"
                 onClick={() => setIsAddVideoOpen(false)}
                 disabled={isSavingVideo}
-                className="absolute top-4 right-4 text-text-muted hover:text-white p-2 rounded-full hover:bg-white/[0.04] transition-all cursor-pointer disabled:opacity-50"
+                className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
-              <h3 className="text-xl font-bold text-white mb-6">Upload Lecture Video</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-6">Upload Lecture Video</h3>
 
               <form onSubmit={handleAddVideoSubmit} className="space-y-6">
                 {addVideoError && (
@@ -393,7 +393,7 @@ export default function TeacherCourseContent() {
                     value={newVideoTitle}
                     onChange={(e) => setNewVideoTitle(e.target.value)}
                     placeholder="e.g., Lesson 1: Present Perfect Tense"
-                    className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                     disabled={isSavingVideo}
                     required
                   />
@@ -411,18 +411,18 @@ export default function TeacherCourseContent() {
                         setNewVideoFile(e.target.files[0])
                       }
                     }}
-                    className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-white/5 file:text-white hover:file:bg-white/10"
+                    className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-black/5 file:text-text-primary hover:file:bg-black/5"
                     disabled={isSavingVideo}
                     required
                   />
                 </div>
 
-                <div className="flex gap-3 pt-4 border-t border-white/[0.04]">
+                <div className="flex gap-3 pt-4 border-t border-border-subtle">
                   <button
                     type="button"
                     onClick={() => setIsAddVideoOpen(false)}
                     disabled={isSavingVideo}
-                    className="flex-grow py-3 text-sm font-bold text-text-secondary hover:text-white rounded-2xl border border-white/[0.07] hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                    className="flex-grow py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
                   >
                     Cancel
                   </button>

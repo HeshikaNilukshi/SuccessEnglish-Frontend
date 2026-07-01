@@ -47,22 +47,22 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
 
   return (
     <div className="max-w-3xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-white/[0.04] pb-6 animate-fade-in-up">
+      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
         <div>
           <Link
             to={`/admin/${path}`}
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             &larr; Back to {title}s
           </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
             Add <span className="gradient-text-accent">{title}</span>
           </h1>
         </div>
       </header>
 
       <main className="animate-fade-in-up animate-delay-100">
-        <div className="relative overflow-hidden rounded-2xl glass-panel border border-white/[0.04] p-8 shadow-xl">
+        <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl">
           <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
           
           {error && (
@@ -118,17 +118,17 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
               />
             </div>
 
-            <div className="pt-4 border-t border-white/[0.04] flex items-center justify-end gap-4">
+            <div className="pt-4 border-t border-border-subtle flex items-center justify-end gap-4">
               <Link
                 to={`/admin/${path}`}
-                className="px-5 py-2.5 rounded-xl text-xs font-semibold text-text-secondary hover:text-white bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] transition-all"
+                className="px-5 py-2.5 rounded-xl text-xs font-semibold text-text-secondary hover:text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all"
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="relative inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold text-white overflow-hidden rounded-xl transition-all duration-300 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] disabled:opacity-50 disabled:pointer-events-none cursor-pointer group/btn"
+                className="relative inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold text-text-primary overflow-hidden rounded-xl transition-all duration-300 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] disabled:opacity-50 disabled:pointer-events-none cursor-pointer group/btn"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet" />
                 <span className="relative">

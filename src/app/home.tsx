@@ -49,7 +49,7 @@ export default function HomePage() {
   }, [token, user])
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen" style={{ background: 'linear-gradient(135deg, #dbebfa 0%, #f3f7fd 100%) fixed' }}>
       <div className="absolute top-[800px] left-[-15%] w-[600px] h-[600px] bg-accent-pink/5 rounded-full blur-[160px] pointer-events-none z-0" />
       <div className="absolute top-[1400px] right-[-15%] w-[500px] h-[500px] bg-accent-indigo/6 rounded-full blur-[160px] pointer-events-none z-0" />
 

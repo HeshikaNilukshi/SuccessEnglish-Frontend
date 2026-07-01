@@ -186,17 +186,17 @@ export default function StudentExamFlow() {
 
   if (error && step === 'info') {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Assessment Error</h3>
+          <h3 className="text-xl font-bold text-text-primary">Assessment Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{error}</p>
         </div>
         <button
           onClick={() => navigate(`/student/${courseId}`)}
-          className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
         </button>
@@ -213,12 +213,12 @@ export default function StudentExamFlow() {
     if (alreadyDone) {
       return (
         <div className="min-h-screen flex items-center justify-center px-6">
-          <div className="w-full max-w-md text-center p-12 rounded-2xl glass-panel border border-white/[0.04] shadow-xl space-y-6">
+          <div className="w-full max-w-md text-center p-12 rounded-2xl glass-panel border border-border-subtle shadow-xl space-y-6">
             <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-accent-indigo text-3xl">
               📝
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-text-primary">
                 {isSubmitted ? 'Exam Already Submitted' : 'Submission Deadline Passed'}
               </h3>
               <p className="text-text-secondary text-sm leading-relaxed">
@@ -240,14 +240,14 @@ export default function StudentExamFlow() {
 
     return (
       <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
-        <header className="mb-8 border-b border-white/[0.04] pb-6">
+        <header className="mb-8 border-b border-border-subtle pb-6">
           <button
             onClick={() => navigate(`/student/${courseId}`)}
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             &larr; Cancel and Go Back
           </button>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl font-extrabold text-text-primary tracking-tight">
             Exam Instructions
           </h1>
           <p className="text-text-secondary text-sm mt-1">
@@ -255,49 +255,49 @@ export default function StudentExamFlow() {
           </p>
         </header>
 
-        <div className="glass-panel p-8 rounded-2xl border border-white/[0.04] space-y-6 shadow-xl">
+        <div className="glass-panel p-8 rounded-2xl border border-border-subtle space-y-6 shadow-xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Exam Name</span>
-              <span className="text-white font-medium">{exam.title}</span>
+              <span className="text-text-primary font-medium">{exam.title}</span>
             </div>
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Course Name</span>
-              <span className="text-white font-medium">{exam.course?.name || 'Loading...'}</span>
+              <span className="text-text-primary font-medium">{exam.course?.name || 'Loading...'}</span>
             </div>
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Exam ID</span>
-              <span className="font-mono text-white">#{exam.id}</span>
+              <span className="font-mono text-text-primary">#{exam.id}</span>
             </div>
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Total Questions</span>
-              <span className="text-white font-medium">{exam.totalQuestions} Questions</span>
+              <span className="text-text-primary font-medium">{exam.totalQuestions} Questions</span>
             </div>
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Passing Mark</span>
-              <span className="text-white font-medium">{exam.passMark} Points</span>
+              <span className="text-text-primary font-medium">{exam.passMark} Points</span>
             </div>
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Time Limit</span>
-              <span className="text-white font-medium">
+              <span className="text-text-primary font-medium">
                 {exam.duration > 0 ? `${exam.duration} Minutes` : 'No time limit'}
               </span>
             </div>
           </div>
 
-          <div className="border-t border-white/[0.04] pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div className="border-t border-border-subtle pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Student Name</span>
-              <span className="text-white font-medium">{exam.studentName}</span>
+              <span className="text-text-primary font-medium">{exam.studentName}</span>
             </div>
             <div className="space-y-1">
               <span className="text-xs text-text-muted block font-semibold uppercase tracking-wider">Student ID</span>
-              <span className="font-mono text-white">#{exam.studentId}</span>
+              <span className="font-mono text-text-primary">#{exam.studentId}</span>
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-accent-indigo/5 border border-accent-indigo/10 text-xs text-text-secondary leading-relaxed space-y-2">
-            <strong className="text-white block">Important Instructions:</strong>
+            <strong className="text-text-primary block">Important Instructions:</strong>
             <ul className="list-disc pl-4 space-y-1">
               <li>Once you click <strong>Start Exam</strong>, the countdown will begin (if timed).</li>
               <li>If your browser closes accidentally, you can return to this page and click <strong>Start Exam</strong> to resume. The timer will continue counting down from the original deadline.</li>
@@ -315,7 +315,7 @@ export default function StudentExamFlow() {
             </button>
             <button
               onClick={() => navigate(`/student/${courseId}`)}
-              className="px-6 py-3 rounded-xl text-sm font-bold text-text-secondary hover:text-white border border-white/10 hover:bg-white/5 transition-all cursor-pointer"
+              className="px-6 py-3 rounded-xl text-sm font-bold text-text-secondary hover:text-text-primary border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
             >
               Cancel
             </button>
@@ -328,7 +328,7 @@ export default function StudentExamFlow() {
   // --- STATE 3: SUCCESS PAGE ---
   if (step === 'success') {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-green-500/10 border border-green-500/20 text-green-400 text-3xl">
           ✓
         </div>
@@ -352,11 +352,11 @@ export default function StudentExamFlow() {
   return (
     <div className="max-w-4xl mx-auto px-6 pt-24 pb-20 relative">
       {/* Sticky Top Panel */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-white/[0.04] py-4 shadow-md">
+      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle py-4 shadow-md">
         <div className="max-w-4xl mx-auto px-6 flex justify-between items-center">
           <div className="flex flex-col">
             <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Assessment Exam</span>
-            <span className="text-sm font-bold text-white max-w-[200px] md:max-w-md truncate">{exam.title}</span>
+            <span className="text-sm font-bold text-text-primary max-w-[200px] md:max-w-md truncate">{exam.title}</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -366,7 +366,7 @@ export default function StudentExamFlow() {
               className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 cursor-pointer ${
                 showQuestionMap
                   ? 'bg-accent-indigo/10 border-accent-indigo text-accent-indigo'
-                  : 'bg-white/5 border-white/10 text-text-secondary hover:text-white hover:bg-white/10'
+                  : 'bg-black/5 border-border-subtle text-text-secondary hover:text-text-primary hover:bg-black/5'
               }`}
             >
               Questions ({getAnsweredCount()}/{exam.questions?.length})
@@ -374,7 +374,7 @@ export default function StudentExamFlow() {
 
             {/* Timer */}
             {deadline && (
-              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-mono font-bold text-white">
+              <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-black/5 border border-border-subtle text-xs font-mono font-bold text-text-primary">
                 ⏱️ {timeLeft || '--:--'}
               </div>
             )}
@@ -391,7 +391,7 @@ export default function StudentExamFlow() {
 
         {/* Collapsible Question Navigation Panel */}
         {showQuestionMap && (
-          <div className="max-w-4xl mx-auto px-6 mt-4 pt-4 border-t border-white/[0.04] animate-fade-in">
+          <div className="max-w-4xl mx-auto px-6 mt-4 pt-4 border-t border-border-subtle animate-fade-in">
             <h4 className="text-xs font-bold uppercase tracking-wider text-text-secondary mb-3">
               Questions
             </h4>
@@ -405,7 +405,7 @@ export default function StudentExamFlow() {
                     className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                       isAnswered
                         ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                        : 'bg-white/5 border-white/10 text-text-muted hover:border-white/20'
+                        : 'bg-black/5 border-border-subtle text-text-muted hover:border-border-subtle'
                     }`}
                   >
                     <span className={`w-2.5 h-2.5 rounded-full border flex items-center justify-center ${
@@ -432,16 +432,16 @@ export default function StudentExamFlow() {
           <section
             key={q.id}
             id={`question-card-${idx}`}
-            className="glass-panel p-8 rounded-2xl border border-white/[0.04] space-y-4 shadow-card scroll-mt-36"
+            className="glass-panel p-8 rounded-2xl border border-border-subtle space-y-4 shadow-card scroll-mt-36"
           >
-            <div className="flex justify-between items-center pb-3 border-b border-white/[0.04]">
+            <div className="flex justify-between items-center pb-3 border-b border-border-subtle">
               <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
-              <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] font-bold text-text-secondary uppercase">
+              <span className="px-2.5 py-1 rounded-lg bg-black/5 border border-border-subtle text-[10px] font-bold text-text-secondary uppercase">
                 {q.marks} Marks
               </span>
             </div>
 
-            <p className="text-sm text-white font-medium leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm text-text-primary font-medium leading-relaxed whitespace-pre-wrap">
               {q.questionText}
             </p>
 
@@ -454,7 +454,7 @@ export default function StudentExamFlow() {
                 onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                 placeholder="Type your answer here..."
                 rows={4}
-                className="w-full px-4 py-3.5 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/25 outline-none transition-all resize-y"
+                className="w-full px-4 py-3.5 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/25 outline-none transition-all resize-y"
               />
             </div>
           </section>
@@ -464,16 +464,16 @@ export default function StudentExamFlow() {
       {/* --- STATE 3: SUBMIT CONFIRMATION DIALOG MODAL --- */}
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-white/10 shadow-2xl space-y-6">
-            <h3 className="text-xl font-bold text-white">Submit Assessment Exam?</h3>
+          <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-border-subtle shadow-2xl space-y-6">
+            <h3 className="text-xl font-bold text-text-primary">Submit Assessment Exam?</h3>
             
             <div className="space-y-4">
               <p className="text-sm text-text-secondary leading-relaxed">
-                You have answered <span className="font-bold text-white">{getAnsweredCount()}</span> out of{' '}
-                <span className="font-bold text-white">{exam.questions?.length}</span> questions.
+                You have answered <span className="font-bold text-text-primary">{getAnsweredCount()}</span> out of{' '}
+                <span className="font-bold text-text-primary">{exam.questions?.length}</span> questions.
               </p>
               
-              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 text-xs text-text-muted leading-relaxed">
+              <div className="p-3.5 rounded-xl bg-black/5 border border-border-subtle text-xs text-text-muted leading-relaxed">
                 <strong>Disclaimer:</strong> Once you submit, you will not be able to return to this exam or modify your answers.
               </div>
             </div>
@@ -487,7 +487,7 @@ export default function StudentExamFlow() {
               </button>
               <button
                 onClick={() => setShowConfirmModal(false)}
-                className="px-5 py-3 rounded-xl text-xs font-bold text-text-secondary hover:text-white border border-white/10 hover:bg-white/5 transition-all cursor-pointer"
+                className="px-5 py-3 rounded-xl text-xs font-bold text-text-secondary hover:text-text-primary border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -500,7 +500,7 @@ export default function StudentExamFlow() {
       {submitting && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/75 backdrop-blur-md">
           <div className="w-12 h-12 rounded-full border-4 border-accent-indigo border-t-transparent animate-spin mb-4" />
-          <p className="text-sm font-bold text-white">Submitting your exam assessment...</p>
+          <p className="text-sm font-bold text-text-primary">Submitting your exam assessment...</p>
           <p className="text-xs text-text-muted mt-1">Please do not close this window or reload the page.</p>
         </div>
       )}

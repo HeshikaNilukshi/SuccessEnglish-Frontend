@@ -55,21 +55,21 @@ export default function StudentCourseContent() {
     return (
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8 animate-pulse">
         {/* Back Link skeleton */}
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
         {/* Title skeleton */}
-        <div className="h-10 w-80 bg-white/5 rounded mb-3" />
+        <div className="h-10 w-80 bg-black/5 rounded mb-3" />
         {/* Description skeleton */}
-        <div className="h-4 w-60 bg-white/5 rounded mb-10" />
+        <div className="h-4 w-60 bg-black/5 rounded mb-10" />
 
         {/* Tab Buttons skeleton */}
-        <div className="h-12 w-80 bg-white/5 rounded-xl mb-8" />
+        <div className="h-12 w-80 bg-black/5 rounded-xl mb-8" />
 
         {/* List Grid skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-white/5 rounded-xl border border-white/[0.04] p-5 flex flex-col justify-between">
-              <div className="h-4 w-2/3 bg-white/5 rounded" />
-              <div className="h-3 w-1/3 bg-white/5 rounded" />
+            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between">
+              <div className="h-4 w-2/3 bg-black/5 rounded" />
+              <div className="h-3 w-1/3 bg-black/5 rounded" />
             </div>
           ))}
         </div>
@@ -79,19 +79,19 @@ export default function StudentCourseContent() {
 
   if (error || !course) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Access Denied or Error</h3>
+          <h3 className="text-xl font-bold text-text-primary">Access Denied or Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">
             {error || 'The course content you are looking for is unavailable.'}
           </p>
         </div>
         <Link
           to="/student"
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Dashboard
         </Link>
@@ -101,15 +101,15 @@ export default function StudentCourseContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-white/[0.04] pb-6 animate-fade-in-up">
+      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
         <div>
           <Link
             to="/student"
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Dashboard
           </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-2">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-2">
             {course.name}
           </h1>
           <p className="text-text-secondary text-sm max-w-2xl leading-relaxed">
@@ -120,14 +120,14 @@ export default function StudentCourseContent() {
 
       {/* Modern Pill Tabs */}
       <div className="flex justify-start mb-8 animate-fade-in-up animate-delay-100">
-        <div className="bg-bg-secondary/80 border border-white/[0.04] rounded-xl p-1 flex gap-1.5 w-full max-w-[420px] shadow-card">
+        <div className="bg-bg-secondary/80 border border-border-subtle rounded-xl p-1 flex gap-1.5 w-full max-w-[420px] shadow-card">
           <button
             type="button"
             onClick={() => setActiveTab('videos')}
             className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
               activeTab === 'videos'
                 ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-white hover:bg-white/[0.02]'
+                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
             }`}
           >
             🎥 Videos ({videos.length})
@@ -138,7 +138,7 @@ export default function StudentCourseContent() {
             className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
               activeTab === 'exams'
                 ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-white hover:bg-white/[0.02]'
+                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
             }`}
           >
             📝 Exams ({exams.length})
@@ -149,7 +149,7 @@ export default function StudentCourseContent() {
             className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
               activeTab === 'results'
                 ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-white hover:bg-white/[0.02]'
+                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
             }`}
           >
             📊 Results ({results.length})
@@ -162,9 +162,9 @@ export default function StudentCourseContent() {
         {activeTab === 'videos' && (
           <div>
             {videos.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
                 <span className="text-4xl block">🎬</span>
-                <h3 className="text-lg font-bold text-white">No Lecture Videos Yet</h3>
+                <h3 className="text-lg font-bold text-text-primary">No Lecture Videos Yet</h3>
                 <p className="text-xs text-text-secondary">
                   Check back later! The teacher hasn't uploaded any videos for this course yet.
                 </p>
@@ -181,7 +181,7 @@ export default function StudentCourseContent() {
                     
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-lg shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
                           🎥
                         </div>
                         <span className="text-[10px] font-mono text-text-muted">
@@ -189,12 +189,12 @@ export default function StudentCourseContent() {
                         </span>
                       </div>
                       
-                      <h3 className="text-base font-bold text-white tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
+                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
                         {video.title}
                       </h3>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
+                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
                       <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
                       <div
                         className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
@@ -212,9 +212,9 @@ export default function StudentCourseContent() {
         {activeTab === 'exams' && (
           <div>
             {exams.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
                 <span className="text-4xl block">✍️</span>
-                <h3 className="text-lg font-bold text-white">No Exams Scheduled Yet</h3>
+                <h3 className="text-lg font-bold text-text-primary">No Exams Scheduled Yet</h3>
                 <p className="text-xs text-text-secondary">
                   Great news! There are no exams or assessments scheduled for this course at the moment.
                 </p>
@@ -231,7 +231,7 @@ export default function StudentCourseContent() {
                     
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-lg shadow-inner group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
+                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg shadow-inner group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
                           📝
                         </div>
                         <span className="text-[10px] font-mono text-text-muted flex gap-2">
@@ -239,12 +239,12 @@ export default function StudentCourseContent() {
                         </span>
                       </div>
                       
-                      <h3 className="text-base font-bold text-white tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
+                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
                         {exam.title}
                       </h3>
                     </div>
  
-                    <div className="mt-4 pt-3 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-text-muted">
+                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
                       <span>Questions: {exam._count?.questions ?? 0}</span>
                       <div
                         className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
@@ -262,18 +262,18 @@ export default function StudentCourseContent() {
         {activeTab === 'results' && (
           <div>
             {results.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
                 <span className="text-4xl block">📊</span>
-                <h3 className="text-lg font-bold text-white">No Exam Attempts Yet</h3>
+                <h3 className="text-lg font-bold text-text-primary">No Exam Attempts Yet</h3>
                 <p className="text-xs text-text-secondary">
                   You have not attempted any exams for this course yet.
                 </p>
               </div>
             ) : (
-              <div className="glass-panel rounded-2xl border border-white/[0.04] overflow-hidden">
+              <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-white/[0.04] bg-white/[0.02]">
+                    <tr className="border-b border-border-subtle bg-black/5">
                       <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Exam Title</th>
                       <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Date Taken</th>
                       <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Score / Status</th>
@@ -292,11 +292,11 @@ export default function StudentCourseContent() {
                           }}
                           className={`transition-colors duration-150 ${
                             rowClickable 
-                              ? 'hover:bg-white/[0.03] cursor-pointer' 
+                              ? 'hover:bg-black/5 cursor-pointer' 
                               : 'cursor-default opacity-75'
                           }`}
                         >
-                          <td className="px-6 py-4 text-sm font-semibold text-white">
+                          <td className="px-6 py-4 text-sm font-semibold text-text-primary">
                             {attempt.exam.title}
                           </td>
                           <td className="px-6 py-4 text-sm text-text-muted">

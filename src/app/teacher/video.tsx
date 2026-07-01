@@ -124,28 +124,28 @@ export default function TeacherVideoPage() {
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-6 md:px-12 pt-10 pb-8 animate-pulse flex flex-col items-stretch">
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
-        <div className="h-10 w-96 bg-white/5 rounded mb-8" />
-        <div className="w-full aspect-video bg-white/5 rounded-2xl border border-white/[0.04] shadow-2xl" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
+        <div className="h-10 w-96 bg-black/5 rounded mb-8" />
+        <div className="w-full aspect-video bg-black/5 rounded-2xl border border-border-subtle shadow-2xl" />
       </div>
     )
   }
 
   if (error || !video) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Video Unreachable</h3>
+          <h3 className="text-xl font-bold text-text-primary">Video Unreachable</h3>
           <p className="text-text-secondary text-sm leading-relaxed">
             {error || 'The video you are trying to view is unavailable.'}
           </p>
         </div>
         <Link
           to={`/teacher/${courseId}`}
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course Content
         </Link>
@@ -159,11 +159,11 @@ export default function TeacherVideoPage() {
         <div>
           <Link
             to={`/teacher/${courseId}`}
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             &larr; Back to Course Content
           </Link>
-          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-white">
+          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary">
             {video.title}
           </h1>
         </div>
@@ -178,7 +178,7 @@ export default function TeacherVideoPage() {
               setEditProgress(null)
               setIsEditing(true)
             }}
-            className="px-4 py-2 text-xs font-bold text-white rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
+            className="px-4 py-2 text-xs font-bold text-text-primary rounded-xl bg-black/5 border border-border-subtle hover:bg-black/5 hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
           >
             ✏️ Edit Video
           </button>
@@ -195,7 +195,7 @@ export default function TeacherVideoPage() {
       <main className="relative w-full flex justify-center items-center">
         <div className="absolute inset-0 bg-gradient-to-tr from-accent-indigo/10 via-accent-violet/5 to-accent-pink/5 rounded-2xl blur-3xl opacity-50 -z-10" />
 
-        <div className="w-full aspect-video rounded-2xl overflow-hidden glass-panel border border-white/[0.06] shadow-2xl relative bg-black/60">
+        <div className="w-full aspect-video rounded-2xl overflow-hidden glass-panel border border-border-subtle shadow-2xl relative bg-black/60">
           <iframe
             src={video.videoUrl}
             title={video.title}
@@ -214,21 +214,21 @@ export default function TeacherVideoPage() {
             onClick={() => !isSaving && setIsEditing(false)}
           />
           <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
-            <div className="relative w-full max-w-lg rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in overflow-hidden">
+            <div className="relative w-full max-w-lg rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in overflow-hidden">
               <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
               
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
                 disabled={isSaving}
-                className="absolute top-4 right-4 text-text-muted hover:text-white p-2 rounded-full hover:bg-white/[0.04] transition-all cursor-pointer disabled:opacity-50"
+                className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
-              <h3 className="text-xl font-bold text-white mb-6">Edit Lecture Video</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-6">Edit Lecture Video</h3>
 
               <form onSubmit={handleEditSubmit} className="space-y-6">
                 {editError && (
@@ -251,7 +251,7 @@ export default function TeacherVideoPage() {
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                     disabled={isSaving}
                   />
                 </div>
@@ -268,7 +268,7 @@ export default function TeacherVideoPage() {
                         setEditFile(e.target.files[0])
                       }
                     }}
-                    className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-white/5 file:text-white hover:file:bg-white/10"
+                    className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-black/5 file:text-text-primary hover:file:bg-black/5"
                     disabled={isSaving}
                   />
                   <p className="text-[10px] text-text-muted">
@@ -276,12 +276,12 @@ export default function TeacherVideoPage() {
                   </p>
                 </div>
 
-                <div className="flex gap-3 pt-4 border-t border-white/[0.04]">
+                <div className="flex gap-3 pt-4 border-t border-border-subtle">
                   <button
                     type="button"
                     onClick={() => setIsEditing(false)}
                     disabled={isSaving}
-                    className="flex-grow py-3 text-sm font-bold text-text-secondary hover:text-white rounded-2xl border border-white/[0.07] hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                    className="flex-grow py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -308,7 +308,7 @@ export default function TeacherVideoPage() {
             onClick={() => !isDeleting && setIsDeleteOpen(false)}
           />
           <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
-            <div className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden">
+            <div className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-red-500/35 to-transparent" />
               <div className="absolute top-[-20%] left-[20%] w-[200px] h-[200px] bg-red-500/8 rounded-full blur-[60px] pointer-events-none" />
 
@@ -316,7 +316,7 @@ export default function TeacherVideoPage() {
                 type="button"
                 onClick={() => setIsDeleteOpen(false)}
                 disabled={isDeleting}
-                className="absolute top-4 right-4 text-text-muted hover:text-white p-2 rounded-full hover:bg-white/[0.04] transition-all cursor-pointer disabled:opacity-50"
+                className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -329,9 +329,9 @@ export default function TeacherVideoPage() {
                 </svg>
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-1">Delete Video?</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-1">Delete Video?</h3>
               <p className="text-sm text-text-secondary mb-8 leading-relaxed">
-                Are you sure you want to delete <span className="text-white font-semibold">"{video.title}"</span>? This action is permanent and cannot be undone.
+                Are you sure you want to delete <span className="text-text-primary font-semibold">"{video.title}"</span>? This action is permanent and cannot be undone.
               </p>
 
               <div className="flex gap-3">
@@ -339,7 +339,7 @@ export default function TeacherVideoPage() {
                   type="button"
                   onClick={() => setIsDeleteOpen(false)}
                   disabled={isDeleting}
-                  className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-white rounded-2xl border border-white/[0.07] hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>

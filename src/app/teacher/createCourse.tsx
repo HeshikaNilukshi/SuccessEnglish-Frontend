@@ -48,14 +48,14 @@ export default function CreateCourse() {
 
   return (
     <div className="max-w-xl mx-auto px-6 pt-16 pb-16">
-      <header className="mb-10 border-b border-white/[0.04] pb-6">
+      <header className="mb-10 border-b border-border-subtle pb-6">
         <Link
           to="/teacher"
-          className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
         >
           &larr; Back to Panel
         </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary">
           Create New Course
         </h1>
         <p className="text-text-secondary text-sm">
@@ -63,7 +63,7 @@ export default function CreateCourse() {
         </p>
       </header>
 
-      <main className="glass-panel p-8 rounded-2xl border border-white/[0.04] relative">
+      <main className="glass-panel p-8 rounded-2xl border border-border-subtle relative">
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-xs text-red-400">
@@ -80,7 +80,7 @@ export default function CreateCourse() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., General English Masterclass"
-              className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function CreateCourse() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Provide a detailed description of the course curriculum and objectives..."
-              className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all resize-none"
             />
           </div>
 
@@ -107,7 +107,7 @@ export default function CreateCourse() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="e.g., 49.99"
-              className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-white/5 focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-white placeholder-white/20 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
             />
           </div>
 

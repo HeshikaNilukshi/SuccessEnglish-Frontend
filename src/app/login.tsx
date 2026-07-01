@@ -51,19 +51,19 @@ export default function LoginPage() {
             <div className="relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.25)]">
               <div className="absolute inset-0 bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink opacity-90" />
               <span className="relative text-white font-extrabold text-lg tracking-tight select-none">S</span>
-              <span className="absolute top-0.5 left-1 w-3.5 h-1 bg-white/25 rounded-full blur-[2px]" />
+              <span className="absolute top-0.5 left-1 w-3.5 h-1 bg-black/5 rounded-full blur-[2px]" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-white/90">
+            <span className="text-lg font-bold tracking-tight text-text-primary/90">
               Success <span className="gradient-text-accent font-extrabold">English</span>
             </span>
           </Link>
         </div>
 
-        <div className="glass-panel rounded-2xl p-8 border border-white/[0.06] shadow-card relative overflow-hidden group">
+        <div className="glass-panel rounded-2xl p-8 border border-border-subtle shadow-card relative overflow-hidden group">
           <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/35 to-transparent" />
           
           <div className="mb-6">
-            <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Welcome Back</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-text-primary mb-2">Welcome Back</h1>
             <p className="text-sm text-text-secondary">Sign in to access your dashboard.</p>
           </div>
 
@@ -112,14 +112,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="relative w-full py-3.5 rounded-xl text-sm font-semibold text-white overflow-hidden transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_25px_rgba(99,102,241,0.35)] cursor-pointer mt-2"
+              className="relative w-full py-3.5 rounded-xl text-sm font-semibold text-text-primary overflow-hidden transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_25px_rgba(99,102,241,0.35)] cursor-pointer mt-2"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet" />
               <span className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(105deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)] bg-[length:200%_100%]" />
               <span className="relative flex items-center justify-center gap-2">
                 {isSubmitting ? (
                   <>
-                    <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-text-primary" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
@@ -141,7 +141,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center mt-6">
-          <Link to="/" className="text-xs text-text-muted hover:text-white transition-colors duration-200 flex items-center justify-center gap-1.5">
+          <Link to="/" className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 flex items-center justify-center gap-1.5">
             <span>←</span> Back to Home
           </Link>
         </div>

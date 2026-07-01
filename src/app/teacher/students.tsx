@@ -39,11 +39,11 @@ export default function CourseStudents() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-6 pt-16 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
-        <div className="h-10 w-80 bg-white/5 rounded mb-10" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
+        <div className="h-10 w-80 bg-black/5 rounded mb-10" />
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-16 bg-white/5 rounded-xl" />
+            <div key={i} className="h-16 bg-black/5 rounded-xl" />
           ))}
         </div>
       </div>
@@ -52,17 +52,17 @@ export default function CourseStudents() {
 
   if (error) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Error</h3>
+          <h3 className="text-xl font-bold text-text-primary">Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{error}</p>
         </div>
         <Link
           to={`/teacher/${courseId}`}
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
         </Link>
@@ -72,14 +72,14 @@ export default function CourseStudents() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 pt-16 pb-16">
-      <header className="mb-10 border-b border-white/[0.04] pb-6">
+      <header className="mb-10 border-b border-border-subtle pb-6">
         <Link
           to={`/teacher/${courseId}`}
-          className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
         >
           &larr; Back to Course
         </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
+        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
           Enrolled Students
         </h1>
         <p className="text-text-secondary text-sm">
@@ -89,18 +89,18 @@ export default function CourseStudents() {
 
       <main>
         {students.length === 0 ? (
-          <div className="text-center py-16 px-6 rounded-2xl glass-panel border-white/[0.04] max-w-xl mx-auto space-y-4">
+          <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
             <span className="text-4xl block">👥</span>
-            <h3 className="text-lg font-bold text-white">No Students Enrolled</h3>
+            <h3 className="text-lg font-bold text-text-primary">No Students Enrolled</h3>
             <p className="text-xs text-text-secondary">
               No students have requested or been verified for enrollment in this course yet.
             </p>
           </div>
         ) : (
-          <div className="glass-panel rounded-2xl border border-white/[0.04] overflow-hidden">
+          <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/[0.04] bg-white/[0.02]">
+                <tr className="border-b border-border-subtle bg-black/5">
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Student Name</th>
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Email Address</th>
                   <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Status</th>
@@ -111,9 +111,9 @@ export default function CourseStudents() {
                   <tr
                     key={student.id}
                     onClick={() => navigate(`/teacher/student/${student.user.id}/profile`)}
-                    className="hover:bg-white/[0.03] transition-colors duration-150 cursor-pointer"
+                    className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
                   >
-                    <td className="px-6 py-4 text-sm font-semibold text-white">
+                    <td className="px-6 py-4 text-sm font-semibold text-text-primary">
                       {student.user.name}
                     </td>
                     <td className="px-6 py-4 text-sm text-text-secondary">{student.user.email}</td>

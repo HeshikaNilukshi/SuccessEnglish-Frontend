@@ -19,7 +19,7 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
 
       <div className="space-y-4">
         <div className="flex items-start justify-between">
-          <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+          <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-2xl shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
             {icon}
           </div>
           <div className="px-3 py-1 rounded-full text-xs font-semibold bg-accent-indigo/10 border border-accent-indigo/20 text-accent-indigo">
@@ -27,7 +27,7 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
           </div>
         </div>
 
-        <h3 className="text-xl font-bold text-white tracking-tight group-hover:text-accent-indigo transition-colors duration-300">
+        <h3 className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300">
           {course.name}
         </h3>
 
@@ -36,7 +36,7 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
         </p>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-white/[0.04] flex items-center justify-between text-xs text-text-muted">
+      <div className="mt-8 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
         <span>Created {new Date(course.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
         <div
           className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1"

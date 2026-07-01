@@ -58,12 +58,12 @@ export default function TeacherExamView() {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto px-6 pt-16 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
-        <div className="h-10 w-96 bg-white/5 rounded mb-4" />
-        <div className="h-4 w-48 bg-white/5 rounded mb-10" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
+        <div className="h-10 w-96 bg-black/5 rounded mb-4" />
+        <div className="h-4 w-48 bg-black/5 rounded mb-10" />
         <div className="space-y-6">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="h-40 bg-white/5 rounded-xl border border-white/[0.04]" />
+            <div key={i} className="h-40 bg-black/5 rounded-xl border border-border-subtle" />
           ))}
         </div>
       </div>
@@ -72,17 +72,17 @@ export default function TeacherExamView() {
 
   if (error || !exam) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Error</h3>
+          <h3 className="text-xl font-bold text-text-primary">Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{error || 'Exam details unavailable.'}</p>
         </div>
         <Link
           to={`/teacher/${courseId}`}
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
         </Link>
@@ -92,11 +92,11 @@ export default function TeacherExamView() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
-      <header className="mb-10 border-b border-white/[0.04] pb-6">
+      <header className="mb-10 border-b border-border-subtle pb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <Link
             to={`/teacher/${courseId}`}
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 group cursor-pointer"
           >
             &larr; Back to Course
           </Link>
@@ -104,7 +104,7 @@ export default function TeacherExamView() {
           <div className="flex items-center gap-3 self-start sm:self-center shrink-0">
             <Link
               to={`/teacher/${courseId}/exams/${examId}/edit`}
-              className="px-4 py-2 text-xs font-bold text-white rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
+              className="px-4 py-2 text-xs font-bold text-text-primary rounded-xl bg-black/5 border border-border-subtle hover:bg-black/5 hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
             >
               ✏️ Edit Exam
             </Link>
@@ -120,7 +120,7 @@ export default function TeacherExamView() {
 
         <div className="flex justify-between items-start gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
+            <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
               {exam.title}
             </h1>
             <p className="text-text-secondary text-sm">
@@ -137,14 +137,14 @@ export default function TeacherExamView() {
         {exam.questions.map((q, idx) => (
           <div
             key={q.id}
-            className="glass-panel p-6 rounded-xl border border-white/[0.04] space-y-4"
+            className="glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
           >
-            <div className="flex justify-between items-center pb-2 border-b border-white/[0.04]">
+            <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
               <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
               <span className="text-xs text-text-muted">{q.marks} Marks</span>
             </div>
 
-            <p className="text-sm font-semibold text-white">
+            <p className="text-sm font-semibold text-text-primary">
               {q.questionText}
             </p>
 
@@ -166,7 +166,7 @@ export default function TeacherExamView() {
             onClick={() => !isDeleting && setIsDeleteOpen(false)}
           />
           <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
-            <div className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden">
+            <div className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-red-500/35 to-transparent" />
               <div className="absolute top-[-20%] left-[20%] w-[200px] h-[200px] bg-red-500/8 rounded-full blur-[60px] pointer-events-none" />
 
@@ -174,7 +174,7 @@ export default function TeacherExamView() {
                 type="button"
                 onClick={() => setIsDeleteOpen(false)}
                 disabled={isDeleting}
-                className="absolute top-4 right-4 text-text-muted hover:text-white p-2 rounded-full hover:bg-white/[0.04] transition-all cursor-pointer disabled:opacity-50"
+                className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -187,9 +187,9 @@ export default function TeacherExamView() {
                 </svg>
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-1">Delete Exam?</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-1">Delete Exam?</h3>
               <p className="text-sm text-text-secondary mb-8 leading-relaxed">
-                Are you sure you want to delete <span className="text-white font-semibold">"{exam.title}"</span>? This action is permanent and cannot be undone.
+                Are you sure you want to delete <span className="text-text-primary font-semibold">"{exam.title}"</span>? This action is permanent and cannot be undone.
               </p>
 
               <div className="flex gap-3">
@@ -197,7 +197,7 @@ export default function TeacherExamView() {
                   type="button"
                   onClick={() => setIsDeleteOpen(false)}
                   disabled={isDeleting}
-                  className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-white rounded-2xl border border-white/[0.07] hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>

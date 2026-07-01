@@ -14,15 +14,15 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8">
-      <header className="relative z-20 flex flex-col gap-4 mb-12 border-b border-white/[0.04] pb-6 animate-fade-in-up">
+      <header className="relative z-20 flex flex-col gap-4 mb-12 border-b border-border-subtle pb-6 animate-fade-in-up">
         <div>
           <Link
             to={backTarget}
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Dashboard
           </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
             My <span className="gradient-text-accent">Profile</span>
           </h1>
         </div>
@@ -31,7 +31,7 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch animate-fade-in-up" style={{ animationDelay: '100ms' }}>
         
         <div className="lg:col-span-4">
-          <div className="relative overflow-hidden rounded-2xl glass-panel border border-white/[0.04] p-8 shadow-xl text-center group h-full flex flex-col justify-between">
+          <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl text-center group h-full flex flex-col justify-between">
             <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
             
             <div className="flex flex-col items-center">
@@ -43,13 +43,13 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-3 w-full">
-                <h2 className="text-2xl font-bold text-white tracking-tight">{user?.name}</h2>
+                <h2 className="text-2xl font-bold text-text-primary tracking-tight">{user?.name}</h2>
                 
                 <div className="space-y-1">
                   <div className="text-[10px] uppercase tracking-wider text-text-muted">
                     {isStudent ? 'Student ID' : 'User ID'}
                   </div>
-                  <div className="font-mono text-sm md:text-base font-semibold text-text-primary bg-white/[0.03] border border-white/[0.06] px-3.5 py-1.5 rounded-xl select-all inline-block max-w-full truncate">
+                  <div className="font-mono text-sm md:text-base font-semibold text-text-primary bg-black/5 border border-border-subtle px-3.5 py-1.5 rounded-xl select-all inline-block max-w-full truncate">
                     {user?.id}
                   </div>
                 </div>
@@ -70,7 +70,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-white/[0.04] w-full">
+            <div className="mt-8 pt-6 border-t border-border-subtle w-full">
               <button
                 type="button"
                 onClick={() => setIsSignOutModalOpen(true)}

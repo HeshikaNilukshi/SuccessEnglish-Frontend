@@ -32,17 +32,17 @@ export default function TeacherDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-white/[0.04] pb-6">
+      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6">
         <div>
           <Link
             to="/"
-            className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
           >
             &larr; Back to home portal
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div className="space-y-2">
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
                 Teacher Panel, <span className="gradient-text-accent">{user?.name}</span>
               </h1>
               <p className="text-text-secondary text-sm md:text-base">
@@ -56,7 +56,7 @@ export default function TeacherDashboard() {
 
       <main className="space-y-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-white">
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-text-primary">
             My Created Courses
           </h2>
           <div className="flex items-center gap-4">
@@ -79,16 +79,16 @@ export default function TeacherDashboard() {
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-white/[0.04] p-7 h-[250px] flex flex-col justify-between animate-pulse"
+                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-7 h-[250px] flex flex-col justify-between animate-pulse"
               >
                 <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/5" />
-                  <div className="h-6 w-3/4 rounded bg-white/5" />
-                  <div className="h-4 w-full rounded bg-white/5" />
+                  <div className="w-12 h-12 rounded-xl bg-black/5" />
+                  <div className="h-6 w-3/4 rounded bg-black/5" />
+                  <div className="h-4 w-full rounded bg-black/5" />
                 </div>
-                <div className="pt-4 border-t border-white/[0.04] flex justify-between items-center">
-                  <div className="h-3 w-1/3 rounded bg-white/5" />
-                  <div className="h-3 w-1/4 rounded bg-white/5" />
+                <div className="pt-4 border-t border-border-subtle flex justify-between items-center">
+                  <div className="h-3 w-1/3 rounded bg-black/5" />
+                  <div className="h-3 w-1/4 rounded bg-black/5" />
                 </div>
               </div>
             ))}
@@ -101,7 +101,7 @@ export default function TeacherDashboard() {
             <button
               type="button"
               onClick={loadCourses}
-              className="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+              className="px-5 py-2 rounded-xl text-xs font-semibold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
             >
               Try Again
             </button>
@@ -109,12 +109,12 @@ export default function TeacherDashboard() {
         )}
 
         {!loading && !error && courses.length === 0 && (
-          <div className="max-w-xl mx-auto text-center py-16 px-8 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
-            <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/10">
+          <div className="max-w-xl mx-auto text-center py-16 px-8 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
+            <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-black/5 border border-border-subtle">
               <span className="text-4xl">📚</span>
             </div>
             <div className="space-y-3">
-              <h3 className="text-2xl font-bold text-white tracking-tight">No Courses Created Yet</h3>
+              <h3 className="text-2xl font-bold text-text-primary tracking-tight">No Courses Created Yet</h3>
               <p className="text-sm text-text-secondary max-w-md mx-auto">
                 Get started by creating your first course.
               </p>

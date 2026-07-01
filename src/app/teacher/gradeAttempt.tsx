@@ -178,12 +178,12 @@ export default function GradeExamAttempt() {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto px-6 pt-16 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-white/5 rounded mb-4" />
-        <div className="h-10 w-96 bg-white/5 rounded mb-4" />
-        <div className="h-4 w-48 bg-white/5 rounded mb-10" />
+        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
+        <div className="h-10 w-96 bg-black/5 rounded mb-4" />
+        <div className="h-4 w-48 bg-black/5 rounded mb-10" />
         <div className="space-y-6">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="h-40 bg-white/5 rounded-xl border border-white/[0.04]" />
+            <div key={i} className="h-40 bg-black/5 rounded-xl border border-border-subtle" />
           ))}
         </div>
       </div>
@@ -192,18 +192,18 @@ export default function GradeExamAttempt() {
 
   if (error || !attempt) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-white/[0.04] shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white">Error</h3>
+          <h3 className="text-xl font-bold text-text-primary">Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{error || 'Attempt details unavailable.'}</p>
         </div>
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Go Back
         </button>
@@ -220,11 +220,11 @@ export default function GradeExamAttempt() {
   return (
     <div className="max-w-3xl mx-auto px-6 pt-28 pb-16 relative">
       {/* Sticky Score Banner */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-white/[0.04] py-4 shadow-md animate-fade-in">
+      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle py-4 shadow-md animate-fade-in">
         <div className="max-w-3xl mx-auto px-6 flex justify-between items-center">
           <div className="flex flex-col">
             <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Grading Exam Attempt</span>
-            <span className="text-sm font-bold text-white truncate max-w-[200px] md:max-w-md">{attempt.student.name}</span>
+            <span className="text-sm font-bold text-text-primary truncate max-w-[200px] md:max-w-md">{attempt.student.name}</span>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -241,7 +241,7 @@ export default function GradeExamAttempt() {
                 <>✨ Grade Attempt With AI</>
               )}
             </button>
-            <div className="bg-bg-secondary border border-white/5 rounded-xl px-4 py-2 text-right">
+            <div className="bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2 text-right">
               <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
               <span className="text-lg font-extrabold text-emerald-400">{currentScore} / {totalPossibleScore}</span>
             </div>
@@ -249,19 +249,19 @@ export default function GradeExamAttempt() {
         </div>
       </div>
 
-      <header className="mb-10 border-b border-white/[0.04] pb-6">
+      <header className="mb-10 border-b border-border-subtle pb-6">
         <button
           onClick={() => navigate(-1)}
-          className="text-xs text-text-muted hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-0 outline-none"
+          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-0 outline-none"
         >
           &larr; Go Back
         </button>
         <div className="space-y-4">
-          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">
+          <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
             Grade Exam Attempt
           </h1>
           <p className="text-text-secondary text-sm">
-            Review answers submitted by <span className="font-semibold text-white">{attempt.student.name}</span> ({attempt.student.email}) for <span className="font-semibold text-white">{attempt.exam.title}</span>.
+            Review answers submitted by <span className="font-semibold text-text-primary">{attempt.student.name}</span> ({attempt.student.email}) for <span className="font-semibold text-text-primary">{attempt.exam.title}</span>.
           </p>
         </div>
       </header>
@@ -289,22 +289,22 @@ export default function GradeExamAttempt() {
                 if (marks === 0) {
                   return 'p-4 rounded-lg bg-rose-500/5 border border-rose-500/10 text-xs text-rose-400'
                 }
-                return 'p-4 rounded-lg bg-white/[0.02] border border-white/5 text-xs text-white'
+                return 'p-4 rounded-lg bg-black/5 border border-border-subtle text-xs text-text-primary'
               }
 
               return (
                 <div
                   key={ans.id}
-                  className="glass-panel p-6 rounded-xl border border-white/[0.04] space-y-4"
+                  className="glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
                 >
-                  <div className="flex justify-between items-center pb-2 border-b border-white/[0.04]">
+                  <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
                     <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
                     <span className="text-xs text-text-muted">
                       {ans.question.marks} Marks
                     </span>
                   </div>
 
-                  <p className="text-sm font-semibold text-white">
+                  <p className="text-sm font-semibold text-text-primary">
                     {ans.question.questionText}
                   </p>
 
@@ -334,7 +334,7 @@ export default function GradeExamAttempt() {
                     </div>
                   </div>
 
-                  <div className="space-y-4 pt-4 border-t border-white/[0.04]">
+                  <div className="space-y-4 pt-4 border-t border-border-subtle">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                       {/* Numeric Grade Input */}
                       <div className="flex-1 space-y-1.5">
@@ -352,7 +352,7 @@ export default function GradeExamAttempt() {
                               handleGradeChange(ans.id, val)
                             }}
                             placeholder="Enter marks"
-                            className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent-indigo transition-colors w-32"
+                            className="bg-black/5 border border-border-subtle rounded-xl px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:border-accent-indigo transition-colors w-32"
                             disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
                           />
                           <span className="text-sm text-text-muted">/ {ans.question.marks} Marks</span>
@@ -392,7 +392,7 @@ export default function GradeExamAttempt() {
                         onChange={(e) => handleFeedbackChange(ans.id, e.target.value)}
                         placeholder="Add comments or feedback for the student..."
                         rows={2}
-                        className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-text-muted focus:outline-none focus:border-accent-indigo transition-colors resize-none"
+                        className="w-full bg-black/5 border border-border-subtle rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-indigo transition-colors resize-none"
                         disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
                       />
                     </div>

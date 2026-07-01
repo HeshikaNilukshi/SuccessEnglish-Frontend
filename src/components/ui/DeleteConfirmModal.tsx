@@ -29,7 +29,7 @@ export default function DeleteConfirmModal({
       />
       <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
         <div
-          className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden"
+          className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden"
         >
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-red-500/35 to-transparent" />
           <div className="absolute top-[-20%] left-[20%] w-[200px] h-[200px] bg-red-500/8 rounded-full blur-[60px] pointer-events-none" />
@@ -38,7 +38,7 @@ export default function DeleteConfirmModal({
             type="button"
             onClick={onClose}
             disabled={isDeleting}
-            className="absolute top-4 right-4 text-text-muted hover:text-white p-2 rounded-full hover:bg-white/[0.04] transition-all cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+            className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -51,7 +51,7 @@ export default function DeleteConfirmModal({
             </svg>
           </div>
 
-          <h3 className="text-xl font-bold text-white mb-1">{title}</h3>
+          <h3 className="text-xl font-bold text-text-primary mb-1">{title}</h3>
           <p className="text-sm text-text-secondary mb-8 leading-relaxed">
             {message}
           </p>
@@ -61,7 +61,7 @@ export default function DeleteConfirmModal({
               type="button"
               onClick={onClose}
               disabled={isDeleting}
-              className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-white rounded-2xl border border-white/[0.07] hover:border-white/15 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+              className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
