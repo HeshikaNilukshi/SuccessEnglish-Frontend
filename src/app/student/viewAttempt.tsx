@@ -109,16 +109,19 @@ export default function StudentAttemptView() {
 
       <main className="space-y-6">
         {attempt.answers.map((ans, idx) => {
-          const isCorrectVal = ans.isCorrect
+          const marks = ans.marksAwarded
 
           const studentAnswerContainerClass = () => {
-            if (isCorrectVal === true) {
-              return 'p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400'
+            if (marks === ans.question.marks) {
+              return 'p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium'
             }
-            if (isCorrectVal === false) {
-              return 'p-4 rounded-lg bg-rose-500/5 border border-rose-500/10 text-xs text-rose-400'
+            if (marks !== null && marks > 0) {
+              return 'p-4 rounded-lg bg-amber-500/12 border border-amber-500/25 text-xs text-amber-900 font-medium'
             }
-            return 'p-4 rounded-lg bg-black/5 border border-border-subtle text-xs text-text-primary'
+            if (marks === 0) {
+              return 'p-4 rounded-lg bg-rose-500/12 border border-rose-500/25 text-xs text-rose-900 font-medium'
+            }
+            return 'p-4 rounded-lg bg-black/8 border border-border-subtle text-xs text-slate-800'
           }
 
           return (
@@ -127,9 +130,9 @@ export default function StudentAttemptView() {
               className="glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
             >
               <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
-                <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
-                <span className="px-2 py-1 rounded bg-black/5 border border-border-subtle text-[10px] font-bold text-text-muted">
-                  Given Marks: {isCorrectVal === true ? ans.question.marks : 0} / {ans.question.marks}
+                <span className="text-xs font-bold text-accent-indigo">Question {idx + 1}</span>
+                <span className="px-3 py-1.5 rounded-xl bg-black/8 border border-border-subtle text-xs md:text-sm font-extrabold text-slate-700">
+                  Given Marks: {marks !== null ? marks : 'Pending'} / {ans.question.marks}
                 </span>
               </div>
 
@@ -141,11 +144,13 @@ export default function StudentAttemptView() {
                 {/* Student's Answer */}
                 <div className={studentAnswerContainerClass()}>
                   <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${
-                    isCorrectVal === true 
-                      ? 'text-emerald-500' 
-                      : isCorrectVal === false 
-                        ? 'text-rose-400' 
-                        : 'text-text-muted'
+                    marks === ans.question.marks
+                      ? 'text-emerald-700' 
+                      : (marks !== null && marks > 0)
+                        ? 'text-amber-700'
+                        : marks === 0 
+                          ? 'text-rose-700' 
+                          : 'text-slate-500'
                   }`}>
                     Your Answer
                   </span>
@@ -153,23 +158,36 @@ export default function StudentAttemptView() {
                 </div>
 
                 {/* Correct Answer */}
-                <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400">
-                  <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-500 block mb-1">
+                <div className="p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
+                  <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-700 block mb-1">
                     Correct Answer
                   </span>
                   {ans.question.correctAnswer}
                 </div>
               </div>
 
+              {ans.feedback && (
+                <div className="p-4 rounded-lg bg-black/8 border border-border-subtle text-xs text-slate-800 space-y-2">
+                  <span className="font-bold uppercase tracking-wider text-[9px] text-accent-indigo block">
+                    Feedback
+                  </span>
+                  <div className="mt-1 leading-relaxed text-text-secondary">
+                    {ans.feedback}
+                  </div>
+                </div>
+              )}
+
               <div className="flex justify-end pt-2">
-                <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${
-                  isCorrectVal === true
+                <span className={`px-4 py-2 rounded-full text-xs md:text-sm font-extrabold border ${
+                  marks === ans.question.marks
                     ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                    : isCorrectVal === false
-                      ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
-                      : 'bg-black/5 border-border-subtle text-text-secondary'
+                    : marks !== null && marks > 0
+                      ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                      : marks === 0
+                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                        : 'bg-black/5 border-border-subtle text-text-secondary'
                 }`}>
-                  {isCorrectVal === true ? '✓ Correct' : isCorrectVal === false ? '✗ Incorrect' : 'Pending Grading'}
+                  {marks === ans.question.marks ? '✓ Fully Correct' : marks !== null && marks > 0 ? '✓ Partially Correct' : marks === 0 ? '✗ Incorrect' : 'Pending Grading'}
                 </span>
               </div>
             </div>

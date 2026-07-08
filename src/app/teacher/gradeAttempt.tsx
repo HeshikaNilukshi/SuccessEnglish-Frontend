@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { 
-  fetchAttemptWithAnswers, 
-  updateAttemptMarks, 
-  evaluateAttemptWithAI, 
-  evaluateAnswerWithAI, 
-  type ExamAttemptDetail 
+import {
+  fetchAttemptWithAnswers,
+  updateAttemptMarks,
+  evaluateAttemptWithAI,
+  evaluateAnswerWithAI,
+  type ExamAttemptDetail
 } from '@/actions/courses'
 
 export default function GradeExamAttempt() {
@@ -15,11 +15,11 @@ export default function GradeExamAttempt() {
   const navigate = useNavigate()
 
   const [attempt, setAttempt] = useState<ExamAttemptDetail | null>(null)
-  const [grades, setGrades] = useState<Array<{ 
-    answerId: number; 
-    marksAwarded: number | null; 
-    similarity?: number | null; 
-    feedback?: string | null; 
+  const [grades, setGrades] = useState<Array<{
+    answerId: number;
+    marksAwarded: number | null;
+    similarity?: number | null;
+    feedback?: string | null;
   }>>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -43,10 +43,10 @@ export default function GradeExamAttempt() {
 
         const data = await fetchAttemptWithAnswers(token, id)
         setAttempt(data)
-        
+
         const initialGrades = data.answers.map((ans) => ({
           answerId: ans.id,
-          marksAwarded: ans.marksAwarded ?? (ans.isCorrect === true ? ans.question.marks : ans.isCorrect === false ? 0 : null),
+          marksAwarded: ans.marksAwarded ?? null,
           similarity: ans.similarity,
           feedback: ans.feedback,
         }))
@@ -117,11 +117,11 @@ export default function GradeExamAttempt() {
         prevGrades.map((g) =>
           g.answerId === answerId
             ? {
-                ...g,
-                marksAwarded: aiRes.marks,
-                feedback: aiRes.feedback,
-                similarity: aiRes.similarity,
-              }
+              ...g,
+              marksAwarded: aiRes.marks,
+              feedback: aiRes.feedback,
+              similarity: aiRes.similarity,
+            }
             : g
         )
       )
@@ -281,15 +281,15 @@ export default function GradeExamAttempt() {
 
               const studentAnswerContainerClass = () => {
                 if (marks === ans.question.marks) {
-                  return 'p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400'
+                  return 'p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium'
                 }
                 if (marks !== null && marks > 0) {
-                  return 'p-4 rounded-lg bg-amber-500/5 border border-amber-500/10 text-xs text-amber-400'
+                  return 'p-4 rounded-lg bg-amber-500/12 border border-amber-500/25 text-xs text-amber-900 font-medium'
                 }
                 if (marks === 0) {
-                  return 'p-4 rounded-lg bg-rose-500/5 border border-rose-500/10 text-xs text-rose-400'
+                  return 'p-4 rounded-lg bg-rose-500/12 border border-rose-500/25 text-xs text-rose-900 font-medium'
                 }
-                return 'p-4 rounded-lg bg-black/5 border border-border-subtle text-xs text-text-primary'
+                return 'p-4 rounded-lg bg-black/8 border border-border-subtle text-xs text-slate-800'
               }
 
               return (
@@ -298,10 +298,22 @@ export default function GradeExamAttempt() {
                   className="glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
                 >
                   <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
-                    <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
-                    <span className="text-xs text-text-muted">
-                      {ans.question.marks} Marks
-                    </span>
+                    <span className="text-xs font-bold text-accent-indigo">Question {idx + 1}</span>
+                    <div className="flex items-center gap-3">
+                      {marks !== null && (
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${marks === ans.question.marks
+                            ? 'bg-emerald-500/12 border-emerald-500/25 text-emerald-700'
+                            : marks > 0
+                              ? 'bg-amber-500/12 border-amber-500/25 text-amber-700'
+                              : 'bg-rose-500/12 border-rose-500/25 text-rose-700'
+                          }`}>
+                          {marks} / {ans.question.marks} Marks Given
+                        </span>
+                      )}
+                      <span className="text-xs text-text-muted">
+                        Max {ans.question.marks} Marks
+                      </span>
+                    </div>
                   </div>
 
                   <p className="text-sm font-semibold text-text-primary">
@@ -311,23 +323,22 @@ export default function GradeExamAttempt() {
                   <div className="space-y-4">
                     {/* Student's Answer */}
                     <div className={studentAnswerContainerClass()}>
-                      <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${
-                        marks === ans.question.marks 
-                          ? 'text-emerald-500' 
+                      <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${marks === ans.question.marks
+                          ? 'text-emerald-700'
                           : (marks !== null && marks > 0)
-                            ? 'text-amber-500' 
+                            ? 'text-amber-700'
                             : marks === 0
-                              ? 'text-rose-400' 
-                              : 'text-text-muted'
-                      }`}>
+                              ? 'text-rose-700'
+                              : 'text-slate-500'
+                        }`}>
                         Student's Answer
                       </span>
                       <span>{ans.studentAnswer}</span>
                     </div>
 
                     {/* Correct Answer */}
-                    <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400">
-                      <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-500 block mb-1">
+                    <div className="p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
+                      <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-700 block mb-1">
                         Correct Answer
                       </span>
                       {ans.question.correctAnswer}
@@ -360,22 +371,20 @@ export default function GradeExamAttempt() {
                       </div>
 
                       {/* AI Evaluation Button */}
-                      <div>
-                        <button
-                          type="button"
-                          onClick={() => handleGradeOneWithAI(ans.id)}
-                          disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
-                          className="px-4 py-2.5 rounded-xl text-xs font-bold text-accent-indigo bg-accent-indigo/10 border border-accent-indigo/20 hover:bg-accent-indigo/20 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5"
-                        >
-                          {gradingAnswerIds[ans.id] ? (
-                            <>
-                              <span className="animate-spin">⏳</span> Grading...
-                            </>
-                          ) : (
-                            <>✨ Grade with AI</>
-                          )}
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleGradeOneWithAI(ans.id)}
+                        disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                        className="px-4 py-2.5 rounded-xl text-xs font-bold text-accent-indigo bg-accent-indigo/10 border border-accent-indigo/20 hover:bg-accent-indigo/20 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5"
+                      >
+                        {gradingAnswerIds[ans.id] ? (
+                          <>
+                            <span className="animate-spin">⏳</span> Grading...
+                          </>
+                        ) : (
+                          <>✨ Grade with AI</>
+                        )}
+                      </button>
                     </div>
 
                     {/* Feedback and Similarity Section */}
