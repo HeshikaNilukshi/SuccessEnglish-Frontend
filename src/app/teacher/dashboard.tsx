@@ -96,8 +96,8 @@ export default function TeacherDashboard() {
         )}
 
         {!loading && error && (
-          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 space-y-4">
-            <p className="text-sm text-red-400">{error}</p>
+          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 space-y-4">
+            <p className="text-sm text-red-900 font-medium">{error}</p>
             <button
               type="button"
               onClick={loadCourses}

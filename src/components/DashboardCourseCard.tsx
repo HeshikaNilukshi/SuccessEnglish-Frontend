@@ -25,7 +25,7 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
               {icon}
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide border bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide border bg-emerald-500/10 border-emerald-500/20 text-emerald-900 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               Active ✓
             </div>

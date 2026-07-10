@@ -89,9 +89,9 @@ export default function UserProfile() {
 
   if (error && !profileUser) {
     return (
-      <div className="max-w-md mx-auto mt-20 text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 shadow-xl space-y-4">
+      <div className="max-w-md mx-auto mt-20 text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
         <div className="text-3xl">⚠️</div>
-        <p className="text-sm text-red-400">{error || 'User not found'}</p>
+        <p className="text-sm text-red-900 font-medium">{error || 'User not found'}</p>
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -170,14 +170,14 @@ export default function UserProfile() {
               {/* Editable Form (Admin Only) */}
               <div className="flex-grow w-full">
                 {error && (
-                  <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-sm">
+                  <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-red-900 font-medium text-sm">
                     <span className="text-sm shrink-0">⚠️</span>
                     <span>{error}</span>
                   </div>
                 )}
 
                 {success && (
-                  <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-sm">
+                  <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/12 border border-emerald-500/25 text-emerald-900 font-medium text-sm">
                     <span className="text-sm shrink-0">✓</span>
                     <span>{success}</span>
                   </div>
@@ -329,7 +329,7 @@ export default function UserProfile() {
                           {enrollment.course.name}
                         </h4>
                         <span className={`inline-block mt-2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${enrollment.verified
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          ? 'bg-emerald-500/10 text-emerald-900 font-medium border border-emerald-500/20'
                           : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                           }`}>
                           {enrollment.verified ? 'Verified' : 'Pending Verification'}

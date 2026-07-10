@@ -94,8 +94,8 @@ export default function AdminStudentsList() {
         )}
 
         {!loading && error && (
-          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 shadow-xl space-y-4">
-            <p className="text-sm text-red-400">{error}</p>
+          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
+            <p className="text-sm text-red-900 font-medium">{error}</p>
             <button
               type="button"
               onClick={loadStudents}
@@ -141,7 +141,7 @@ export default function AdminStudentsList() {
                             handleDeleteClick(student.id)
                           }}
                           disabled={deletingId === student.id}
-                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-red-400 hover:text-white bg-red-500/5 border border-red-500/10 hover:bg-red-500/20 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-red-900 font-medium hover:text-white bg-red-500/12 border border-red-500/25 hover:bg-red-500/20 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                         >
                           {deletingId === student.id ? 'Deleting...' : 'Delete'}
                         </button>

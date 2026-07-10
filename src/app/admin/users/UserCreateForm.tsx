@@ -66,7 +66,7 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
           <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
           
           {error && (
-            <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-sm">
+            <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-red-900 font-medium text-sm">
               <span className="text-sm shrink-0">⚠️</span>
               <span>{error}</span>
             </div>
@@ -75,7 +75,7 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                Full Name <span className="text-red-400">*</span>
+                Full Name <span className="text-red-900 font-medium">*</span>
               </label>
               <input
                 id="name"
@@ -90,7 +90,7 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
 
             <div className="space-y-2">
               <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                Email Address <span className="text-red-400">*</span>
+                Email Address <span className="text-red-900 font-medium">*</span>
               </label>
               <input
                 id="email"
@@ -105,7 +105,7 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
 
             <div className="space-y-2">
               <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                Password <span className="text-red-400">*</span>
+                Password <span className="text-red-900 font-medium">*</span>
               </label>
               <input
                 id="password"

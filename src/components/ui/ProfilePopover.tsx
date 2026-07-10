@@ -66,11 +66,11 @@ export default function ProfilePopover({ user }: { user: User | null }) {
                 className="relative z-10 group w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-left cursor-pointer hover:bg-red-500/10"
               >
                 <span className="flex items-center justify-center w-8 h-8 rounded-lg group-hover:bg-red-500/20 transition-colors duration-150 shrink-0">
-                  <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-red-900 font-medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 01-3-3h4a3 3 0 013 3v1" />
                   </svg>
                 </span>
-                <span className="text-sm font-semibold text-text-secondary group-hover:text-red-400 transition-colors duration-150">
+                <span className="text-sm font-semibold text-text-secondary group-hover:text-red-900 font-medium transition-colors duration-150">
                   Sign Out
                 </span>
               </button>

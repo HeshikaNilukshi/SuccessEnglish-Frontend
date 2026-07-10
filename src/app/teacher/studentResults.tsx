@@ -54,7 +54,7 @@ export default function StudentSpecificResults() {
   if (error) {
     return (
       <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
-        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
+        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
@@ -128,7 +128,7 @@ export default function StudentSpecificResults() {
                       {!attempt.isGraded ? (
                         <span className="text-amber-400 font-medium">Pending Grading</span>
                       ) : (
-                        <span className="text-emerald-400 font-bold">{attempt.score} Marks</span>
+                        <span className="text-emerald-900 font-medium font-bold">{attempt.score} Marks</span>
                       )}
                     </td>
                   </tr>

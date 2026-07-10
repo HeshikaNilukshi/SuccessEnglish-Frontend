@@ -156,7 +156,7 @@ export default function CreateExam() {
       <main className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-xs text-red-400">
+            <div className="p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-xs text-red-900 font-medium">
               {error}
             </div>
           )}
@@ -220,7 +220,7 @@ export default function CreateExam() {
                     <button
                       type="button"
                       onClick={() => handleRemoveQuestion(idx)}
-                      className="text-xs text-red-400 hover:text-red-300 cursor-pointer"
+                      className="text-xs text-red-900 font-medium hover:text-red-300 cursor-pointer"
                       disabled={submitting}
                     >
                       Delete

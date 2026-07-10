@@ -92,9 +92,9 @@ export default function StudentDashboard() {
 
         {/* Error Alert */}
         {!loading && error && (
-          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 shadow-xl space-y-4">
+          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
             <div className="text-3xl">⚠️</div>
-            <p className="text-sm text-red-400">{error}</p>
+            <p className="text-sm text-red-900 font-medium">{error}</p>
             <button
               type="button"
               onClick={loadEnrollments}

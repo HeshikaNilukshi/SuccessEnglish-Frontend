@@ -53,7 +53,7 @@ export default function CourseStudents() {
   if (error) {
     return (
       <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
-        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
+        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
@@ -120,7 +120,7 @@ export default function CourseStudents() {
                     <td className="px-6 py-4 text-right">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
                         student.verified
-                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-900 font-medium'
                           : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
                       }`}>
                         {student.verified ? 'Verified' : 'Pending'}

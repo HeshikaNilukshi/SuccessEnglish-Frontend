@@ -68,7 +68,7 @@ export default function StudentProfileForm() {
     <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl h-full flex flex-col">
       <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
       {success && (
-        <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-sm animate-fade-in-up">
+        <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/12 border border-emerald-500/25 text-emerald-900 font-medium text-sm animate-fade-in-up">
           <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -76,7 +76,7 @@ export default function StudentProfileForm() {
         </div>
       )}
       {error && (
-        <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-red-400 text-sm animate-fade-in-up">
+        <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-red-900 font-medium text-sm animate-fade-in-up">
           <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>

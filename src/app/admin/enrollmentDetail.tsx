@@ -70,7 +70,7 @@ export default function AdminEnrollmentDetail() {
   if (error || !enrollment) {
     return (
       <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
-        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
+        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
@@ -200,7 +200,7 @@ export default function AdminEnrollmentDetail() {
             </div>
 
             {submitError && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs px-4 py-3 rounded-xl mt-4 shrink-0">
+              <div className="bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-xs px-4 py-3 rounded-xl mt-4 shrink-0">
                 {submitError}
               </div>
             )}
@@ -217,7 +217,7 @@ export default function AdminEnrollmentDetail() {
                   </button>
                   <button
                     type="button"
-                    className="py-3.5 px-8 rounded-xl text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 cursor-default select-none"
+                    className="py-3.5 px-8 rounded-xl text-xs font-bold text-emerald-900 font-medium bg-emerald-500/10 border border-emerald-500/20 cursor-default select-none"
                   >
                     ✓ Payment Verified
                   </button>

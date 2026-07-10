@@ -68,9 +68,8 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-start gap-2.5 animate-pulse-slow">
-              <span className="text-sm shrink-0">⚠️</span>
-              <p className="leading-relaxed">{error}</p>
+            <div className="mb-6 p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-xs text-red-900 font-medium">
+              {error}
             </div>
           )}
 

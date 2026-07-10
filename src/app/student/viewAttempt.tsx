@@ -54,7 +54,7 @@ export default function StudentAttemptView() {
   if (error || !attempt) {
     return (
       <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
-        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
+        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
@@ -85,7 +85,7 @@ export default function StudentAttemptView() {
           </div>
           <div className="bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2 text-right">
             <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
-            <span className="text-lg font-extrabold text-emerald-400">{attempt.score ?? 0} / {totalPossibleScore}</span>
+            <span className="text-lg font-extrabold text-emerald-900 font-medium">{attempt.score ?? 0} / {totalPossibleScore}</span>
           </div>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function StudentAttemptView() {
               <div className="flex justify-end pt-2">
                 <span className={`px-4 py-2 rounded-full text-xs md:text-sm font-extrabold border ${
                   marks === ans.question.marks
-                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-900 font-medium'
                     : marks !== null && marks > 0
                       ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
                       : marks === 0

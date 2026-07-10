@@ -95,8 +95,8 @@ export default function AdminCoursesList() {
             )}
 
             {!loadingCourses && coursesError && (
-              <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 shadow-xl space-y-4">
-                <p className="text-sm text-red-400">{coursesError}</p>
+              <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
+                <p className="text-sm text-red-900 font-medium">{coursesError}</p>
                 <button
                   type="button"
                   onClick={loadCourses}
@@ -154,8 +154,8 @@ export default function AdminCoursesList() {
             )}
 
             {!loadingStudents && studentsError && (
-              <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 shadow-xl space-y-4">
-                <p className="text-sm text-red-400">{studentsError}</p>
+              <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
+                <p className="text-sm text-red-900 font-medium">{studentsError}</p>
                 <button
                   type="button"
                   onClick={() => handleSelectCourse(selectedCourse)}
@@ -198,7 +198,7 @@ export default function AdminCoursesList() {
                           <td className="p-5 text-sm text-right">
                             <span className={`inline-block text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${
                               item.verified 
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                                ? 'bg-emerald-500/10 text-emerald-900 font-medium border border-emerald-500/20' 
                                 : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                             }`}>
                               {item.verified ? 'Verified' : 'Pending'}

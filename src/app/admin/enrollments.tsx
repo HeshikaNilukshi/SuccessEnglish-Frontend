@@ -59,8 +59,8 @@ export default function AdminEnrollments() {
         )}
 
         {!loading && error && (
-          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/5 border border-red-500/10 shadow-xl space-y-4">
-            <p className="text-sm text-red-400">{error}</p>
+          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
+            <p className="text-sm text-red-900 font-medium">{error}</p>
             <button
               type="button"
               onClick={loadEnrollments}
@@ -108,7 +108,7 @@ export default function AdminEnrollments() {
                       <td className="p-5 text-sm text-right">
                         <span className={`inline-block text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${
                           enrollment.verified 
-                             ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                             ? 'bg-emerald-500/10 text-emerald-900 font-medium border border-emerald-500/20' 
                              : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                         }`}>
                           {enrollment.verified ? 'Verified' : 'Pending'}

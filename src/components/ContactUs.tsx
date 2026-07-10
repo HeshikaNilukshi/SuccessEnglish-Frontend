@@ -52,7 +52,7 @@ export default function ContactUs() {
           </div>
 
           <div className="glass-panel p-5 rounded-xl border border-border-subtle flex items-start gap-4">
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-lg text-emerald-400 shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-lg text-emerald-900 font-medium shrink-0">
               ⏰
             </div>
             <div>

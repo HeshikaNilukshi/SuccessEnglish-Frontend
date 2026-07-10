@@ -66,7 +66,7 @@ export default function CreateCourse() {
       <main className="glass-panel p-8 rounded-2xl border border-border-subtle relative">
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-xs text-red-400">
+            <div className="p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-xs text-red-900 font-medium">
               {error}
             </div>
           )}

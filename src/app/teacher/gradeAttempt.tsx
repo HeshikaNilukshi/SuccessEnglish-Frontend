@@ -193,7 +193,7 @@ export default function GradeExamAttempt() {
   if (error || !attempt) {
     return (
       <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
-        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-3xl">
+        <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
@@ -243,13 +243,13 @@ export default function GradeExamAttempt() {
             </button>
             <div className="bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2 text-right">
               <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
-              <span className="text-lg font-extrabold text-emerald-400">{currentScore} / {totalPossibleScore}</span>
+              <span className="text-lg text-emerald-900 font-medium">{currentScore} / {totalPossibleScore}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <header className="mb-10 border-b border-border-subtle pb-6">
+      <header className="mb-5 border-b border-border-subtle pb-6">
         <button
           onClick={() => navigate(-1)}
           className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-0 outline-none"
@@ -269,7 +269,7 @@ export default function GradeExamAttempt() {
       <main>
         <form onSubmit={handleSubmit} className="space-y-8">
           {success && (
-            <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400">
+            <div className="p-4 rounded-xl bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
               {success}
             </div>
           )}
@@ -391,7 +391,7 @@ export default function GradeExamAttempt() {
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
                         Feedback {gradeItem?.similarity !== undefined && gradeItem?.similarity !== null && (
-                          <span className="text-emerald-400 font-normal normal-case ml-2">
+                          <span className="text-emerald-900 font-medium normal-case ml-2">
                             (AI Similarity: {Math.round(gradeItem.similarity * 100)}%)
                           </span>
                         )}
