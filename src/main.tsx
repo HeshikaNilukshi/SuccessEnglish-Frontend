@@ -16,6 +16,7 @@ import StudentCourseContent from '@/app/student/courseContent'
 import StudentVideoPage from '@/app/student/video'
 import StudentExamFlow from '@/app/student/examFlow'
 import StudentAttemptView from '@/app/student/viewAttempt'
+import StudentResultsDashboard from '@/app/shared/studentResults'
 import TeacherLayout from '@/TeacherLayout'
 import TeacherRoute from '@/components/TeacherRoute'
 import TeacherDashboard from '@/app/teacher/dashboard'
@@ -74,6 +75,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path=":courseId/exams/:examId/edit" element={<CreateExam />} />
               <Route path=":courseId/students" element={<CourseStudents />} />
               <Route path="student/:id/profile" element={<UserProfile />} />
+              <Route path="student/:id/results" element={<StudentResultsDashboard />} />
               <Route path=":courseId/results" element={<CourseResults />} />
               <Route path=":courseId/student/:studentId" element={<StudentSpecificResults />} />
               <Route path="attempt/:attemptId" element={<GradeExamAttempt />} />

@@ -244,34 +244,46 @@ export default function UserProfile() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-6 items-center">
-              {/* Left side: Avatar */}
-              <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] shrink-0">
-                <span className="text-text-primary font-extrabold text-3xl uppercase">
-                  {profileUser.name?.charAt(0) ?? 'U'}
-                </span>
+            <div className="flex flex-col sm:flex-row gap-6 items-center justify-between w-full">
+              <div className="flex flex-col sm:flex-row gap-6 items-center text-center sm:text-left">
+                {/* Left side: Avatar */}
+                <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] shrink-0 mx-auto sm:mx-0">
+                  <span className="text-text-primary font-extrabold text-3xl uppercase">
+                    {profileUser.name?.charAt(0) ?? 'U'}
+                  </span>
+                </div>
+
+                {/* Right side: Details */}
+                <div className="space-y-2.5">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight">
+                    {profileUser.name}
+                  </h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:justify-start gap-2 sm:gap-4 text-sm sm:text-base text-text-secondary">
+                    <span className="font-semibold text-text-primary/90">{profileUser.email}</span>
+                    <span className="hidden sm:inline text-text-primary/10">•</span>
+                    <span className="font-mono bg-black/5 px-2.5 py-0.5 rounded text-xs text-text-secondary border border-border-subtle inline-block self-center">
+                      Student ID: {profileUser.id}
+                    </span>
+                    <span className="hidden sm:inline text-text-primary/10">•</span>
+                    <span className="text-[9px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/25">
+                      {profileUser.role}
+                    </span>
+                  </div>
+                  <div className="text-xs text-text-muted">
+                    Registered on <span className="text-text-secondary font-medium">{formatDate(profileUser.createdAt || '')}</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Right side: Details */}
-              <div className="flex-grow text-center sm:text-left space-y-2.5">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-text-primary tracking-tight">
-                  {profileUser.name}
-                </h2>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-center sm:justify-start gap-2 sm:gap-4 text-sm sm:text-base text-text-secondary">
-                  <span className="font-semibold text-text-primary/90">{profileUser.email}</span>
-                  <span className="hidden sm:inline text-text-primary/10">•</span>
-                  <span className="font-mono bg-black/5 px-2.5 py-0.5 rounded text-xs text-text-secondary border border-border-subtle inline-block self-center">
-                    Student ID: {profileUser.id}
-                  </span>
-                  <span className="hidden sm:inline text-text-primary/10">•</span>
-                  <span className="text-[9px] font-extrabold tracking-widest uppercase px-3 py-1 rounded-full bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/25">
-                    {profileUser.role}
-                  </span>
-                </div>
-                <div className="text-xs text-text-muted">
-                  Registered on <span className="text-text-secondary font-medium">{formatDate(profileUser.createdAt || '')}</span>
-                </div>
-              </div>
+              {/* Action Button */}
+              {currentUser?.role === 'TEACHER' && isStudent && (
+                <Link
+                  to={`/teacher/student/${profileUser.id}/results`}
+                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-accent-indigo/10 border border-accent-indigo/20 hover:bg-accent-indigo hover:text-white transition-all duration-200 cursor-pointer shadow-sm shrink-0 flex items-center gap-1.5"
+                >
+                  📈 View Progress Timeline
+                </Link>
+              )}
             </div>
           )}
         </div>
