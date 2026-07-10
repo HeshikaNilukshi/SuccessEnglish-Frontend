@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { formatDate } from '@/utils/format-datetime'
-import { ResultsChart, type AreaData } from './results-chart'
+import { ResultsChart, type AreaData } from '../../components/results-chart'
 
 export default function StudentResultsDashboard() {
   const { id } = useParams<{ id: string }>()

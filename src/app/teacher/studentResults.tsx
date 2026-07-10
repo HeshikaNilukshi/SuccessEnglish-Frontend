@@ -128,7 +128,7 @@ export default function StudentSpecificResults() {
                       {!attempt.isGraded ? (
                         <span className="text-amber-400 font-medium">Pending Grading</span>
                       ) : (
-                        <span className="text-emerald-900 font-medium font-bold">{attempt.score} Marks</span>
+                        <span className="text-emerald-900 font-medium">{attempt.score} Marks</span>
                       )}
                     </td>
                   </tr>
