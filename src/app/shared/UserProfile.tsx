@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { fetchUserById, updateUser } from '@/actions/users'
-import { formatDate } from '@/utils/format-datetime'
+import { formatDate } from '@/lib/utils'
 
 export default function UserProfile() {
   const { id } = useParams<{ id: string }>()

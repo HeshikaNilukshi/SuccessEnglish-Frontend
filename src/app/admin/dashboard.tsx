@@ -69,7 +69,7 @@ export default function AdminDashboard() {
                 Welcome back, {user?.name}. Manage users, courses, and verify enrollments.
               </p>
             </div>
-            <ProfilePopover user={user} />
+            <ProfilePopover />
           </div>
         </div>
       </header>

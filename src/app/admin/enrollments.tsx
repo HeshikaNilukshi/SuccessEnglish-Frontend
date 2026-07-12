@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAllEnrollments } from '@/actions/enrollments'
-import { formatDate } from '@/utils/format-datetime'
+import { formatDate } from '@/lib/utils'
 
 export default function AdminEnrollments() {
   const navigate = useNavigate()

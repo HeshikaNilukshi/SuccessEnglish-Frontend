@@ -86,7 +86,7 @@ export default function TeacherLayout() {
 
         {/* User Profile at bottom */}
         <div className="p-4 border-t border-border-subtle">
-          <ProfilePopover user={user} />
+          <ProfilePopover />
         </div>
       </aside>
 
@@ -129,7 +129,7 @@ export default function TeacherLayout() {
             </nav>
 
             <div className="p-4 border-t border-border-subtle">
-              <ProfilePopover user={user} />
+              <ProfilePopover />
             </div>
           </aside>
         </div>

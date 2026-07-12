@@ -1,0 +1,71 @@
+interface Course {
+  id: number;
+  name: string;
+  description: string | null;
+  price: number;
+  createdBy: number;
+  createdAt: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: 'ADMIN' | 'TEACHER' | 'STUDENT';
+  createdAt?: string;
+}
+
+interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface Enrollment {
+  id: number;
+  userId: number;
+  courseId: number;
+  receiptUrl: string;
+  receiptPublicId: string;
+  verified: boolean;
+  createdAt: string;
+  course: {
+    id: number;
+    name: string;
+    description: string | null;
+    price: number;
+    createdAt: string;
+  };
+}
+
+interface Video {
+  id: number;
+  courseId: number;
+  title: string;
+  videoUrl: string;
+  publicId: string;
+  createdAt: string;
+}
+
+interface Exam {
+  id: number;
+  title: string;
+  duration: number;
+  passMark: number;
+  courseId: number;
+  createdBy: number;
+  createdAt: string;
+  _count?: {
+    questions: number;
+  };
+}

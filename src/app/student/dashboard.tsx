@@ -49,7 +49,7 @@ export default function StudentDashboard() {
                 Start your English journey.
               </p>
             </div>
-            <ProfilePopover user={user} />
+            <ProfilePopover />
           </div>
         </div>
       </header>

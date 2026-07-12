@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchEnrollmentById, verifyEnrollment } from '@/actions/enrollments'
-import { formatDate } from '@/utils/format-datetime'
+import { formatDate } from '@/lib/utils'
 
 export default function AdminEnrollmentDetail() {
   const { id } = useParams<{ id: string }>()
@@ -217,7 +217,7 @@ export default function AdminEnrollmentDetail() {
                   </button>
                   <button
                     type="button"
-                    className="py-3.5 px-8 rounded-xl text-xs font-bold text-emerald-900 font-medium bg-emerald-500/10 border border-emerald-500/20 cursor-default select-none"
+                    className="py-3.5 px-8 rounded-xl text-xs text-emerald-900 font-medium bg-emerald-500/10 border border-emerald-500/20 cursor-default select-none"
                   >
                     ✓ Payment Verified
                   </button>

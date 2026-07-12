@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { formatDate } from '@/utils/format-datetime'
+import { formatDate } from '@/lib/utils'
 import StudentProfileForm from '@/components/student-profile-form'
 import SignOutModal from '@/components/ui/SignOutModal'
 
@@ -74,7 +74,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => setIsSignOutModalOpen(true)}
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-bold text-red-900 font-medium hover:text-red-300 bg-red-500/12 hover:bg-red-500/10 border border-red-500/25 hover:border-red-500/25 transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs text-red-900 font-medium hover:text-red-300 bg-red-500/12 hover:bg-red-500/10 border border-red-500/25 hover:border-red-500/25 transition-all active:scale-[0.98] cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

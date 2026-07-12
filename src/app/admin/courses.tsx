@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourses, fetchStudentsByCourse, type CourseStudentResponse } from '@/actions/courses'
-import { formatDate } from '@/utils/format-datetime'
+import { formatDate } from '@/lib/utils'
 
 export default function AdminCoursesList() {
   const navigate = useNavigate()

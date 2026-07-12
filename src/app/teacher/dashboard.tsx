@@ -6,6 +6,7 @@ import PageShell from '@/components/teacher/PageShell'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
+import ProfilePopover from '@/components/ui/ProfilePopover'
 
 export default function TeacherDashboard() {
   const { user, token } = useAuth()
@@ -49,6 +50,7 @@ export default function TeacherDashboard() {
       title={pageTitle}
       subtitle="Manage your courses, content, and student exams."
       breadcrumbs={breadcrumbs}
+      actions={<ProfilePopover />}
     >
       <div className="flex-grow flex flex-col space-y-8">
         <div className="flex items-center justify-between">

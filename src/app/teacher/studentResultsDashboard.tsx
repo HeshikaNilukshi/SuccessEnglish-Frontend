@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { formatDate } from '@/utils/format-datetime'
+import { formatDate } from '@/lib/utils'
 import { ResultsChart, type AreaData } from '../../components/results-chart'
 import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
