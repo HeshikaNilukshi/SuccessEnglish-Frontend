@@ -4,6 +4,10 @@ import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourses } from '@/actions/courses'
 import TeacherCourseCard from '@/components/TeacherCourseCard'
 import ProfilePopover from '@/components/ui/ProfilePopover'
+import PageShell from '@/components/teacher/PageShell'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 export default function TeacherDashboard() {
   const { user } = useAuth()
@@ -30,40 +34,34 @@ export default function TeacherDashboard() {
     loadCourses()
   }, [user])
 
-  return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6">
-        <div>
-          <Link
-            to="/"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            &larr; Back to home portal
-          </Link>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-                Teacher Panel, <span className="gradient-text-accent">{user?.name}</span>
-              </h1>
-              <p className="text-text-secondary text-sm md:text-base">
-                Manage your courses, content, and student exams.
-              </p>
-            </div>
-            <ProfilePopover user={user} />
-          </div>
-        </div>
-      </header>
+  const pageTitle = (
+    <>
+      Teacher Panel, <span className="gradient-text-accent">{user?.name}</span>
+    </>
+  )
 
-      <main className="space-y-8">
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Teacher Panel' },
+  ]
+
+  return (
+    <PageShell
+      title={pageTitle}
+      subtitle="Manage your courses, content, and student exams."
+      breadcrumbs={breadcrumbs}
+      actions={<ProfilePopover user={user} />}
+    >
+      <div className="flex-grow flex flex-col space-y-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl md:text-2xl font-bold tracking-tight text-text-primary">
             My Created Courses
           </h2>
           <div className="flex items-center gap-4">
             {!loading && courses.length > 0 && (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-accent-indigo/10 text-accent-indigo border border-accent-indigo/25">
+              <Badge variant="outline" className="font-semibold px-2.5 py-1 bg-accent-indigo/10 text-accent-indigo border-accent-indigo/25">
                 {courses.length} {courses.length === 1 ? 'Course' : 'Courses'}
-              </span>
+              </Badge>
             )}
             <Link
               to="/teacher/courses/new"
@@ -79,16 +77,16 @@ export default function TeacherDashboard() {
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-7 h-[250px] flex flex-col justify-between animate-pulse"
+                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-7 h-[250px] flex flex-col justify-between"
               >
                 <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-black/5" />
-                  <div className="h-6 w-3/4 rounded bg-black/5" />
-                  <div className="h-4 w-full rounded bg-black/5" />
+                  <Skeleton className="w-12 h-12 rounded-xl" />
+                  <Skeleton className="h-6 w-3/4 rounded" />
+                  <Skeleton className="h-4 w-full rounded" />
                 </div>
                 <div className="pt-4 border-t border-border-subtle flex justify-between items-center">
-                  <div className="h-3 w-1/3 rounded bg-black/5" />
-                  <div className="h-3 w-1/4 rounded bg-black/5" />
+                  <Skeleton className="h-3 w-1/3 rounded" />
+                  <Skeleton className="h-3 w-1/4 rounded" />
                 </div>
               </div>
             ))}
@@ -109,25 +107,19 @@ export default function TeacherDashboard() {
         )}
 
         {!loading && !error && courses.length === 0 && (
-          <div className="max-w-xl mx-auto text-center py-16 px-8 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
-            <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-black/5 border border-border-subtle">
-              <span className="text-4xl">📚</span>
-            </div>
-            <div className="space-y-3">
-              <h3 className="text-2xl font-bold text-text-primary tracking-tight">No Courses Created Yet</h3>
-              <p className="text-sm text-text-secondary max-w-md mx-auto">
-                Get started by creating your first course.
-              </p>
-            </div>
-            <div className="pt-2">
+          <EmptyState
+            icon="📚"
+            title="No Courses Created Yet"
+            description="Get started by creating your first course."
+            action={
               <Link
                 to="/teacher/courses/new"
                 className="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all"
               >
                 Create Course &rarr;
               </Link>
-            </div>
-          </div>
+            }
+          />
         )}
 
         {!loading && !error && courses.length > 0 && (
@@ -137,8 +129,7 @@ export default function TeacherDashboard() {
             ))}
           </div>
         )}
-      </main>
-
-    </div>
+      </div>
+    </PageShell>
   )
 }

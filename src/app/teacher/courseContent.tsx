@@ -3,6 +3,11 @@ import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchUploadSignature, saveVideoDetails } from '@/actions/courses'
 import { createPortal } from 'react-dom'
+import PageShell from '@/components/teacher/PageShell'
+import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { EmptyState } from '@/components/ui/EmptyState'
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 
 export default function TeacherCourseContent() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -122,14 +127,16 @@ export default function TeacherCourseContent() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
-        <div className="h-10 w-80 bg-black/5 rounded mb-3" />
-        <div className="h-4 w-60 bg-black/5 rounded mb-10" />
-        <div className="h-12 w-80 bg-black/5 rounded-xl mb-8" />
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8">
+        <header className="mb-6">
+          <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
+          <div className="h-10 w-80 bg-black/5 rounded mb-3 animate-pulse" />
+          <div className="h-4 w-60 bg-black/5 rounded mb-10 animate-pulse" />
+        </header>
+        <div className="h-12 w-80 bg-black/5 rounded-xl mb-8 animate-pulse" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between" />
+            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between animate-pulse" />
           ))}
         </div>
       </div>
@@ -156,196 +163,187 @@ export default function TeacherCourseContent() {
     )
   }
 
-  return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6">
-        <div>
-          <Link
-            to="/teacher"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            &larr; Back to Panel
-          </Link>
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-2">
-                {course.name}
-              </h1>
-              <p className="text-text-secondary text-sm max-w-2xl leading-relaxed">
-                {course.description || "Course details and curriculum management."}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to={`/teacher/${course.id}/students`}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all"
-              >
-                👥 View Students
-              </Link>
-              <Link
-                to={`/teacher/${course.id}/results`}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all"
-              >
-                📊 Exam Results
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+  const breadcrumbs = [
+    { label: 'Panel', href: '/teacher' },
+    { label: course.name }
+  ]
 
-      <div className="flex justify-between items-center mb-8">
-        <div className="bg-bg-secondary/80 border border-border-subtle rounded-xl p-1 flex gap-1.5 w-full max-w-[320px] shadow-card">
-          <button
-            type="button"
-            onClick={() => setActiveTab('videos')}
-            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-              activeTab === 'videos'
-                ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
-            }`}
-          >
-            🎥 Videos ({videos.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('exams')}
-            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-              activeTab === 'exams'
-                ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
-            }`}
-          >
-            📝 Exams ({exams.length})
-          </button>
-        </div>
-
-        <div>
-          {activeTab === 'videos' ? (
-            <button
-              type="button"
-              onClick={() => {
-                setNewVideoTitle('')
-                setNewVideoFile(null)
-                setAddVideoError(null)
-                setAddVideoProgress(null)
-                setIsAddVideoOpen(true)
-              }}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer"
-            >
-              + Add Video
-            </button>
-          ) : (
+  const headerActions = (
+    <TooltipProvider>
+      <div className="flex flex-wrap gap-3">
+        <Tooltip>
+          <TooltipTrigger>
             <Link
-              to={`/teacher/${course.id}/exams/new`}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-violet to-accent-pink hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] transition-all"
+              to={`/teacher/${course.id}/students`}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all block cursor-pointer"
             >
-              + Add Exam
+              👥 View Students
             </Link>
-          )}
-        </div>
+          </TooltipTrigger>
+          <TooltipContent className="bg-bg-secondary text-text-primary border border-border-subtle">
+            View student enrollments and details
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <Link
+              to={`/teacher/${course.id}/results`}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all block cursor-pointer"
+            >
+              📊 Exam Results
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent className="bg-bg-secondary text-text-primary border border-border-subtle">
+            View student test submissions
+          </TooltipContent>
+        </Tooltip>
       </div>
+    </TooltipProvider>
+  )
 
-      <main>
-        {activeTab === 'videos' && (
+  return (
+    <PageShell
+      title={course.name}
+      subtitle={course.description || "Course details and curriculum management."}
+      breadcrumbs={breadcrumbs}
+      actions={headerActions}
+    >
+      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as 'videos' | 'exams')} className="w-full flex-grow flex flex-col">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+          <TabsList className="bg-bg-secondary/80 border border-border-subtle p-1 rounded-xl h-auto">
+            <TabsTrigger
+              value="videos"
+              className="py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer data-active:bg-gradient-to-r data-active:from-accent-indigo data-active:to-accent-violet data-active:text-white data-active:shadow-[0_0_15px_rgba(99,102,241,0.25)]"
+            >
+              🎥 Videos <Badge className="ml-1.5 bg-black/10 text-text-primary border-none select-none">{videos.length}</Badge>
+            </TabsTrigger>
+            <TabsTrigger
+              value="exams"
+              className="py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer data-active:bg-gradient-to-r data-active:from-accent-indigo data-active:to-accent-violet data-active:text-white data-active:shadow-[0_0_15px_rgba(99,102,241,0.25)]"
+            >
+              📝 Exams <Badge className="ml-1.5 bg-black/10 text-text-primary border-none select-none">{exams.length}</Badge>
+            </TabsTrigger>
+          </TabsList>
+
           <div>
-            {videos.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
-                <span className="text-4xl block">🎬</span>
-                <h3 className="text-lg font-bold text-text-primary">No Videos Uploaded</h3>
-                <p className="text-xs text-text-secondary">
-                  Add a lecture video to this course using the action buttons above.
-                </p>
-              </div>
+            {activeTab === 'videos' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setNewVideoTitle('')
+                  setNewVideoFile(null)
+                  setAddVideoError(null)
+                  setAddVideoProgress(null)
+                  setIsAddVideoOpen(true)
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer"
+              >
+                + Add Video
+              </button>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos.map((video) => (
-                  <Link
-                    key={video.id}
-                    to={`/teacher/${course.id}/videos/${video.id}`}
-                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
-                  >
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-indigo to-accent-violet rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                    
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
-                          🎥
-                        </div>
-                        <span className="text-[10px] font-mono text-text-muted">
-                          ID: #{video.id}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
-                        {video.title}
-                      </h3>
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                      <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
-                      <div
-                        className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                      >
-                        Watch Video &rarr;
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              <Link
+                to={`/teacher/${course.id}/exams/new`}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-violet to-accent-pink hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] transition-all"
+              >
+                + Add Exam
+              </Link>
             )}
           </div>
-        )}
+        </div>
 
-        {activeTab === 'exams' && (
-          <div>
-            {exams.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
-                <span className="text-4xl block">✍️</span>
-                <h3 className="text-lg font-bold text-text-primary">No Exams Created</h3>
-                <p className="text-xs text-text-secondary">
-                  Create a course assessment using the Add Exam button above.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {exams.map((exam) => (
-                  <Link
-                    key={exam.id}
-                    to={`/teacher/${course.id}/exams/${exam.id}`}
-                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
-                  >
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-violet to-accent-pink rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+        <TabsContent value="videos" className="outline-none flex-grow">
+          {videos.length === 0 ? (
+            <EmptyState
+              icon="🎬"
+              title="No Videos Uploaded"
+              description="Add a lecture video to this course using the action buttons above."
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videos.map((video) => (
+                <Link
+                  key={video.id}
+                  to={`/teacher/${course.id}/videos/${video.id}`}
+                  className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-indigo to-accent-violet rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+                        🎥
+                      </div>
+                      <Badge variant="outline" className="text-[10px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5">
+                        ID: #{video.id}
+                      </Badge>
+                    </div>
                     
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
-                          📝
-                        </div>
-                        <span className="text-[10px] font-mono text-text-muted">
-                          {exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
-                        {exam.title}
-                      </h3>
-                    </div>
+                    <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
+                      {video.title}
+                    </h3>
+                  </div>
 
-                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                      <span>Questions: {exam._count?.questions ?? 0}</span>
-                      <div
-                        className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                      >
-                        View Exam &rarr;
-                      </div>
+                  <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
+                    <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
+                    <div
+                      className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
+                    >
+                      Watch Video &rarr;
                     </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </main>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="exams" className="outline-none flex-grow">
+          {exams.length === 0 ? (
+            <EmptyState
+              icon="✍️"
+              title="No Exams Created"
+              description="Create a course assessment using the Add Exam button above."
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {exams.map((exam) => (
+                <Link
+                  key={exam.id}
+                  to={`/teacher/${course.id}/exams/${exam.id}`}
+                  className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-violet to-accent-pink rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
+                        📝
+                      </div>
+                      <Badge variant="outline" className="text-[10px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5">
+                        {exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}
+                      </Badge>
+                    </div>
+                    
+                    <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
+                      {exam.title}
+                    </h3>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
+                    <span>Questions: {exam._count?.questions ?? 0}</span>
+                    <div
+                      className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
+                    >
+                      View Exam &rarr;
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
 
       {/* Add Video Modal */}
       {isAddVideoOpen && createPortal(
@@ -440,6 +438,6 @@ export default function TeacherCourseContent() {
         </>,
         document.body
       )}
-    </div>
+    </PageShell>
   )
 }

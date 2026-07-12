@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAllResultsByCourse, type ExamAttemptResponse } from '@/actions/courses'
+import PageShell from '@/components/teacher/PageShell'
+import { Badge } from '@/components/ui/badge'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 export default function CourseResults() {
   const navigate = useNavigate()
@@ -38,12 +41,12 @@ export default function CourseResults() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-6 pt-16 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
-        <div className="h-10 w-80 bg-black/5 rounded mb-10" />
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8 flex flex-col items-stretch">
+        <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
+        <div className="h-10 w-80 bg-black/5 rounded mb-10 animate-pulse" />
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-16 bg-black/5 rounded-xl" />
+            <div key={i} className="h-16 bg-black/5 rounded-xl animate-pulse" />
           ))}
         </div>
       </div>
@@ -60,85 +63,86 @@ export default function CourseResults() {
           <h3 className="text-xl font-bold text-text-primary">Error</h3>
           <p className="text-text-secondary text-sm leading-relaxed">{error}</p>
         </div>
-        <Link
-          to={`/teacher/${courseId}`}
+        <button
+          type="button"
+          onClick={() => navigate(`/teacher/${courseId}`)}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
-        </Link>
+        </button>
       </div>
     )
   }
 
-  return (
-    <div className="max-w-4xl mx-auto px-6 pt-16 pb-16">
-      <header className="mb-10 border-b border-border-subtle pb-6">
-        <Link
-          to={`/teacher/${courseId}`}
-          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-        >
-          &larr; Back to Course
-        </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
-          Exam Results
-        </h1>
-        <p className="text-text-secondary text-sm">
-          A list of all student attempts and scores for exams in this course.
-        </p>
-      </header>
+  const breadcrumbs = [
+    { label: 'Panel', href: '/teacher' },
+    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: 'Exam Results' }
+  ]
 
-      <main>
-        {results.length === 0 ? (
-          <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
-            <span className="text-4xl block">📊</span>
-            <h3 className="text-lg font-bold text-text-primary">No Exam Submissions</h3>
-            <p className="text-xs text-text-secondary">
-              No students have taken or submitted any exams for this course yet.
-            </p>
-          </div>
-        ) : (
-          <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-border-subtle bg-black/5">
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Student</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Exam Title</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Date Taken</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.04]">
-                {results.map((attempt) => (
-                  <tr
-                    key={attempt.id}
-                    onClick={() => navigate(`/teacher/attempt/${attempt.id}`)}
-                    className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
-                  >
-                    <td className="px-6 py-4 text-sm font-semibold text-text-primary">{attempt.student.name}</td>
-                    <td className="px-6 py-4 text-sm text-text-secondary">{attempt.exam.title}</td>
-                    <td className="px-6 py-4 text-sm text-text-muted">
-                      {new Date(attempt.createdAt).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-right">
-                      {!attempt.isGraded ? (
-                        <span className="text-amber-400 font-medium">Pending Grading</span>
-                      ) : (
-                        <span className="text-emerald-900 font-medium font-bold">{attempt.score} Marks</span>
-                      )}
-                    </td>
+  return (
+    <PageShell
+      title="Exam Results"
+      subtitle="A list of all student attempts and scores for exams in this course."
+      breadcrumbs={breadcrumbs}
+    >
+      <div className="w-full max-w-7xl mx-auto">
+        <main>
+          {results.length === 0 ? (
+            <EmptyState
+              icon="📊"
+              title="No Exam Submissions"
+              description="No students have taken or submitted any exams for this course yet."
+            />
+          ) : (
+            <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-border-subtle bg-black/5">
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Student</th>
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Exam Title</th>
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Date Taken</th>
+                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Score</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </main>
-    </div>
+                </thead>
+                <tbody className="divide-y divide-white/[0.04]">
+                  {results.map((attempt) => (
+                    <tr
+                      key={attempt.id}
+                      onClick={() => navigate(`/teacher/attempt/${attempt.id}`)}
+                      className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
+                    >
+                      <td className="px-6 py-4 text-sm font-semibold text-text-primary">{attempt.student.name}</td>
+                      <td className="px-6 py-4 text-sm text-text-secondary">{attempt.exam.title}</td>
+                      <td className="px-6 py-4 text-sm text-text-muted">
+                        {new Date(attempt.createdAt).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Badge
+                          variant={!attempt.isGraded ? "secondary" : "outline"}
+                          className={`font-semibold ${
+                            !attempt.isGraded
+                              ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                              : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-900 font-medium'
+                          }`}
+                        >
+                          {!attempt.isGraded ? 'Pending Grading' : `${attempt.score} Marks`}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </main>
+      </div>
+    </PageShell>
   )
 }

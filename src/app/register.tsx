@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 
 export default function RegisterPage() {
   const { user, register } = useAuth()
@@ -123,10 +124,9 @@ export default function RegisterPage() {
               <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2">
                 Password
               </label>
-              <input
+              <PasswordInput
                 id="password"
-                type="password"
-                placeholder="Min 6 characters"
+                placeholder="Enter a secure password (min. 6 chars)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="auth-input"
@@ -139,10 +139,9 @@ export default function RegisterPage() {
               <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2">
                 Confirm Password
               </label>
-              <input
+              <PasswordInput
                 id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
+                placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="auth-input"

@@ -23,10 +23,10 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
   --animate-shimmer: shimmer 2s infinite linear;
-  --animate-fade-in-up: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in-up: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-slow: pulseSlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-popover-in: popoverIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-popover-in: popoverIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @layer base {

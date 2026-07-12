@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { createExam, updateExam, fetchExamDetails, type CreateQuestionInput } from '@/actions/courses'
+import PageShell from '@/components/teacher/PageShell'
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 
 export default function CreateExam() {
   const { courseId, examId } = useParams<{ courseId: string; examId?: string }>()
@@ -136,24 +140,19 @@ export default function CreateExam() {
     }
   }
 
-  return (
-    <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
-      <header className="mb-10 border-b border-border-subtle pb-6">
-        <Link
-          to={isEditing && examId ? `/teacher/${courseId}/exams/${examId}` : `/teacher/${courseId}`}
-          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-        >
-          &larr; Back to {isEditing ? 'Exam' : 'Course'}
-        </Link>
-        <h1 className="text-3xl font-extrabold tracking-tight text-text-primary font-sans">
-          {isEditing ? 'Edit Assessment Exam' : 'Create Assessment Exam'}
-        </h1>
-        <p className="text-text-secondary text-sm">
-          {isEditing ? 'Modify exam details and update questions.' : 'Define exam title, time limit, and enter questions with correct answers.'}
-        </p>
-      </header>
+  const breadcrumbs = [
+    { label: 'Panel', href: '/teacher' },
+    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: isEditing ? 'Edit Exam' : 'Create Exam' }
+  ]
 
-      <main className="space-y-6">
+  return (
+    <PageShell
+      title={isEditing ? 'Edit Assessment Exam' : 'Create Assessment Exam'}
+      subtitle={isEditing ? 'Modify exam details and update questions.' : 'Define exam title, time limit, and enter questions with correct answers.'}
+      breadcrumbs={breadcrumbs}
+    >
+      <div className="w-full max-w-3xl mx-auto space-y-6">
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
             <div className="p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-xs text-red-900 font-medium">
@@ -161,61 +160,68 @@ export default function CreateExam() {
             </div>
           )}
 
-          <div className="glass-panel p-8 rounded-2xl border border-border-subtle space-y-6">
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-                Exam Title
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g., Grammar Pop Quiz 1"
-                className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
-                disabled={submitting}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="glass-panel border border-border-subtle">
+            <CardHeader>
+              <CardTitle className="text-lg font-bold text-text-primary">Exam Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-                  Duration in minutes
+                  Exam Title
                 </label>
                 <input
-                  type="number"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
-                  disabled={submitting}
-                />
-                <span className="text-xs text-text-secondary px-1">(0 for unlimited)</span>
-              </div>
-
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
-                  Pass Mark
-                </label>
-                <input
-                  type="number"
-                  value={passMark}
-                  onChange={(e) => setPassMark(e.target.value)}
-                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g., Grammar Pop Quiz 1"
+                  className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                   disabled={submitting}
                 />
               </div>
-            </div>
-          </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+                    Duration in minutes
+                  </label>
+                  <input
+                    type="number"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
+                    disabled={submitting}
+                  />
+                  <span className="text-xs text-text-secondary px-1">(0 for unlimited)</span>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+                    Pass Mark
+                  </label>
+                  <input
+                    type="number"
+                    value={passMark}
+                    onChange={(e) => setPassMark(e.target.value)}
+                    className="w-full mt-1 px-4 py-3 rounded-xl bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
+                    disabled={submitting}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="space-y-6">
             <h2 className="text-lg font-bold text-text-primary">Questions</h2>
 
             {questions.map((q, idx) => (
-              <div
+              <Card
                 key={idx}
-                className="relative glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
+                className="relative glass-panel border border-border-subtle"
               >
-                <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
-                  <span className="text-xs font-bold text-accent-indigo">Question #{idx + 1}</span>
+                <CardHeader className="flex flex-row justify-between items-center pb-2">
+                  <Badge variant="outline" className="font-semibold bg-accent-indigo/10 text-accent-indigo border-accent-indigo/25">
+                    Question #{idx + 1}
+                  </Badge>
                   {questions.length > 1 && (
                     <button
                       type="button"
@@ -226,50 +232,52 @@ export default function CreateExam() {
                       Delete
                     </button>
                   )}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                    Question Text
-                  </label>
-                  <input
-                    type="text"
-                    value={q.questionText}
-                    onChange={(e) => handleQuestionChange(idx, 'questionText', e.target.value)}
-                    placeholder="e.g., What is the past participle of 'go'?"
-                    className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
-                    disabled={submitting}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="md:col-span-2 space-y-2">
+                </CardHeader>
+                <CardContent className="space-y-4 pt-2">
+                  <Separator className="bg-border-subtle mb-4" />
+                  <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                      Correct Answer
+                      Question Text
                     </label>
                     <input
                       type="text"
-                      value={q.correctAnswer}
-                      onChange={(e) => handleQuestionChange(idx, 'correctAnswer', e.target.value)}
-                      placeholder="e.g., gone"
+                      value={q.questionText}
+                      onChange={(e) => handleQuestionChange(idx, 'questionText', e.target.value)}
+                      placeholder="e.g., What is the past participle of 'go'?"
                       className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
                       disabled={submitting}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
-                      Marks
-                    </label>
-                    <input
-                      type="number"
-                      value={q.marks}
-                      onChange={(e) => handleQuestionChange(idx, 'marks', e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
-                      disabled={submitting}
-                    />
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2 space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                        Correct Answer
+                      </label>
+                      <input
+                        type="text"
+                        value={q.correctAnswer}
+                        onChange={(e) => handleQuestionChange(idx, 'correctAnswer', e.target.value)}
+                        placeholder="e.g., gone"
+                        className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
+                        disabled={submitting}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                        Marks
+                      </label>
+                      <input
+                        type="number"
+                        value={q.marks}
+                        onChange={(e) => handleQuestionChange(idx, 'marks', e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
+                        disabled={submitting}
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             ))}
 
             <button
@@ -290,7 +298,7 @@ export default function CreateExam() {
             {submitting ? (isEditing ? 'Saving...' : 'Creating Exam...') : (isEditing ? 'Save Changes' : 'Publish Exam')}
           </button>
         </form>
-      </main>
-    </div>
+      </div>
+    </PageShell>
   )
 }

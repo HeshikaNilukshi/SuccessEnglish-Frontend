@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 import { fetchUserById, updateUser } from '@/actions/users'
 import { formatDate } from '@/utils/format-datetime'
 
@@ -218,9 +219,8 @@ export default function UserProfile() {
                     <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                       Change Password
                     </label>
-                    <input
+                    <PasswordInput
                       id="password"
-                      type="password"
                       placeholder="Leave blank to keep current password"
                       className="auth-input"
                       value={password}

@@ -8,6 +8,10 @@ import {
   evaluateAnswerWithAI,
   type ExamAttemptDetail
 } from '@/actions/courses'
+import PageShell from '@/components/teacher/PageShell'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 
 export default function GradeExamAttempt() {
   const { attemptId } = useParams<{ attemptId: string }>()
@@ -81,7 +85,6 @@ export default function GradeExamAttempt() {
     setSuccess(null)
     try {
       const results = await evaluateAttemptWithAI(token, parseInt(attemptId, 10))
-      // results is an array of { answerId, similarity, marks, feedback }
       setGrades((prevGrades) =>
         prevGrades.map((g) => {
           const aiRes = results.find((r: any) => r.answerId === g.answerId)
@@ -112,7 +115,6 @@ export default function GradeExamAttempt() {
     setSuccess(null)
     try {
       const aiRes = await evaluateAnswerWithAI(token, answerId)
-      // aiRes is { similarity, marks, feedback }
       setGrades((prevGrades) =>
         prevGrades.map((g) =>
           g.answerId === answerId
@@ -177,13 +179,13 @@ export default function GradeExamAttempt() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-6 pt-16 pb-8 animate-pulse">
-        <div className="h-4 w-32 bg-black/5 rounded mb-4" />
-        <div className="h-10 w-96 bg-black/5 rounded mb-4" />
-        <div className="h-4 w-48 bg-black/5 rounded mb-10" />
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8 flex flex-col items-stretch">
+        <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
+        <div className="h-10 w-96 bg-black/5 rounded mb-4 animate-pulse" />
+        <div className="h-4 w-48 bg-black/5 rounded mb-10 animate-pulse" />
         <div className="space-y-6">
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="h-40 bg-black/5 rounded-xl border border-border-subtle" />
+            <div key={i} className="h-40 bg-black/5 rounded-xl border border-border-subtle animate-pulse" />
           ))}
         </div>
       </div>
@@ -217,209 +219,214 @@ export default function GradeExamAttempt() {
   }, 0)
   const totalPossibleScore = attempt.answers.reduce((acc, curr) => acc + curr.question.marks, 0)
 
+  const breadcrumbs = [
+    { label: 'Panel', href: '/teacher' },
+    { label: 'Course', href: `/teacher/${attempt.exam.courseId}` },
+    { label: 'Results', href: `/teacher/${attempt.exam.courseId}/results` },
+    { label: 'Grade Attempt' }
+  ]
+
+  const subtitle = `Review answers submitted by ${attempt.student.name} (${attempt.student.email}) for ${attempt.exam.title}.`
+
   return (
-    <div className="max-w-3xl mx-auto px-6 pt-28 pb-16 relative">
-      {/* Sticky Score Banner */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle py-4 shadow-md animate-fade-in">
-        <div className="max-w-3xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Grading Exam Attempt</span>
-            <span className="text-sm font-bold text-text-primary truncate max-w-[200px] md:max-w-md">{attempt.student.name}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleGradeAllWithAI}
-              disabled={isGradingAll || submitting}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-accent-indigo hover:bg-accent-indigo/80 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5 shadow-md shadow-accent-indigo/10"
-            >
-              {isGradingAll ? (
-                <>
-                  <span className="animate-spin">⏳</span> Grading...
-                </>
-              ) : (
-                <>✨ Grade Attempt With AI</>
-              )}
-            </button>
-            <div className="bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2 text-right">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
-              <span className="text-lg text-emerald-900 font-medium">{currentScore} / {totalPossibleScore}</span>
+    <PageShell
+      title="Grade Exam Attempt"
+      subtitle={subtitle}
+      breadcrumbs={breadcrumbs}
+    >
+      <div className="w-full max-w-7xl mx-auto space-y-6">
+        {/* Inline Sticky Score Bar */}
+        <div className="sticky top-6 z-30 animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl bg-bg-secondary/90 backdrop-blur-xl border border-border-subtle px-6 py-4 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Grading Exam Attempt</span>
+              <span className="text-sm font-bold text-text-primary truncate max-w-[260px] md:max-w-md">{attempt.student.name}</span>
+              <span className="text-xs text-text-muted truncate max-w-[260px]">{attempt.exam.title}</span>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={handleGradeAllWithAI}
+                disabled={isGradingAll || submitting}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-accent-indigo hover:bg-accent-indigo/80 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                {isGradingAll ? (
+                  <>
+                    <span className="animate-spin">⏳</span> Grading...
+                  </>
+                ) : (
+                  <>✨ Grade With AI</>
+                )}
+              </button>
+              <div className="flex flex-col items-end bg-black/5 border border-border-subtle rounded-xl px-4 py-2 min-w-[90px]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Score</span>
+                <span className="text-lg font-bold text-emerald-900 leading-tight">{currentScore} <span className="text-text-muted text-sm font-normal">/ {totalPossibleScore}</span></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <header className="mb-5 border-b border-border-subtle pb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-0 outline-none"
-        >
-          &larr; Go Back
-        </button>
-        <div className="space-y-4">
-          <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
-            Grade Exam Attempt
-          </h1>
-          <p className="text-text-secondary text-sm">
-            Review answers submitted by <span className="font-semibold text-text-primary">{attempt.student.name}</span> ({attempt.student.email}) for <span className="font-semibold text-text-primary">{attempt.exam.title}</span>.
-          </p>
-        </div>
-      </header>
+        <main>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {success && (
+              <div className="p-4 rounded-xl bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
+                {success}
+              </div>
+            )}
 
-      <main>
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {success && (
-            <div className="p-4 rounded-xl bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
-              {success}
-            </div>
-          )}
+            <div className="space-y-6">
+              {attempt.answers.map((ans, idx) => {
+                const gradeItem = grades.find((g) => g.answerId === ans.id)
+                const marks = gradeItem ? gradeItem.marksAwarded : null
 
-          <div className="space-y-6">
-            {attempt.answers.map((ans, idx) => {
-              const gradeItem = grades.find((g) => g.answerId === ans.id)
-              const marks = gradeItem ? gradeItem.marksAwarded : null
-
-              const studentAnswerContainerClass = () => {
-                if (marks === ans.question.marks) {
-                  return 'p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium'
+                const studentAnswerContainerClass = () => {
+                  if (marks === ans.question.marks) {
+                    return 'p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium'
+                  }
+                  if (marks !== null && marks > 0) {
+                    return 'p-4 rounded-lg bg-amber-500/12 border border-amber-500/25 text-xs text-amber-900 font-medium'
+                  }
+                  if (marks === 0) {
+                    return 'p-4 rounded-lg bg-rose-500/12 border border-rose-500/25 text-xs text-rose-900 font-medium'
+                  }
+                  return 'p-4 rounded-lg bg-black/8 border border-border-subtle text-xs text-slate-800'
                 }
-                if (marks !== null && marks > 0) {
-                  return 'p-4 rounded-lg bg-amber-500/12 border border-amber-500/25 text-xs text-amber-900 font-medium'
-                }
-                if (marks === 0) {
-                  return 'p-4 rounded-lg bg-rose-500/12 border border-rose-500/25 text-xs text-rose-900 font-medium'
-                }
-                return 'p-4 rounded-lg bg-black/8 border border-border-subtle text-xs text-slate-800'
-              }
 
-              return (
-                <div
-                  key={ans.id}
-                  className="glass-panel p-6 rounded-xl border border-border-subtle space-y-4"
-                >
-                  <div className="flex justify-between items-center pb-2 border-b border-border-subtle">
-                    <span className="text-xs font-bold text-accent-indigo">Question {idx + 1}</span>
-                    <div className="flex items-center gap-3">
-                      {marks !== null && (
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${marks === ans.question.marks
-                            ? 'bg-emerald-500/12 border-emerald-500/25 text-emerald-700'
-                            : marks > 0
-                              ? 'bg-amber-500/12 border-amber-500/25 text-amber-700'
-                              : 'bg-rose-500/12 border-rose-500/25 text-rose-700'
+                return (
+                  <Card
+                    key={ans.id}
+                    className="glass-panel"
+                  >
+                    <CardHeader className="flex flex-row justify-between items-center pb-2">
+                      <Badge variant="outline" className="font-semibold bg-accent-indigo/10 text-accent-indigo border-accent-indigo/25">
+                        Question {idx + 1}
+                      </Badge>
+                      <div className="flex items-center gap-3">
+                        {marks !== null && (
+                          <Badge variant={marks === ans.question.marks ? "default" : marks > 0 ? "secondary" : "destructive"} className={`font-bold ${
+                            marks === ans.question.marks
+                              ? 'bg-emerald-500/12 border border-emerald-500/25 text-emerald-705'
+                              : marks > 0
+                                ? 'bg-amber-500/12 border border-amber-500/25 text-amber-705'
+                                : 'bg-rose-500/12 border border-rose-500/25 text-rose-705'
                           }`}>
-                          {marks} / {ans.question.marks} Marks Given
+                            {marks} / {ans.question.marks} Marks Given
+                          </Badge>
+                        )}
+                        <span className="text-xs text-text-muted">
+                          Max {ans.question.marks} Marks
                         </span>
-                      )}
-                      <span className="text-xs text-text-muted">
-                        Max {ans.question.marks} Marks
-                      </span>
-                    </div>
-                  </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-2">
+                      <Separator className="bg-border-subtle mb-4" />
+                      <p className="text-sm font-semibold text-text-primary">
+                        {ans.question.questionText}
+                      </p>
 
-                  <p className="text-sm font-semibold text-text-primary">
-                    {ans.question.questionText}
-                  </p>
+                      <div className="space-y-4">
+                        {/* Student's Answer */}
+                        <div className={studentAnswerContainerClass()}>
+                          <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${
+                            marks === ans.question.marks
+                              ? 'text-emerald-700'
+                              : (marks !== null && marks > 0)
+                                ? 'text-amber-700'
+                                : marks === 0
+                                  ? 'text-rose-700'
+                                  : 'text-slate-500'
+                          }`}>
+                            Student's Answer
+                          </span>
+                          <span>{ans.studentAnswer}</span>
+                        </div>
 
-                  <div className="space-y-4">
-                    {/* Student's Answer */}
-                    <div className={studentAnswerContainerClass()}>
-                      <span className={`font-bold uppercase tracking-wider text-[9px] block mb-1 ${marks === ans.question.marks
-                          ? 'text-emerald-700'
-                          : (marks !== null && marks > 0)
-                            ? 'text-amber-700'
-                            : marks === 0
-                              ? 'text-rose-700'
-                              : 'text-slate-500'
-                        }`}>
-                        Student's Answer
-                      </span>
-                      <span>{ans.studentAnswer}</span>
-                    </div>
-
-                    {/* Correct Answer */}
-                    <div className="p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
-                      <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-700 block mb-1">
-                        Correct Answer
-                      </span>
-                      {ans.question.correctAnswer}
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 pt-4 border-t border-border-subtle">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                      {/* Numeric Grade Input */}
-                      <div className="flex-1 space-y-1.5">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
-                          Marks Awarded (Max: {ans.question.marks})
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="number"
-                            min={0}
-                            max={ans.question.marks}
-                            value={marks ?? ''}
-                            onChange={(e) => {
-                              const val = e.target.value === '' ? null : Math.min(ans.question.marks, Math.max(0, parseInt(e.target.value, 10)))
-                              handleGradeChange(ans.id, val)
-                            }}
-                            placeholder="Enter marks"
-                            className="bg-black/5 border border-border-subtle rounded-xl px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:border-accent-indigo transition-colors w-32"
-                            disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
-                          />
-                          <span className="text-sm text-text-muted">/ {ans.question.marks} Marks</span>
+                        {/* Correct Answer */}
+                        <div className="p-4 rounded-lg bg-emerald-500/12 border border-emerald-500/25 text-xs text-emerald-900 font-medium">
+                          <span className="font-bold uppercase tracking-wider text-[9px] text-emerald-700 block mb-1">
+                            Correct Answer
+                          </span>
+                          {ans.question.correctAnswer}
                         </div>
                       </div>
 
-                      {/* AI Evaluation Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleGradeOneWithAI(ans.id)}
-                        disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
-                        className="px-4 py-2.5 rounded-xl text-xs font-bold text-accent-indigo bg-accent-indigo/10 border border-accent-indigo/20 hover:bg-accent-indigo/20 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5"
-                      >
-                        {gradingAnswerIds[ans.id] ? (
-                          <>
-                            <span className="animate-spin">⏳</span> Grading...
-                          </>
-                        ) : (
-                          <>✨ Grade with AI</>
-                        )}
-                      </button>
-                    </div>
+                      <div className="space-y-4 pt-4 border-t border-border-subtle">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                          {/* Numeric Grade Input */}
+                          <div className="flex-1 space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
+                              Marks Awarded (Max: {ans.question.marks})
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                min={0}
+                                max={ans.question.marks}
+                                value={marks ?? ''}
+                                onChange={(e) => {
+                                  const val = e.target.value === '' ? null : Math.min(ans.question.marks, Math.max(0, parseInt(e.target.value, 10)))
+                                  handleGradeChange(ans.id, val)
+                                }}
+                                placeholder="Enter marks"
+                                className="bg-black/5 border border-border-subtle rounded-xl px-4 py-2.5 text-sm text-text-primary focus:outline-none focus:border-accent-indigo transition-colors w-32"
+                                disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                              />
+                              <span className="text-sm text-text-muted">/ {ans.question.marks} Marks</span>
+                            </div>
+                          </div>
 
-                    {/* Feedback and Similarity Section */}
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
-                        Feedback {gradeItem?.similarity !== undefined && gradeItem?.similarity !== null && (
-                          <span className="text-emerald-900 font-medium normal-case ml-2">
-                            (AI Similarity: {Math.round(gradeItem.similarity * 100)}%)
-                          </span>
-                        )}
-                      </label>
-                      <textarea
-                        value={gradeItem?.feedback ?? ''}
-                        onChange={(e) => handleFeedbackChange(ans.id, e.target.value)}
-                        placeholder="Add comments or feedback for the student..."
-                        rows={2}
-                        className="w-full bg-black/5 border border-border-subtle rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-indigo transition-colors resize-none"
-                        disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+                          {/* AI Evaluation Button */}
+                          <button
+                            type="button"
+                            onClick={() => handleGradeOneWithAI(ans.id)}
+                            disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                            className="px-4 py-2.5 rounded-xl text-xs font-bold text-accent-indigo bg-accent-indigo/10 border border-accent-indigo/20 hover:bg-accent-indigo/20 disabled:opacity-50 transition-all cursor-pointer flex items-center gap-1.5"
+                          >
+                            {gradingAnswerIds[ans.id] ? (
+                              <>
+                                <span className="animate-spin">⏳</span> Grading...
+                              </>
+                            ) : (
+                              <>✨ Grade with AI</>
+                            )}
+                          </button>
+                        </div>
 
-          <button
-            type="submit"
-            disabled={submitting || isGradingAll}
-            className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all disabled:opacity-50 cursor-pointer"
-          >
-            {submitting ? 'Saving...' : 'Submit Grades'}
-          </button>
-        </form>
-      </main>
-    </div>
+                        {/* Feedback and Similarity Section */}
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
+                            Feedback {gradeItem?.similarity !== undefined && gradeItem?.similarity !== null && (
+                              <span className="text-emerald-900 font-medium normal-case ml-2">
+                                (AI Similarity: {Math.round(gradeItem.similarity * 100)}%)
+                              </span>
+                            )}
+                          </label>
+                          <textarea
+                            value={gradeItem?.feedback ?? ''}
+                            onChange={(e) => handleFeedbackChange(ans.id, e.target.value)}
+                            placeholder="Add comments or feedback for the student..."
+                            rows={2}
+                            className="w-full bg-black/5 border border-border-subtle rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-indigo transition-colors resize-none"
+                            disabled={submitting || isGradingAll || gradingAnswerIds[ans.id]}
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting || isGradingAll}
+              className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all disabled:opacity-50 cursor-pointer"
+            >
+              {submitting ? 'Saving...' : 'Submit Grades'}
+            </button>
+          </form>
+        </main>
+      </div>
+    </PageShell>
   )
 }

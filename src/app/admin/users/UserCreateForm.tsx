@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { createUser } from '@/actions/users'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 
 interface UserCreateFormProps {
   role: 'ADMIN' | 'TEACHER' | 'STUDENT'
@@ -107,10 +108,9 @@ export default function UserCreateForm({ role }: UserCreateFormProps) {
               <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                 Password <span className="text-red-900 font-medium">*</span>
               </label>
-              <input
+              <PasswordInput
                 id="password"
-                type="password"
-                placeholder="Min. 6 characters"
+                placeholder="Enter a secure password (min. 6 chars)"
                 required
                 className="auth-input"
                 value={password}
