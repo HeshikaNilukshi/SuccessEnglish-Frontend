@@ -18,8 +18,9 @@ import StudentAttemptView from '@/app/student/viewAttempt'
 import StudentResultsDashboard from '@/app/teacher/studentResultsDashboard'
 import TeacherLayout from '@/app/teacher/TeacherLayout'
 import TeacherDashboard from '@/app/teacher/dashboard'
-import CreateCourse from '@/app/teacher/createCourse'
 import TeacherCourseContent from '@/app/teacher/courseContent'
+import TeacherCourseVideos from '@/app/teacher/courseVideos'
+import TeacherCourseExams from '@/app/teacher/courseExams'
 import TeacherVideoPage from '@/app/teacher/video'
 import CreateExam from '@/app/teacher/createExam'
 import TeacherExamView from '@/app/teacher/exam'
@@ -61,8 +62,10 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/teacher" element={<TeacherLayout />}>
             <Route index element={<TeacherDashboard />} />
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="courses/new" element={<CreateCourse />} />
+
             <Route path=":courseId" element={<TeacherCourseContent />} />
+            <Route path=":courseId/videos" element={<TeacherCourseVideos />} />
+            <Route path=":courseId/exams" element={<TeacherCourseExams />} />
             <Route path=":courseId/videos/:videoId" element={<TeacherVideoPage />} />
             <Route path=":courseId/exams/new" element={<CreateExam />} />
             <Route path=":courseId/exams/:examId" element={<TeacherExamView />} />

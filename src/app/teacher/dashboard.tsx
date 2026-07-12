@@ -5,15 +5,16 @@ import { fetchCourses } from '@/actions/courses'
 import TeacherCourseCard from '@/components/TeacherCourseCard'
 import ProfilePopover from '@/components/ui/ProfilePopover'
 import PageShell from '@/components/teacher/PageShell'
-import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
 
 export default function TeacherDashboard() {
-  const { user } = useAuth()
+  const { user, token } = useAuth()
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false)
 
   const loadCourses = async () => {
     setLoading(true)
@@ -34,14 +35,14 @@ export default function TeacherDashboard() {
     loadCourses()
   }, [user])
 
+  const firstName = user?.name ? user.name.split(' ')[0] : ''
   const pageTitle = (
     <>
-      Teacher Panel, <span className="gradient-text-accent">{user?.name}</span>
+      Welcome! <span className="gradient-text-accent">{firstName}</span>
     </>
   )
 
   const breadcrumbs = [
-    { label: 'Home', href: '/' },
     { label: 'Home' },
   ]
 
@@ -58,17 +59,13 @@ export default function TeacherDashboard() {
             My Created Courses
           </h2>
           <div className="flex items-center gap-4">
-            {!loading && courses.length > 0 && (
-              <Badge variant="outline" className="font-semibold px-2.5 py-1 bg-accent-indigo/10 text-accent-indigo border-accent-indigo/25">
-                {courses.length} {courses.length === 1 ? 'Course' : 'Courses'}
-              </Badge>
-            )}
-            <Link
-              to="/teacher/courses/new"
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all"
+
+            <button
+              onClick={() => setIsCreateCourseOpen(true)}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all cursor-pointer"
             >
               + Create Course
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -130,6 +127,13 @@ export default function TeacherDashboard() {
           </div>
         )}
       </div>
+
+      <CreateCourseModal
+        isOpen={isCreateCourseOpen}
+        onClose={() => setIsCreateCourseOpen(false)}
+        token={token ?? ''}
+        onSuccess={loadCourses}
+      />
     </PageShell>
   )
 }

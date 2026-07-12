@@ -1,61 +1,65 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse } from '@/actions/courses'
+import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchStudentsByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { AddVideoModal } from '@/components/ui/AddVideoModal'
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
+import { DeleteCourseModal } from '@/components/ui/DeleteCourseModal'
+import { MoreVertical, Video, FileText, Users } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
 
 export default function TeacherCourseContent() {
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
+  const navigate = useNavigate()
 
   const [course, setCourse] = useState<Course | null>(null)
-  const [videos, setVideos] = useState<Video[]>([])
-  const [exams, setExams] = useState<Exam[]>([])
+  const [videoCount, setVideoCount] = useState(0)
+  const [examCount, setExamCount] = useState(0)
+  const [studentCount, setStudentCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'videos' | 'exams'>('videos')
 
-  // Add Video states
-  // Add Video states
-  const [isAddVideoOpen, setIsAddVideoOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+
+  const loadDashboardData = async () => {
+    if (!courseId || !token) return
+    try {
+      setLoading(true)
+      setError(null)
+      const id = parseInt(courseId, 10)
+      if (isNaN(id)) {
+        throw new Error('Invalid Course ID')
+      }
+
+      const [courseData, videosData, examsData, studentsData] = await Promise.all([
+        fetchCourse(id, token),
+        fetchVideosByCourse(token, id),
+        fetchExamsByCourse(token, id),
+        fetchStudentsByCourse(token, id)
+      ])
+
+      setCourse(courseData)
+      setVideoCount(videosData.length)
+      setExamCount(examsData.length)
+      setStudentCount(studentsData.length)
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message || 'Failed to load course dashboard.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const loadContent = async () => {
-      if (!courseId || !token) return
-      try {
-        setLoading(true)
-        setError(null)
-        const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const [courseData, videosData, examsData] = await Promise.all([
-          fetchCourse(id, token),
-          fetchVideosByCourse(token, id),
-          fetchExamsByCourse(token, id)
-        ])
-
-        setCourse(courseData)
-        setVideos(videosData)
-        setExams(examsData)
-      } catch (err: any) {
-        console.error(err)
-        setError(err.message || 'Failed to load course content.')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadContent()
+    loadDashboardData()
   }, [courseId, token])
-
-
 
   if (loading) {
     return (
@@ -63,12 +67,10 @@ export default function TeacherCourseContent() {
         <header className="mb-6">
           <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
           <div className="h-10 w-80 bg-black/5 rounded mb-3 animate-pulse" />
-          <div className="h-4 w-60 bg-black/5 rounded mb-10 animate-pulse" />
         </header>
-        <div className="h-12 w-80 bg-black/5 rounded-xl mb-8 animate-pulse" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between animate-pulse" />
+            <div key={i} className="h-48 bg-black/5 rounded-3xl border border-border-subtle p-7 animate-pulse" />
           ))}
         </div>
       </div>
@@ -83,7 +85,7 @@ export default function TeacherCourseContent() {
         </div>
         <div className="space-y-2">
           <h3 className="text-xl font-bold text-text-primary">Error</h3>
-          <p className="text-text-secondary text-sm leading-relaxed">{error || 'Course content unavailable.'}</p>
+          <p className="text-text-secondary text-sm leading-relaxed">{error || 'Course details unavailable.'}</p>
         </div>
         <Link
           to="/teacher"
@@ -101,38 +103,61 @@ export default function TeacherCourseContent() {
   ]
 
   const headerActions = (
-    <TooltipProvider>
-      <div className="flex flex-wrap gap-3">
-        <Tooltip>
-          <TooltipTrigger>
-            <Link
-              to={`/teacher/${course.id}/students`}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all block cursor-pointer"
-            >
-              👥 View Students
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent className="bg-bg-secondary text-text-primary border border-border-subtle">
-            View student enrollments and details
-          </TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger>
-            <Link
-              to={`/teacher/${course.id}/results`}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all block cursor-pointer"
-            >
-              📊 Exam Results
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent className="bg-bg-secondary text-text-primary border border-border-subtle">
-            View student test submissions
-          </TooltipContent>
-        </Tooltip>
-      </div>
-    </TooltipProvider>
+    <div className="relative">
+      <DropdownMenu>
+        <DropdownMenuTrigger className="p-2 rounded-xl bg-black/5 border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-black/10 transition-all cursor-pointer focus:outline-none flex items-center justify-center">
+          <MoreVertical className="w-5 h-5" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48 bg-bg-secondary border border-border-subtle rounded-2xl shadow-xl p-1.5 animate-popover-in">
+          <DropdownMenuItem
+            onClick={() => setIsEditOpen(true)}
+            className="flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none"
+          >
+            ✏️ Edit Course
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setIsDeleteOpen(true)}
+            className="flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl text-red-600 hover:bg-red-500/10 transition-all cursor-pointer outline-none"
+          >
+            🗑️ Delete Course
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
+
+  const cards = [
+    {
+      title: 'Videos',
+      description: 'Upload and manage course video lectures, lessons, and video content.',
+      count: videoCount,
+      link: `/teacher/${course.id}/videos`,
+      icon: Video,
+      color: 'from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30',
+      iconColor: 'text-blue-600 bg-blue-500/10 border-blue-500/20',
+      accentColor: 'bg-gradient-to-r from-blue-500 to-indigo-500'
+    },
+    {
+      title: 'Exams',
+      description: 'Create assessments, compile question banks, and publish timed exams.',
+      count: examCount,
+      link: `/teacher/${course.id}/exams`,
+      icon: FileText,
+      color: 'from-violet-500/20 to-pink-500/20 hover:from-violet-500/30 hover:to-pink-500/30',
+      iconColor: 'text-violet-600 bg-violet-500/10 border-violet-500/20',
+      accentColor: 'bg-gradient-to-r from-violet-500 to-pink-500'
+    },
+    {
+      title: 'Students',
+      description: 'View student enrollments, exam answers, and grade exam attempts.',
+      count: studentCount,
+      link: `/teacher/${course.id}/students`,
+      icon: Users,
+      color: 'from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30',
+      iconColor: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20',
+      accentColor: 'bg-gradient-to-r from-emerald-500 to-teal-500'
+    }
+  ]
 
   return (
     <PageShell
@@ -141,144 +166,60 @@ export default function TeacherCourseContent() {
       breadcrumbs={breadcrumbs}
       actions={headerActions}
     >
-      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as 'videos' | 'exams')} className="w-full flex-grow flex flex-col">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
-          <TabsList className="bg-bg-secondary/80 border border-border-subtle p-1 rounded-xl h-auto">
-            <TabsTrigger
-              value="videos"
-              className="py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer data-active:bg-gradient-to-r data-active:from-accent-indigo data-active:to-accent-violet data-active:text-white data-active:shadow-[0_0_15px_rgba(99,102,241,0.25)]"
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4 flex-grow items-start">
+        {cards.map((card, idx) => {
+          const Icon = card.icon
+          return (
+            <Link
+              key={idx}
+              to={card.link}
+              className={`group relative flex flex-col justify-between rounded-3xl bg-gradient-to-br ${card.color} border border-border-subtle p-7 min-h-[220px] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
             >
-              🎥 Videos <Badge className="ml-1.5 bg-black/10 text-text-primary border-none select-none">{videos.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger
-              value="exams"
-              className="py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer data-active:bg-gradient-to-r data-active:from-accent-indigo data-active:to-accent-violet data-active:text-white data-active:shadow-[0_0_15px_rgba(99,102,241,0.25)]"
-            >
-              📝 Exams <Badge className="ml-1.5 bg-black/10 text-text-primary border-none select-none">{exams.length}</Badge>
-            </TabsTrigger>
-          </TabsList>
-
-          <div>
-            {activeTab === 'videos' ? (
-              <button
-                type="button"
-                onClick={() => setIsAddVideoOpen(true)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer"
-              >
-                + Add Video
-              </button>
-            ) : (
-              <Link
-                to={`/teacher/${course.id}/exams/new`}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-violet to-accent-pink hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] transition-all"
-              >
-                + Add Exam
-              </Link>
-            )}
-          </div>
-        </div>
-
-        <TabsContent value="videos" className="outline-none flex-grow">
-          {videos.length === 0 ? (
-            <EmptyState
-              icon="🎬"
-              title="No Videos Uploaded"
-              description="Add a lecture video to this course using the action buttons above."
-            />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {videos.map((video) => (
-                <Link
-                  key={video.id}
-                  to={`/teacher/${course.id}/videos/${video.id}`}
-                  className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-indigo to-accent-violet rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
-                        🎥
-                      </div>
-                      <Badge variant="outline" className="text-[10px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5">
-                        ID: #{video.id}
-                      </Badge>
-                    </div>
-                    
-                    <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
-                      {video.title}
-                    </h3>
+              <div className={`absolute top-0 left-0 right-0 h-[3px] ${card.accentColor} rounded-t-3xl opacity-60 group-hover:opacity-100 transition-opacity`} />
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center ${card.iconColor} transition-all duration-300 group-hover:scale-110`}>
+                    <Icon className="w-6 h-6" />
                   </div>
+                  <span className="text-3xl font-extrabold text-text-primary tracking-tight">
+                    {card.count}
+                  </span>
+                </div>
+                
+                <div className="space-y-1">
+                  <h3 className="text-xl font-bold text-text-primary tracking-tight">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-text-secondary leading-relaxed font-medium">
+                    {card.description}
+                  </p>
+                </div>
+              </div>
 
-                  <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                    <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
-                    <div
-                      className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                    >
-                      Watch Video &rarr;
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </TabsContent>
+              <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-end text-xs font-bold text-text-primary group-hover:text-accent-indigo transition-colors duration-200">
+                <span>Manage {card.title} &rarr;</span>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
 
-        <TabsContent value="exams" className="outline-none flex-grow">
-          {exams.length === 0 ? (
-            <EmptyState
-              icon="✍️"
-              title="No Exams Created"
-              description="Create a course assessment using the Add Exam button above."
-            />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {exams.map((exam) => (
-                <Link
-                  key={exam.id}
-                  to={`/teacher/${course.id}/exams/${exam.id}`}
-                  className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-violet to-accent-pink rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
-                        📝
-                      </div>
-                      <Badge variant="outline" className="text-[10px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5">
-                        {exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}
-                      </Badge>
-                    </div>
-                    
-                    <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
-                      {exam.title}
-                    </h3>
-                  </div>
+      <CreateCourseModal
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        token={token ?? ''}
+        onSuccess={loadDashboardData}
+        course={course}
+      />
 
-                  <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                    <span>Questions: {exam._count?.questions ?? 0}</span>
-                    <div
-                      className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                    >
-                      View Exam &rarr;
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-
-      {/* Add Video Modal */}
-      {/* Add Video Modal */}
-      <AddVideoModal
-        isOpen={isAddVideoOpen}
-        onClose={() => setIsAddVideoOpen(false)}
-        courseId={courseId!}
-        token={token!}
-        onSuccess={(newVideo) => setVideos((prev) => [newVideo, ...prev])}
+      <DeleteCourseModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        token={token ?? ''}
+        courseId={course.id}
+        courseName={course.name}
+        onSuccess={() => navigate('/teacher')}
       />
     </PageShell>
   )

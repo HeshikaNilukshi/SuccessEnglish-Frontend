@@ -69,6 +69,33 @@ export async function createCourse(
   return handleResponse(res);
 }
 
+export async function updateCourse(
+  token: string,
+  courseId: number,
+  data: { name: string; description: string; price: number }
+): Promise<Course> {
+  const res = await fetch(`${API_BASE}/courses/${courseId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+}
+
+export async function deleteCourse(token: string, courseId: number): Promise<any> {
+  const res = await fetch(`${API_BASE}/courses/${courseId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
 export interface UploadSignatureResponse {
   signature: string;
   timestamp: number;
