@@ -74,7 +74,7 @@ export default function StudentResultsDashboard() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Student Progress' }
   ]
 

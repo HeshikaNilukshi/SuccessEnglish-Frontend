@@ -141,7 +141,7 @@ export default function CreateExam() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Course', href: `/teacher/${courseId}` },
     { label: isEditing ? 'Edit Exam' : 'Create Exam' }
   ]

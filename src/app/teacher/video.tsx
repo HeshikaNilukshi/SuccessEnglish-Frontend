@@ -156,7 +156,7 @@ export default function TeacherVideoPage() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Course', href: `/teacher/${courseId}` },
     { label: video.title }
   ]

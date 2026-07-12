@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
@@ -220,7 +220,7 @@ export default function GradeExamAttempt() {
   const totalPossibleScore = attempt.answers.reduce((acc, curr) => acc + curr.question.marks, 0)
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Course', href: `/teacher/${attempt.exam.courseId}` },
     { label: 'Results', href: `/teacher/${attempt.exam.courseId}/results` },
     { label: 'Grade Attempt' }

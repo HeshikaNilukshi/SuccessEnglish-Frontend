@@ -42,7 +42,7 @@ export default function TeacherDashboard() {
 
   const breadcrumbs = [
     { label: 'Home', href: '/' },
-    { label: 'Teacher Panel' },
+    { label: 'Home' },
   ]
 
   return (

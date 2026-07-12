@@ -75,7 +75,7 @@ export default function CourseStudents() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Course', href: `/teacher/${courseId}` },
     { label: 'Enrolled Students' }
   ]

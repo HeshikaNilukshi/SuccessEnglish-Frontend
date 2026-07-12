@@ -49,7 +49,7 @@ export default function CreateCourse() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Create Course' }
   ]
 

@@ -75,7 +75,7 @@ export default function CourseResults() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Course', href: `/teacher/${courseId}` },
     { label: 'Exam Results' }
   ]

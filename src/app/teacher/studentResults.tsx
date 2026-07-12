@@ -76,7 +76,7 @@ export default function StudentSpecificResults() {
   }
 
   const breadcrumbs = [
-    { label: 'Panel', href: '/teacher' },
+    { label: 'Home', href: '/teacher' },
     { label: 'Course', href: `/teacher/${courseId}` },
     { label: 'Students', href: `/teacher/${courseId}/students` },
     { label: 'Attempts' }
