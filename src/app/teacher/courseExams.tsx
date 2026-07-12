@@ -53,7 +53,7 @@ export default function TeacherCourseExams() {
         </header>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between animate-pulse" />
+            <div key={i} className="h-32 bg-[#fbfbfa] border border-[#e2e8f0] rounded-xl p-5 flex flex-col justify-between animate-pulse" />
           ))}
         </div>
       </div>
@@ -62,17 +62,17 @@ export default function TeacherCourseExams() {
 
   if (error || !course) {
     return (
-      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl glass-panel border-border-subtle shadow-xl space-y-6">
+      <div className="max-w-md mx-auto text-center p-12 mt-16 rounded-2xl bg-[#fbfbfa] border border-[#e2e8f0] shadow-sm space-y-6">
         <div className="relative w-20 h-20 mx-auto flex items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-900 font-medium text-3xl">
           ⚠️
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-text-primary">Error</h3>
-          <p className="text-text-secondary text-sm leading-relaxed">{error || 'Course exams unavailable.'}</p>
+          <h3 className="text-xl font-bold text-[#0f172a]">Error</h3>
+          <p className="text-[#64748b] text-sm leading-relaxed">{error || 'Course exams unavailable.'}</p>
         </div>
         <Link
           to={`/teacher/${courseId}`}
-          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
+          className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-[#f8fafc] border border-[#e2e8f0] hover:bg-slate-50 transition-all cursor-pointer"
         >
           Back to Course
         </Link>
@@ -89,7 +89,7 @@ export default function TeacherCourseExams() {
   const headerActions = (
     <Link
       to={`/teacher/${course.id}/exams/new`}
-      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-violet to-accent-pink hover:shadow-[0_0_20px_rgba(168,85,247,0.25)] transition-all inline-block"
+      className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm shadow-violet-500/10 inline-block"
     >
       + Add Exam
     </Link>
@@ -102,7 +102,7 @@ export default function TeacherCourseExams() {
       breadcrumbs={breadcrumbs}
       actions={headerActions}
     >
-      <div className="flex-grow">
+      <div className="flex-grow flex flex-col">
         {exams.length === 0 ? (
           <EmptyState
             icon="✍️"
@@ -110,34 +110,34 @@ export default function TeacherCourseExams() {
             description="Create a course assessment using the Add Exam button above."
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {exams.map((exam) => (
               <Link
                 key={exam.id}
                 to={`/teacher/${course.id}/exams/${exam.id}`}
-                className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-2xl bg-[#fbfbfa] border border-[#e2e8f0] p-6 min-h-[140px] text-left cursor-pointer hover:border-violet-500/50 hover:shadow-md transition-all duration-300"
               >
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-violet to-accent-pink rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-violet-600 rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
                 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
+                    <div className="w-9 h-9 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center text-lg group-hover:scale-105 transition-all duration-300">
                       📝
                     </div>
-                    <Badge variant="outline" className="text-[10px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5">
+                    <Badge variant="outline" className="text-[10px] font-mono text-[#64748b] border-[#e2e8f0] px-1.5 py-0.5 rounded-md">
                       {exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}
                     </Badge>
                   </div>
                   
-                  <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
+                  <h3 className="text-base font-bold text-[#0f172a] tracking-tight group-hover:text-violet-600 transition-colors duration-300 line-clamp-1">
                     {exam.title}
                   </h3>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
+                <div className="mt-4 pt-3 border-t border-[#f1f5f9] flex items-center justify-between text-[11px] font-bold text-[#94a3b8]">
                   <span>Questions: {exam._count?.questions ?? 0}</span>
                   <div
-                    className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
+                    className="text-violet-600 font-bold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
                   >
                     View Exam &rarr;
                   </div>

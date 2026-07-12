@@ -68,9 +68,9 @@ export default function TeacherCourseContent() {
           <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
           <div className="h-10 w-80 bg-black/5 rounded mb-3 animate-pulse" />
         </header>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+        <div className="flex flex-col gap-5 mt-10 w-full">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-48 bg-black/5 rounded-3xl border border-border-subtle p-7 animate-pulse" />
+            <div key={i} className="h-28 bg-black/5 rounded-2xl border border-border-subtle p-6 animate-pulse" />
           ))}
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function TeacherCourseContent() {
   const headerActions = (
     <div className="relative">
       <DropdownMenu>
-        <DropdownMenuTrigger className="p-2 rounded-xl bg-black/5 border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-black/10 transition-all cursor-pointer focus:outline-none flex items-center justify-center">
+        <DropdownMenuTrigger className="p-2 rounded-xl bg-white/10 border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all cursor-pointer focus:outline-none flex items-center justify-center">
           <MoreVertical className="w-5 h-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48 bg-bg-secondary border border-border-subtle rounded-2xl shadow-xl p-1.5 animate-popover-in">
@@ -166,39 +166,41 @@ export default function TeacherCourseContent() {
       breadcrumbs={breadcrumbs}
       actions={headerActions}
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4 flex-grow items-start">
+      <div className="flex flex-col gap-5 mt-4 w-full">
         {cards.map((card, idx) => {
           const Icon = card.icon
           return (
             <Link
               key={idx}
               to={card.link}
-              className={`group relative flex flex-col justify-between rounded-3xl bg-gradient-to-br ${card.color} border border-border-subtle p-7 min-h-[220px] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
+              className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-2xl bg-gradient-to-r ${card.color} border border-border-subtle p-6 transition-all duration-300 hover:-translate-x-1 hover:shadow-md`}
             >
-              <div className={`absolute top-0 left-0 right-0 h-[3px] ${card.accentColor} rounded-t-3xl opacity-60 group-hover:opacity-100 transition-opacity`} />
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center ${card.iconColor} transition-all duration-300 group-hover:scale-110`}>
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <span className="text-3xl font-extrabold text-text-primary tracking-tight">
-                    {card.count}
-                  </span>
+              <div className="flex items-start sm:items-center gap-5 flex-grow">
+                <div className={`w-14 h-14 rounded-2xl border shrink-0 flex items-center justify-center ${card.iconColor} transition-all duration-300 group-hover:scale-105`}>
+                  <Icon className="w-7 h-7" />
                 </div>
-                
                 <div className="space-y-1">
-                  <h3 className="text-xl font-bold text-text-primary tracking-tight">
+                  <h3 className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-200">
                     {card.title}
                   </h3>
-                  <p className="text-xs text-text-secondary leading-relaxed font-medium">
+                  <p className="text-xs text-text-secondary leading-relaxed max-w-xl font-medium">
                     {card.description}
                   </p>
                 </div>
               </div>
-
-              <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-end text-xs font-bold text-text-primary group-hover:text-accent-indigo transition-colors duration-200">
-                <span>Manage {card.title} &rarr;</span>
+              
+              <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 border-t sm:border-t-0 pt-4 sm:pt-0 border-black/5">
+                <div className="flex flex-col items-start sm:items-end">
+                  <span className="text-3xl font-extrabold text-text-primary tracking-tight">
+                    {card.count}
+                  </span>
+                  <span className="text-[10px] text-text-secondary uppercase tracking-wider font-bold">
+                    Items
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-black/5 group-hover:bg-accent-indigo/10 flex items-center justify-center text-text-primary group-hover:text-accent-indigo transition-all duration-200">
+                  <span className="text-lg font-bold group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                </div>
               </div>
             </Link>
           )

@@ -105,7 +105,7 @@ export default function TeacherCourseVideos() {
       breadcrumbs={breadcrumbs}
       actions={headerActions}
     >
-      <div className="flex-grow">
+      <div className="flex-grow flex flex-col">
         {videos.length === 0 ? (
           <EmptyState
             icon="🎬"

@@ -25,17 +25,13 @@ export default function PageShell({
   maxWidthClass = 'max-w-7xl',
 }: PageShellProps) {
   return (
-    <div className="w-full min-h-screen flex flex-col relative z-10">
-
-      {/* ══════════════════════════════════════════════════════
-          HEADER BANNER — full-width, rich gradient treatment
-      ══════════════════════════════════════════════════════ */}
-      <header className="w-full relative overflow-hidden">
-
-        {/* Base gradient — deep navy-indigo → vivid blue */}
+    <div className="w-full flex flex-col min-h-screen bg-bg-primary">
+      {/* Sleek Minimal Header */}
+      <header className="relative overflow-hidden border-b border-border-subtle py-6 px-6 md:px-12">
+        {/* Gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0f1e4a] via-[#1a3280] to-[#2563eb]" />
 
-        {/* Mesh / noise layer */}
+        {/* Subtle noise texture */}
         <div
           className="absolute inset-0 opacity-[0.06]"
           style={{
@@ -47,80 +43,62 @@ export default function PageShell({
         {/* Radial light orbs */}
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-blue-400/20 blur-[80px] pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-64 h-64 rounded-full bg-indigo-300/15 blur-[60px] pointer-events-none" />
-        <div className="absolute top-1/2 -translate-y-1/2 right-1/4 w-32 h-32 rounded-full bg-sky-400/20 blur-[40px] pointer-events-none" />
 
-        {/* Faint grid lines overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
-            backgroundSize: '48px 48px',
-          }}
-        />
+        {/* Content */}
+        <div className={`relative mx-auto ${maxWidthClass} space-y-4 z-10`}>
+          {/* Breadcrumbs Row */}
+          <nav className="flex items-center gap-1.5 flex-wrap" aria-label="Breadcrumb">
+            <Link to="/teacher" className="text-white/40 hover:text-white/80 transition-colors">
+              <Home className="w-3.5 h-3.5" />
+            </Link>
+            {breadcrumbs.map((item, idx) => {
+              const isLast = idx === breadcrumbs.length - 1
+              return (
+                <React.Fragment key={idx}>
+                  <ChevronRight className="w-3 h-3 text-white/30 shrink-0" />
+                  {isLast || !item.href ? (
+                    <span className="text-xs font-bold text-white/90">
+                      {item.label}
+                    </span>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className="text-xs font-bold text-white/55 hover:text-white/90 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </React.Fragment>
+              )
+            })}
+          </nav>
 
-        {/* Bottom fade edge blending into page */}
-        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-b from-transparent to-bg-primary/30 pointer-events-none" />
-
-        {/* ── Content ── */}
-        <div className={`relative w-full ${maxWidthClass} mx-auto px-6 md:px-12 z-10`}>
-
-          {/* Top row: breadcrumbs + actions */}
-          <div className="flex items-center justify-between pt-5 pb-0 min-h-[48px]">
-            {/* Breadcrumbs */}
-            <nav className="flex items-center gap-1.5 flex-wrap" aria-label="Breadcrumb">
-              <Home className="w-3.5 h-3.5 text-white/40 shrink-0" />
-              {breadcrumbs.map((item, idx) => {
-                const isLast = idx === breadcrumbs.length - 1
-                return (
-                  <React.Fragment key={idx}>
-                    <ChevronRight className="w-3 h-3 text-white/30 shrink-0" />
-                    {isLast || !item.href ? (
-                      <span className="text-[11px] font-semibold text-white/90 tracking-wide uppercase">
-                        {item.label}
-                      </span>
-                    ) : (
-                      <Link
-                        to={item.href}
-                        className="text-[11px] font-medium text-white/55 hover:text-white/90 transition-colors duration-200 tracking-wide uppercase"
-                      >
-                        {item.label}
-                      </Link>
-                    )}
-                  </React.Fragment>
-                )
-              })}
-            </nav>
-
-            {/* Actions */}
+          {/* Title Row */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="space-y-1">
+              <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                {title}
+              </h1>
+              {subtitle && (
+                <p className="text-sm font-medium text-white/60">
+                  {subtitle}
+                </p>
+              )}
+            </div>
             {actions && (
               <div className="flex items-center gap-3 shrink-0">
                 {actions}
               </div>
             )}
           </div>
-
-          {/* Page title + subtitle */}
-          <div className="pb-10 pt-6 animate-fade-in-up">
-            <h1 className="text-3xl md:text-[2.75rem] font-extrabold tracking-tight text-white leading-tight drop-shadow-sm">
-              {title}
-            </h1>
-            {subtitle && (
-              <p className="mt-2.5 text-sm md:text-[0.9375rem] text-white/60 max-w-xl leading-relaxed font-medium">
-                {subtitle}
-              </p>
-            )}
-          </div>
         </div>
       </header>
 
-      {/* ══════════════════════════════════════════════════════
-          MAIN CONTENT
-      ══════════════════════════════════════════════════════ */}
-      <main
-        className={`w-full ${maxWidthClass} mx-auto px-6 md:px-12 py-10 flex-grow flex flex-col animate-fade-in-up [animation-delay:80ms]`}
-      >
-        {children}
+      {/* Main Content Area */}
+      <main className="flex-grow py-8 px-6 md:px-12 flex flex-col">
+        <div className={`mx-auto ${maxWidthClass} flex-grow w-full flex flex-col`}>
+          {children}
+        </div>
       </main>
     </div>
   )

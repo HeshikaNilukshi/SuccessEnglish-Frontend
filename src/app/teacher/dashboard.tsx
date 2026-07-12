@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourses } from '@/actions/courses'
 import TeacherCourseCard from '@/components/TeacherCourseCard'
-import ProfilePopover from '@/components/ui/ProfilePopover'
 import PageShell from '@/components/teacher/PageShell'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -51,39 +49,40 @@ export default function TeacherDashboard() {
       title={pageTitle}
       subtitle="Manage your courses, content, and student exams."
       breadcrumbs={breadcrumbs}
-      actions={<ProfilePopover user={user} />}
     >
       <div className="flex-grow flex flex-col space-y-8">
         <div className="flex items-center justify-between">
           <h2 className="text-xl md:text-2xl font-bold tracking-tight text-text-primary">
-            My Created Courses
+            My Courses
           </h2>
-          <div className="flex items-center gap-4">
-
-            <button
-              onClick={() => setIsCreateCourseOpen(true)}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all cursor-pointer"
-            >
-              + Create Course
-            </button>
-          </div>
+          <button
+            onClick={() => setIsCreateCourseOpen(true)}
+            className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all cursor-pointer"
+          >
+            + Create Course
+          </button>
         </div>
 
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-col gap-5 w-full">
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-7 h-[250px] flex flex-col justify-between"
+                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-6 h-28 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
               >
-                <div className="space-y-4">
-                  <Skeleton className="w-12 h-12 rounded-xl" />
-                  <Skeleton className="h-6 w-3/4 rounded" />
-                  <Skeleton className="h-4 w-full rounded" />
+                <div className="flex items-center gap-5 flex-grow">
+                  <Skeleton className="w-14 h-14 rounded-2xl shrink-0" />
+                  <div className="space-y-2 flex-grow max-w-xl">
+                    <Skeleton className="h-5 w-1/3 rounded" />
+                    <Skeleton className="h-4 w-full rounded" />
+                  </div>
                 </div>
-                <div className="pt-4 border-t border-border-subtle flex justify-between items-center">
-                  <Skeleton className="h-3 w-1/3 rounded" />
-                  <Skeleton className="h-3 w-1/4 rounded" />
+                <div className="flex items-center gap-6 shrink-0">
+                  <div className="space-y-1.5 flex flex-col items-end">
+                    <Skeleton className="h-3 w-16 rounded" />
+                    <Skeleton className="h-4 w-20 rounded" />
+                  </div>
+                  <Skeleton className="w-10 h-10 rounded-full" />
                 </div>
               </div>
             ))}
@@ -109,18 +108,18 @@ export default function TeacherDashboard() {
             title="No Courses Created Yet"
             description="Get started by creating your first course."
             action={
-              <Link
-                to="/teacher/courses/new"
-                className="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all"
+              <button
+                onClick={() => setIsCreateCourseOpen(true)}
+                className="inline-flex items-center justify-center px-6 py-3 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all cursor-pointer"
               >
                 Create Course &rarr;
-              </Link>
+              </button>
             }
           />
         )}
 
         {!loading && !error && courses.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-col gap-5 w-full">
             {courses.map((course, idx) => (
               <TeacherCourseCard key={course.id} course={course} index={idx} />
             ))}

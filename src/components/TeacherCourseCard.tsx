@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
@@ -17,37 +16,40 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
       to={`/teacher/${course.id}`}
       className="group block"
     >
-      <Card className="glass-panel border border-border-subtle group-hover:border-accent-indigo/50 transition-all duration-300 relative flex flex-col justify-between h-full p-6 text-left cursor-pointer">
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-indigo via-accent-violet to-accent-pink rounded-t-2xl opacity-80 group-hover:opacity-100 transition-opacity" />
-
-        <div className="space-y-4">
-          <div className="flex items-start justify-between">
-            <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-2xl shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
-              {icon}
+      <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-2xl bg-bg-secondary border border-border-subtle p-6 transition-all duration-300 hover:-translate-x-1 hover:shadow-md">
+        <div className="flex items-start sm:items-center gap-5 flex-grow">
+          <div className="w-14 h-14 rounded-2xl border shrink-0 bg-black/5 border-border-subtle flex items-center justify-center text-2xl group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+            {icon}
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <h3 className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-200">
+                {course.name}
+              </h3>
+              <Badge variant="outline" className="font-bold bg-accent-indigo/10 border-accent-indigo/20 text-accent-indigo py-0.5 px-2 rounded-lg text-[10px]">
+                ${course.price}
+              </Badge>
             </div>
-            <Badge variant="outline" className="font-semibold bg-accent-indigo/10 border-accent-indigo/20 text-accent-indigo">
-              ${course.price}
-            </Badge>
-          </div>
-
-          <h3 className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300">
-            {course.name}
-          </h3>
-
-          <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
-            {course.description || "No description provided."}
-          </p>
-        </div>
-
-        <div className="mt-8 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
-          <span>Created {new Date(course.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-          <div
-            className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1"
-          >
-            Manage Course <span className="text-sm">&rarr;</span>
+            <p className="text-xs text-text-secondary leading-relaxed max-w-xl font-medium line-clamp-2">
+              {course.description || "No description provided."}
+            </p>
           </div>
         </div>
-      </Card>
+
+        <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 border-t sm:border-t-0 pt-4 sm:pt-0 border-black/5">
+          <div className="flex flex-col items-start sm:items-end">
+            <span className="text-[10px] text-text-muted uppercase tracking-wider font-bold">
+              Created
+            </span>
+            <span className="text-xs font-bold text-text-secondary">
+              {new Date(course.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+            </span>
+          </div>
+          <div className="w-10 h-10 rounded-full bg-black/5 group-hover:bg-accent-indigo/10 flex items-center justify-center text-text-primary group-hover:text-accent-indigo transition-all duration-200">
+            <span className="text-lg font-bold group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+          </div>
+        </div>
+      </div>
     </Link>
   )
 }
