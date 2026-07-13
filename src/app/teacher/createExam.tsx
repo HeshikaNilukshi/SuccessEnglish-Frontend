@@ -152,7 +152,7 @@ export default function CreateExam() {
       subtitle={isEditing ? 'Modify exam details and update questions.' : 'Define exam title, time limit, and enter questions with correct answers.'}
       breadcrumbs={breadcrumbs}
     >
-      <div className="w-full max-w-3xl mx-auto space-y-6">
+      <div className="w-full max-w-7xl mx-auto space-y-6">
         <form onSubmit={handleSubmit} className="space-y-8">
           {error && (
             <div className="p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-xs text-red-900 font-medium">
@@ -249,8 +249,8 @@ export default function CreateExam() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="md:col-span-2 space-y-2">
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex-grow space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
                         Correct Answer
                       </label>
@@ -263,15 +263,17 @@ export default function CreateExam() {
                         disabled={submitting}
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="w-full md:w-24 shrink-0 space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
                         Marks
                       </label>
                       <input
                         type="number"
+                        min="1"
+                        max="99"
                         value={q.marks}
                         onChange={(e) => handleQuestionChange(idx, 'marks', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all"
+                        className="w-full px-4 py-2.5 rounded-lg bg-bg-secondary border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all text-center"
                         disabled={submitting}
                       />
                     </div>

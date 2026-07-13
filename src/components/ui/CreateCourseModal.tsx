@@ -148,7 +148,7 @@ export function CreateCourseModal({ isOpen, onClose, token, onSuccess, course = 
 
             <div className="space-y-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
-                Price (USD)
+                Price (Rs.)
               </label>
               <input
                 type="number"

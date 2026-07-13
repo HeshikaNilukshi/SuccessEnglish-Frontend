@@ -6,6 +6,7 @@ import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { AddVideoModal } from '@/components/ui/AddVideoModal'
+import { formatDate } from '@/lib/utils'
 
 export default function TeacherCourseVideos() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -53,9 +54,9 @@ export default function TeacherCourseVideos() {
           <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
           <div className="h-10 w-80 bg-black/5 rounded mb-3 animate-pulse" />
         </header>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col gap-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between animate-pulse" />
+            <div key={i} className="h-20 bg-black/5 rounded-2xl border border-border-subtle p-5 flex items-center justify-between animate-pulse" />
           ))}
         </div>
       </div>
@@ -113,36 +114,38 @@ export default function TeacherCourseVideos() {
             description="Add a lecture video to this course using the action button above."
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
+          <div className="flex flex-col gap-4 animate-fade-in-up">
             {videos.map((video) => (
               <Link
                 key={video.id}
                 to={`/teacher/${course.id}/videos/${video.id}`}
-                className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
+                className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl glass-panel glass-panel-hover p-5 text-left cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-x-1"
               >
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-indigo to-accent-violet rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-accent-indigo to-accent-violet rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
                 
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
-                      🎥
-                    </div>
-                    <Badge variant="outline" className="text-[10px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5">
-                      ID: #{video.id}
-                    </Badge>
+                <div className="flex items-center gap-4 flex-grow">
+                  <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-xl shrink-0 group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+                    🎥
                   </div>
                   
-                  <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
-                    {video.title}
-                  </h3>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300">
+                        {video.title}
+                      </h3>
+                      <Badge variant="outline" className="text-[9px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5 rounded-md">
+                        ID: #{video.id}
+                      </Badge>
+                    </div>
+                    <p className="text-[11px] text-text-muted font-medium">
+                      Uploaded {formatDate(video.createdAt)}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                  <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
-                  <div
-                    className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                  >
-                    Watch Video &rarr;
+                <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-white/[0.04]">
+                  <div className="text-xs font-bold text-accent-indigo opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all flex items-center gap-1">
+                    Watch Video <span className="text-sm">&rarr;</span>
                   </div>
                 </div>
               </Link>

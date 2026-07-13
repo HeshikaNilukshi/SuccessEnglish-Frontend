@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchMyResultsByCourse, type StudentAttemptResponse } from '@/actions/courses'
+import { formatDate } from '@/lib/utils'
 
 export default function StudentCourseContent() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -195,7 +196,7 @@ export default function StudentCourseContent() {
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                      <span>Uploaded {new Date(video.createdAt).toLocaleDateString()}</span>
+                      <span>Uploaded {formatDate(video.createdAt)}</span>
                       <div
                         className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
                       >
@@ -300,19 +301,13 @@ export default function StudentCourseContent() {
                             {attempt.exam.title}
                           </td>
                           <td className="px-6 py-4 text-sm text-text-muted">
-                            {new Date(attempt.createdAt).toLocaleDateString(undefined, {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
+                            {formatDate(attempt.createdAt)}
                           </td>
                           <td className="px-6 py-4 text-sm text-right">
                             {!attempt.isGraded ? (
                               <span className="text-amber-400 font-medium">Pending Grading</span>
                             ) : (
-                              <span className="text-emerald-900 font-medium font-bold">{attempt.score} Marks</span>
+                              <span className="text-emerald-900 font-medium">{attempt.score} Marks</span>
                             )}
                           </td>
                         </tr>

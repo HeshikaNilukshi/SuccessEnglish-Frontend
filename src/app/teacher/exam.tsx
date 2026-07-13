@@ -7,6 +7,7 @@ import PageShell from '@/components/teacher/PageShell'
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { formatDate } from '@/lib/utils'
 
 export default function TeacherExamView() {
   const { courseId, examId } = useParams<{ courseId: string; examId: string }>()
@@ -61,7 +62,7 @@ export default function TeacherExamView() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-6 pt-16 pb-8">
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
         <header className="mb-6">
           <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
           <div className="h-10 w-96 bg-black/5 rounded mb-4 animate-pulse" />
@@ -122,14 +123,13 @@ export default function TeacherExamView() {
     </div>
   )
 
-  const subtitle = (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
-      <p className="text-text-secondary text-sm">
-        Exam preview mode for teachers. Correct answers and marks are visible.
-      </p>
-      <Badge variant="outline" className="font-semibold bg-accent-indigo/10 text-accent-indigo border-accent-indigo/25 shrink-0 self-start sm:self-center">
-        {exam.duration > 0 ? `${exam.duration} Minutes` : 'Untimed'}
-      </Badge>
+  const subtitle = "Exam preview mode for teachers. Correct answers and marks are visible."
+
+  const infoText = (
+    <div className="flex items-center gap-2 flex-wrap">
+      <span>Duration: {exam.duration > 0 ? `${exam.duration} Minutes` : 'Untimed'}</span>
+      <span className="opacity-60">•</span>
+      <span>Created: {formatDate(exam.createdAt)}</span>
     </div>
   )
 
@@ -137,10 +137,11 @@ export default function TeacherExamView() {
     <PageShell
       title={exam.title}
       subtitle={subtitle}
+      infoText={infoText}
       breadcrumbs={breadcrumbs}
       actions={actions}
     >
-      <div className="w-full max-w-3xl mx-auto space-y-6">
+      <div className="w-full max-w-7xl mx-auto space-y-6">
         <main className="space-y-6">
           {exam.questions.map((q, idx) => (
             <Card

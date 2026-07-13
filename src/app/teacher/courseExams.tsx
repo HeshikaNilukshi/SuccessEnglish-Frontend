@@ -51,9 +51,9 @@ export default function TeacherCourseExams() {
           <div className="h-4 w-32 bg-black/5 rounded mb-4 animate-pulse" />
           <div className="h-10 w-80 bg-black/5 rounded mb-3 animate-pulse" />
         </header>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col gap-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-[#fbfbfa] border border-[#e2e8f0] rounded-xl p-5 flex flex-col justify-between animate-pulse" />
+            <div key={i} className="h-20 bg-black/5 rounded-2xl border border-border-subtle p-5 flex items-center justify-between animate-pulse" />
           ))}
         </div>
       </div>
@@ -110,36 +110,38 @@ export default function TeacherCourseExams() {
             description="Create a course assessment using the Add Exam button above."
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-4 animate-fade-in-up">
             {exams.map((exam) => (
               <Link
                 key={exam.id}
                 to={`/teacher/${course.id}/exams/${exam.id}`}
-                className="group relative flex flex-col justify-between rounded-2xl bg-[#fbfbfa] border border-[#e2e8f0] p-6 min-h-[140px] text-left cursor-pointer hover:border-violet-500/50 hover:shadow-md transition-all duration-300"
+                className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl glass-panel glass-panel-hover p-5 text-left cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-x-1"
               >
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-violet-600 rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-accent-violet to-accent-pink rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
                 
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-9 h-9 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center text-lg group-hover:scale-105 transition-all duration-300">
-                      📝
-                    </div>
-                    <Badge variant="outline" className="text-[10px] font-mono text-[#64748b] border-[#e2e8f0] px-1.5 py-0.5 rounded-md">
-                      {exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}
-                    </Badge>
+                <div className="flex items-center gap-4 flex-grow">
+                  <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-xl shrink-0 group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
+                    📝
                   </div>
                   
-                  <h3 className="text-base font-bold text-[#0f172a] tracking-tight group-hover:text-violet-600 transition-colors duration-300 line-clamp-1">
-                    {exam.title}
-                  </h3>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300">
+                        {exam.title}
+                      </h3>
+                      <Badge variant="outline" className="text-[9px] font-mono text-text-muted border-border-subtle px-1.5 py-0.5 rounded-md">
+                        {exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}
+                      </Badge>
+                    </div>
+                    <p className="text-[11px] text-text-muted font-medium">
+                      Questions: {exam._count?.questions ?? 0}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#f1f5f9] flex items-center justify-between text-[11px] font-bold text-[#94a3b8]">
-                  <span>Questions: {exam._count?.questions ?? 0}</span>
-                  <div
-                    className="text-violet-600 font-bold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                  >
-                    View Exam &rarr;
+                <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-white/[0.04]">
+                  <div className="text-xs font-bold text-accent-violet opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all flex items-center gap-1">
+                    View Exam <span className="text-sm">&rarr;</span>
                   </div>
                 </div>
               </Link>

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, Home } from 'lucide-react'
 
@@ -11,6 +11,7 @@ interface PageShellProps {
   children: React.ReactNode
   title: string | React.ReactNode
   subtitle?: string | React.ReactNode
+  infoText?: React.ReactNode
   breadcrumbs: BreadcrumbItemType[]
   actions?: React.ReactNode
   maxWidthClass?: string
@@ -21,6 +22,7 @@ export default function PageShell({
   children,
   title,
   subtitle,
+  infoText,
   breadcrumbs,
   actions,
   maxWidthClass = 'max-w-7xl',
@@ -94,6 +96,11 @@ export default function PageShell({
                 <p className="text-sm font-medium text-white/60">
                   {subtitle}
                 </p>
+              )}
+              {infoText && (
+                <div className="text-xs text-white/50 mt-4">
+                  {infoText}
+                </div>
               )}
             </div>
             

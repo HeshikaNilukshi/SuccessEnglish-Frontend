@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { fetchUserById, updateUser } from '@/actions/users'
-import { formatDate } from '@/lib/utils'
+import { formatDate, formatPrice } from '@/lib/utils'
 import PageShell from '@/components/teacher/PageShell'
 
 export default function UserProfile() {
@@ -290,7 +290,7 @@ export default function UserProfile() {
                         {course.name}
                       </h4>
                       <div className="mt-4 flex items-center justify-between text-xs text-text-muted">
-                        <span>Price: LKR {parseFloat(course.price).toLocaleString()}</span>
+                        <span>Price: {formatPrice(course.price)}</span>
                         <span className="text-accent-indigo group-hover:text-text-primary transition-colors duration-200">View &rarr;</span>
                       </div>
                     </Link>

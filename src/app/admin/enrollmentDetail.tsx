@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchEnrollmentById, verifyEnrollment } from '@/actions/enrollments'
-import { formatDate } from '@/lib/utils'
+import { formatDate, formatPrice } from '@/lib/utils'
 
 export default function AdminEnrollmentDetail() {
   const { id } = useParams<{ id: string }>()
@@ -162,7 +162,7 @@ export default function AdminEnrollmentDetail() {
                 <div className="space-y-1">
                   <h2 className="text-xs font-bold uppercase tracking-widest text-text-secondary">Amount Required</h2>
                   <div className="text-2xl md:text-4xl font-black text-text-primary tracking-tight">
-                    Rs. {Number(course.price).toFixed(2)}
+                    {formatPrice(course.price)}
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse } from '@/actions/courses'
 import { requestEnrollment } from '@/actions/enrollments'
+import { formatPrice } from '@/lib/utils'
 
 export default function StudentEnrollment() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -188,7 +189,7 @@ export default function StudentEnrollment() {
             <div className="mt-8 pt-6 border-t border-border-subtle">
               <h2 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Amount Need to be Paid</h2>
               <div className="text-4xl font-extrabold text-text-primary tracking-tight">
-                Rs. {Number(course.price).toFixed(2)}
+                {formatPrice(course.price)}
               </div>
               <p className="text-[11px] text-text-muted mt-2">
                 Please deposit the exact amount to Success English Academy and upload the receipt image on the right.

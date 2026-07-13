@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
+import { formatPrice, formatDate } from '@/lib/utils'
 
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
 
@@ -27,7 +28,7 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
                 {course.name}
               </h3>
               <Badge variant="outline" className="font-bold bg-accent-indigo/10 border-accent-indigo/20 text-accent-indigo py-0.5 px-2 rounded-lg text-[10px]">
-                ${course.price}
+                {formatPrice(course.price)}
               </Badge>
             </div>
             <p className="text-xs text-text-secondary leading-relaxed max-w-xl font-medium line-clamp-2">
@@ -42,7 +43,7 @@ export default function TeacherCourseCard({ course, index }: TeacherCourseCardPr
               Created
             </span>
             <span className="text-xs font-bold text-text-secondary">
-              {new Date(course.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+              {formatDate(course.createdAt)}
             </span>
           </div>
           <div className="w-10 h-10 rounded-full bg-black/5 group-hover:bg-accent-indigo/10 flex items-center justify-center text-text-primary group-hover:text-accent-indigo transition-all duration-200">

@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchStudentsByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
+import { formatDate, formatPrice } from '@/lib/utils'
 import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
 import { DeleteCourseModal } from '@/components/ui/DeleteCourseModal'
 import { MoreVertical, Video, FileText, Users, Pencil, Trash2 } from 'lucide-react'
@@ -163,6 +164,13 @@ export default function TeacherCourseContent() {
     <PageShell
       title={course.name}
       subtitle={course.description || "Course details and curriculum management."}
+      infoText={
+        <div className="flex items-center gap-2 flex-wrap">
+          <span>Price: {formatPrice(course.price)}</span>
+          <span className="opacity-60">•</span>
+          <span>Created: {formatDate(course.createdAt)}</span>
+        </div>
+      }
       breadcrumbs={breadcrumbs}
       actions={headerActions}
     >

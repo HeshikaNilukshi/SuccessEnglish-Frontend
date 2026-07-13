@@ -5,6 +5,7 @@ import { fetchStudentResultsByCourse, type StudentAttemptResponse } from '@/acti
 import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { formatDate } from '@/lib/utils'
 
 export default function StudentSpecificResults() {
   const navigate = useNavigate()
@@ -115,13 +116,7 @@ export default function StudentSpecificResults() {
                     >
                       <td className="px-6 py-4 text-sm font-semibold text-text-primary">{attempt.exam.title}</td>
                       <td className="px-6 py-4 text-sm text-text-muted">
-                        {new Date(attempt.createdAt).toLocaleDateString(undefined, {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {formatDate(attempt.createdAt)}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <Badge

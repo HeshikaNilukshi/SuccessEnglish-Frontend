@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourses, fetchStudentsByCourse, type CourseStudentResponse } from '@/actions/courses'
-import { formatDate } from '@/lib/utils'
+import { formatDate, formatPrice } from '@/lib/utils'
 
 export default function AdminCoursesList() {
   const navigate = useNavigate()
@@ -134,7 +134,7 @@ export default function AdminCoursesList() {
                     </div>
 
                     <div className="pt-6 mt-6 border-t border-border-subtle flex items-center justify-between text-xs font-semibold">
-                      <span className="text-text-primary">LKR {parseFloat(course.price as any).toLocaleString()}</span>
+                      <span className="text-text-primary">{formatPrice(course.price)}</span>
                       <span className="text-accent-indigo group-hover:text-text-primary transition-colors duration-200">
                         View Enrolled Students &rarr;
                       </span>

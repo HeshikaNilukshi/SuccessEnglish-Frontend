@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { formatDate } from '@/lib/utils'
 
 const courseIcons = ['📚', '✍️', '📖', '📝', '🎓', '🧠', '🌐']
 
@@ -25,7 +26,7 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
               {icon}
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide border bg-emerald-500/10 border-emerald-500/20 text-emerald-900 font-medium">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide border bg-emerald-500/10 border-emerald-500/20 text-emerald-900">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               Active ✓
             </div>
@@ -41,7 +42,7 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
         </div>
 
         <div className="mt-8 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
-          <span>Joined {new Date(enrollment.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+          <span>Joined {formatDate(enrollment.createdAt)}</span>
           <div className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
             Access Course <span className="text-sm">&rarr;</span>
           </div>
@@ -78,7 +79,7 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
       </div>
 
       <div className="mt-8 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
-        <span>Joined {new Date(enrollment.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+        <span>Joined {formatDate(enrollment.createdAt)}</span>
         <span className="text-text-muted italic">Awaiting Approval</span>
       </div>
     </article>
