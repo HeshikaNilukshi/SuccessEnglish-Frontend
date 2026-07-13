@@ -1,22 +1,19 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchMyResultsByCourse, type StudentAttemptResponse } from '@/actions/courses'
-import { formatDate } from '@/lib/utils'
+import { fetchCourse, fetchCourseStats, type CourseStats } from '@/actions/courses'
+import { formatDate, formatPrice } from '@/lib/utils'
+import PageShell from '@/components/teacher/PageShell'
+import { Video, FileText, BarChart3 } from 'lucide-react'
 
 export default function StudentCourseContent() {
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
 
   const [course, setCourse] = useState<Course | null>(null)
-  const [videos, setVideos] = useState<Video[]>([])
-  const [exams, setExams] = useState<Exam[]>([])
-  const [results, setResults] = useState<StudentAttemptResponse[]>([])
+  const [stats, setStats] = useState<CourseStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'videos' | 'exams' | 'results'>(location.state?.activeTab || 'videos')
 
   useEffect(() => {
     const loadContent = async () => {
@@ -29,18 +26,13 @@ export default function StudentCourseContent() {
           throw new Error('Invalid Course ID')
         }
 
-        // Fetch course details, videos, exams, and results in parallel
-        const [courseData, videosData, examsData, resultsData] = await Promise.all([
+        const [courseData, statsData] = await Promise.all([
           fetchCourse(id, token),
-          fetchVideosByCourse(token, id),
-          fetchExamsByCourse(token, id),
-          fetchMyResultsByCourse(token, id)
+          fetchCourseStats(token, id)
         ])
 
         setCourse(courseData)
-        setVideos(videosData)
-        setExams(examsData)
-        setResults(resultsData)
+        setStats(statsData)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load course content. Please try again.')
@@ -62,16 +54,10 @@ export default function StudentCourseContent() {
         {/* Description skeleton */}
         <div className="h-4 w-60 bg-black/5 rounded mb-10" />
 
-        {/* Tab Buttons skeleton */}
-        <div className="h-12 w-80 bg-black/5 rounded-xl mb-8" />
-
-        {/* List Grid skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* List Row skeleton */}
+        <div className="flex flex-col gap-5 w-full">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 bg-black/5 rounded-xl border border-border-subtle p-5 flex flex-col justify-between">
-              <div className="h-4 w-2/3 bg-black/5 rounded" />
-              <div className="h-3 w-1/3 bg-black/5 rounded" />
-            </div>
+            <div key={i} className="h-28 bg-black/5 rounded-2xl border border-border-subtle p-6" />
           ))}
         </div>
       </div>
@@ -100,226 +86,97 @@ export default function StudentCourseContent() {
     )
   }
 
+  const breadcrumbs = [
+    { label: 'Home', href: '/student' },
+    { label: course.name }
+  ]
+
+  const cards = [
+    {
+      title: 'Lectures',
+      description: 'Access course video lectures, lessons, and learning material.',
+      count: stats?.videoCount ?? 0,
+      link: `/student/${course.id}/videos`,
+      icon: Video,
+      color: 'from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30',
+      iconColor: 'text-blue-600 bg-blue-500/10 border-blue-500/20',
+      accentColor: 'bg-gradient-to-r from-blue-500 to-indigo-500'
+    },
+    {
+      title: 'Exams',
+      description: 'Take course assessments, timed exams, and view questionnaires.',
+      count: stats?.examCount ?? 0,
+      link: `/student/${course.id}/exams`,
+      icon: FileText,
+      color: 'from-violet-500/20 to-pink-500/20 hover:from-violet-500/30 hover:to-pink-500/30',
+      iconColor: 'text-violet-600 bg-violet-500/10 border-violet-500/20',
+      accentColor: 'bg-gradient-to-r from-violet-500 to-pink-500'
+    },
+    {
+      title: 'My Results',
+      description: 'View attempt history, detailed answersheets, scores, and teacher feedback.',
+      count: stats?.resultsCount ?? 0,
+      link: `/student/${course.id}/results`,
+      icon: BarChart3,
+      color: 'from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30',
+      iconColor: 'text-amber-600 bg-amber-500/10 border-amber-500/20',
+      accentColor: 'bg-gradient-to-r from-amber-500 to-orange-500'
+    }
+  ]
+
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to="/student"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Dashboard
-          </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-2">
-            {course.name}
-          </h1>
-          <p className="text-text-secondary text-sm max-w-2xl leading-relaxed">
-            {course.description || "Learn comprehensive English grammar, conversational speaking skills, and unlock academic excellence."}
-          </p>
+    <PageShell
+      title={course.name}
+      subtitle={course.description || "Learn comprehensive English grammar, conversational speaking skills, and unlock academic excellence."}
+      infoText={
+        <div className="flex items-center gap-2 flex-wrap">
+          <span>Price: {formatPrice(course.price)}</span>
+          <span className="opacity-60">•</span>
+          <span>Created: {formatDate(course.createdAt)}</span>
         </div>
-      </header>
-
-      {/* Modern Pill Tabs */}
-      <div className="flex justify-start mb-8 animate-fade-in-up animate-delay-100">
-        <div className="bg-bg-secondary/80 border border-border-subtle rounded-xl p-1 flex gap-1.5 w-full max-w-[420px] shadow-card">
-          <button
-            type="button"
-            onClick={() => setActiveTab('videos')}
-            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-              activeTab === 'videos'
-                ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
-            }`}
-          >
-            🎥 Videos ({videos.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('exams')}
-            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-              activeTab === 'exams'
-                ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
-            }`}
-          >
-            📝 Exams ({exams.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('results')}
-            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer ${
-              activeTab === 'results'
-                ? 'bg-gradient-to-r from-accent-indigo to-accent-violet text-white shadow-[0_0_15px_rgba(99,102,241,0.25)]'
-                : 'text-text-secondary hover:text-text-primary hover:bg-black/5'
-            }`}
-          >
-            📊 Results ({results.length})
-          </button>
-        </div>
+      }
+      breadcrumbs={breadcrumbs}
+    >
+      <div className="flex flex-col gap-5 w-full animate-fade-in-up">
+        {cards.map((card, idx) => {
+          const Icon = card.icon
+          return (
+            <Link
+              key={idx}
+              to={card.link}
+              className={`group relative flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-2xl bg-gradient-to-r ${card.color} border border-border-subtle p-6 transition-all duration-300 hover:-translate-x-1 hover:shadow-md`}
+            >
+              <div className="flex items-start sm:items-center gap-5 flex-grow">
+                <div className={`w-14 h-14 rounded-2xl border shrink-0 flex items-center justify-center ${card.iconColor} transition-all duration-300 group-hover:scale-105`}>
+                  <Icon className="w-7 h-7" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-200">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-text-secondary leading-relaxed max-w-xl font-medium">
+                    {card.description}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 border-t sm:border-t-0 pt-4 sm:pt-0 border-black/5">
+                <div className="flex flex-col items-start sm:items-end">
+                  <span className="text-3xl font-extrabold text-text-primary tracking-tight">
+                    {card.count}
+                  </span>
+                  <span className="text-[10px] text-text-secondary uppercase tracking-wider font-bold">
+                    {card.title === 'My Results' ? 'Attempts' : card.title}
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-black/5 group-hover:bg-accent-indigo/10 flex items-center justify-center text-text-primary group-hover:text-accent-indigo transition-all duration-200">
+                  <span className="text-lg font-bold group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                </div>
+              </div>
+            </Link>
+          )
+        })}
       </div>
-
-      {/* Tab Contents */}
-      <main className="animate-fade-in-up animate-delay-200">
-        {activeTab === 'videos' && (
-          <div>
-            {videos.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
-                <span className="text-4xl block">🎬</span>
-                <h3 className="text-lg font-bold text-text-primary">No Lecture Videos Yet</h3>
-                <p className="text-xs text-text-secondary">
-                  Check back later! The teacher hasn't uploaded any videos for this course yet.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos.map((video) => (
-                  <Link
-                    key={video.id}
-                    to={`/student/${course.id}/videos/${video.id}`}
-                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
-                  >
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-indigo to-accent-violet rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                    
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
-                          🎥
-                        </div>
-                        <span className="text-[10px] font-mono text-text-muted">
-                          ID: #{video.id}
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300 line-clamp-1">
-                        {video.title}
-                      </h3>
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                      <span>Uploaded {formatDate(video.createdAt)}</span>
-                      <div
-                        className="text-accent-indigo font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                      >
-                        Watch Video &rarr;
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'exams' && (
-          <div>
-            {exams.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
-                <span className="text-4xl block">✍️</span>
-                <h3 className="text-lg font-bold text-text-primary">No Exams Scheduled Yet</h3>
-                <p className="text-xs text-text-secondary">
-                  Great news! There are no exams or assessments scheduled for this course at the moment.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {exams.map((exam) => (
-                  <Link
-                    key={exam.id}
-                    to={`/student/${course.id}/exams/${exam.id}`}
-                    className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-6 min-h-[140px] text-left cursor-pointer"
-                  >
-                    <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent-violet to-accent-pink rounded-t-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                    
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="w-9 h-9 rounded-lg bg-black/5 border border-border-subtle flex items-center justify-center text-lg shadow-inner group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
-                          📝
-                        </div>
-                        <span className="text-[10px] font-mono text-text-muted flex gap-2">
-                          <span>{exam.duration > 0 ? `${exam.duration} mins` : 'Untimed'}</span>
-                        </span>
-                      </div>
-                      
-                      <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300 line-clamp-1">
-                        {exam.title}
-                      </h3>
-                    </div>
- 
-                    <div className="mt-4 pt-3 border-t border-border-subtle flex items-center justify-between text-[11px] text-text-muted">
-                      <span>Questions: {exam._count?.questions ?? 0}</span>
-                      <div
-                        className="text-accent-violet font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5"
-                      >
-                        Start Exam &rarr;
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'results' && (
-          <div>
-            {results.length === 0 ? (
-              <div className="text-center py-16 px-6 rounded-2xl glass-panel border-border-subtle max-w-xl mx-auto space-y-4">
-                <span className="text-4xl block">📊</span>
-                <h3 className="text-lg font-bold text-text-primary">No Exam Attempts Yet</h3>
-                <p className="text-xs text-text-secondary">
-                  You have not attempted any exams for this course yet.
-                </p>
-              </div>
-            ) : (
-              <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-border-subtle bg-black/5">
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Exam Title</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary">Date Taken</th>
-                      <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-text-secondary text-right">Score / Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/[0.04]">
-                    {results.map((attempt) => {
-                      const rowClickable = attempt.isGraded
-                      return (
-                        <tr
-                          key={attempt.id}
-                          onClick={() => {
-                            if (rowClickable) {
-                              navigate(`/student/attempt/${attempt.id}`)
-                            }
-                          }}
-                          className={`transition-colors duration-150 ${
-                            rowClickable 
-                              ? 'hover:bg-black/5 cursor-pointer' 
-                              : 'cursor-default opacity-75'
-                          }`}
-                        >
-                          <td className="px-6 py-4 text-sm font-semibold text-text-primary">
-                            {attempt.exam.title}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-text-muted">
-                            {formatDate(attempt.createdAt)}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-right">
-                            {!attempt.isGraded ? (
-                              <span className="text-amber-400 font-medium">Pending Grading</span>
-                            ) : (
-                              <span className="text-emerald-900 font-medium">{attempt.score} Marks</span>
-                            )}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-      </main>
-    </div>
+    </PageShell>
   )
 }

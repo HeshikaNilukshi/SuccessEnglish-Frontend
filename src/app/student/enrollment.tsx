@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse } from '@/actions/courses'
 import { requestEnrollment } from '@/actions/enrollments'
 import { formatPrice } from '@/lib/utils'
+import PageShell from '@/components/teacher/PageShell'
 
 export default function StudentEnrollment() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -129,21 +130,21 @@ export default function StudentEnrollment() {
     )
   }
 
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Enrollment' }
+  ]
+
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10">
-      <header className="relative z-20 flex flex-col gap-4 mb-12 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to="/"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Home Portal
-          </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-            Course <span className="gradient-text-accent">Enrollment</span>
-          </h1>
-        </div>
-      </header>
+    <PageShell
+      title={
+        <>
+          Course <span className="gradient-text-accent">Enrollment</span>
+        </>
+      }
+      subtitle="Complete your payment and upload your receipt to request enrollment."
+      breadcrumbs={breadcrumbs}
+    >
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch animate-fade-in-up animate-delay-100">
         <div className="lg:col-span-5">
@@ -280,6 +281,6 @@ export default function StudentEnrollment() {
           </form>
         </div>
       </div>
-    </div>
+    </PageShell>
   )
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchStudentsByCourse, fetchAllResultsByCourse } from '@/actions/courses'
+import { fetchCourse, fetchCourseStats } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
 import { formatDate, formatPrice } from '@/lib/utils'
 import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
@@ -40,19 +40,16 @@ export default function TeacherCourseContent() {
         throw new Error('Invalid Course ID')
       }
 
-      const [courseData, videosData, examsData, studentsData, resultsData] = await Promise.all([
+      const [courseData, statsData] = await Promise.all([
         fetchCourse(id, token),
-        fetchVideosByCourse(token, id),
-        fetchExamsByCourse(token, id),
-        fetchStudentsByCourse(token, id),
-        fetchAllResultsByCourse(token, id)
+        fetchCourseStats(token, id)
       ])
 
       setCourse(courseData)
-      setVideoCount(videosData.length)
-      setExamCount(examsData.length)
-      setStudentCount(studentsData.length)
-      setResultsCount(resultsData.length)
+      setVideoCount(statsData.videoCount)
+      setExamCount(statsData.examCount)
+      setStudentCount(statsData.studentCount)
+      setResultsCount(statsData.resultsCount)
     } catch (err: any) {
       console.error(err)
       setError(err.message || 'Failed to load course dashboard.')

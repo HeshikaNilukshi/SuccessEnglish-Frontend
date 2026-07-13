@@ -24,6 +24,23 @@ export async function fetchCourse(id: number, token?: string): Promise<Course> {
   return handleResponse(res);
 }
 
+export interface CourseStats {
+  videoCount: number;
+  examCount: number;
+  studentCount: number;
+  resultsCount: number;
+}
+
+export async function fetchCourseStats(token: string, courseId: number): Promise<CourseStats> {
+  const res = await fetch(`${API_BASE}/courses/${courseId}/stats`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return handleResponse(res);
+}
+
 export async function fetchVideosByCourse(token: string, courseId: number): Promise<Video[]> {
   const res = await fetch(`${API_BASE}/videos/course/${courseId}`, {
     headers: {

@@ -15,7 +15,6 @@ interface PageShellProps {
   breadcrumbs: BreadcrumbItemType[]
   actions?: React.ReactNode
   maxWidthClass?: string
-  homeHref?: string
 }
 
 export default function PageShell({
@@ -26,7 +25,6 @@ export default function PageShell({
   breadcrumbs,
   actions,
   maxWidthClass = 'max-w-7xl',
-  homeHref,
 }: PageShellProps) {
   return (
     <div className="w-full flex flex-col min-h-screen bg-bg-primary">
@@ -53,7 +51,7 @@ export default function PageShell({
           {/* Top Row: Breadcrumbs and Mobile Actions */}
           <div className="flex items-center justify-between gap-4">
             <nav className="flex items-center gap-1.5 flex-wrap" aria-label="Breadcrumb">
-              <Link to={homeHref || "/teacher"} className="text-white/40 hover:text-white/80 transition-colors">
+              <Link to="/" className="text-white/40 hover:text-white/80 transition-colors">
                 <Home className="w-3.5 h-3.5" />
               </Link>
               {breadcrumbs.map((item, idx) => {

@@ -239,7 +239,7 @@ export default function StudentExamFlow() {
     }
 
     return (
-      <div className="max-w-3xl mx-auto px-6 pt-16 pb-16">
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-16">
         <header className="mb-8 border-b border-border-subtle pb-6">
           <button
             onClick={() => navigate(`/student/${courseId}`)}
@@ -350,10 +350,10 @@ export default function StudentExamFlow() {
 
   // --- STATE 2: ACTIVE EXAM SCREEN ---
   return (
-    <div className="max-w-4xl mx-auto px-6 pt-24 pb-20 relative">
+    <div className="max-w-7xl mx-auto px-6 pt-24 pb-20 relative">
       {/* Sticky Top Panel */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle py-4 shadow-md">
-        <div className="max-w-4xl mx-auto px-6 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <div className="flex flex-col">
             <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Assessment Exam</span>
             <span className="text-sm font-bold text-text-primary max-w-[200px] md:max-w-md truncate">{exam.title}</span>
@@ -391,7 +391,7 @@ export default function StudentExamFlow() {
 
         {/* Collapsible Question Navigation Panel */}
         {showQuestionMap && (
-          <div className="max-w-4xl mx-auto px-6 mt-4 pt-4 border-t border-border-subtle animate-fade-in">
+          <div className="max-w-7xl mx-auto px-6 mt-4 pt-4 border-t border-border-subtle animate-fade-in">
             <h4 className="text-xs font-bold uppercase tracking-wider text-text-secondary mb-3">
               Questions
             </h4>

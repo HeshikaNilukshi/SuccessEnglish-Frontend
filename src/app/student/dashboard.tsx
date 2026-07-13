@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchMyEnrollments } from '@/actions/courses'
 import DashboardCourseCard from '@/components/DashboardCourseCard'
 import ProfilePopover from '@/components/ui/ProfilePopover'
+import PageShell from '@/components/teacher/PageShell'
 
 export default function StudentDashboard() {
   const { user, token } = useAuth()
@@ -30,29 +30,24 @@ export default function StudentDashboard() {
     loadEnrollments()
   }, [token])
 
+  const firstName = user?.name ? user.name.split(' ')[0] : ''
+  const pageTitle = (
+    <>
+      Welcome, <span className="gradient-text-accent">{firstName}</span>!
+    </>
+  )
+
+  const breadcrumbs = [
+    { label: 'Home' }
+  ]
+
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to="/"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            &larr; Back to home portal
-          </Link>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-                Welcome, <span className="gradient-text-accent">{user?.name}</span>!
-              </h1>
-              <p className="text-text-secondary text-sm md:text-base">
-                Start your English journey.
-              </p>
-            </div>
-            <ProfilePopover />
-          </div>
-        </div>
-      </header>
+    <PageShell
+      title={pageTitle}
+      subtitle="Start your English journey."
+      breadcrumbs={breadcrumbs}
+      actions={<ProfilePopover />}
+    >
 
       <main className="space-y-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
         <div className="flex items-center justify-between">
@@ -68,22 +63,27 @@ export default function StudentDashboard() {
 
         {/* Loading Skeletons */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(3)].map((_, i) => (
+          <div className="flex flex-col gap-6 w-full animate-pulse">
+            {[...Array(2)].map((_, i) => (
               <div
                 key={i}
-                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-7 h-[250px] flex flex-col justify-between"
+                className="relative overflow-hidden rounded-2xl bg-bg-secondary/60 border border-border-subtle p-8 h-48 flex flex-col justify-between"
               >
                 <div className="absolute inset-0 shimmer-overlay animate-shimmer" />
-                <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-black/5 animate-pulse" />
-                  <div className="h-6 w-3/4 rounded bg-black/5 animate-pulse" />
-                  <div className="h-4 w-full rounded bg-black/5 animate-pulse" />
-                  <div className="h-4 w-5/6 rounded bg-black/5 animate-pulse" />
+                <div className="flex items-start justify-between gap-6">
+                  <div className="flex items-center gap-4 flex-grow">
+                    <div className="w-14 h-14 rounded-2xl bg-black/5" />
+                    <div className="space-y-2 flex-grow max-w-lg">
+                      <div className="h-6 w-1/3 rounded bg-black/5" />
+                      <div className="h-4 w-full rounded bg-black/5" />
+                      <div className="h-4 w-3/4 rounded bg-black/5" />
+                    </div>
+                  </div>
+                  <div className="h-7 w-28 rounded bg-black/5" />
                 </div>
                 <div className="pt-4 border-t border-border-subtle flex justify-between items-center">
-                  <div className="h-3 w-1/3 rounded bg-black/5 animate-pulse" />
-                  <div className="h-3 w-1/4 rounded bg-black/5 animate-pulse" />
+                  <div className="h-4 w-28 rounded bg-black/5" />
+                  <div className="h-4 w-24 rounded bg-black/5" />
                 </div>
               </div>
             ))}
@@ -139,7 +139,7 @@ export default function StudentDashboard() {
 
         {/* Active Enrollment Cards */}
         {!loading && !error && enrollments.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-col gap-6 w-full">
             {enrollments.map((enrollment, idx) => (
               <DashboardCourseCard key={enrollment.id} enrollment={enrollment} index={idx} />
             ))}
@@ -147,6 +147,6 @@ export default function StudentDashboard() {
         )}
       </main>
 
-    </div>
+    </PageShell>
   )
 }

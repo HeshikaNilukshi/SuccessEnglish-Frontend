@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchVideoDetails } from '@/actions/courses'
+import PageShell from '@/components/teacher/PageShell'
+import { formatDate } from '@/lib/utils'
 
 export default function StudentVideoPage() {
   const { courseId, videoId } = useParams<{ courseId: string; videoId: string }>()
@@ -70,24 +72,21 @@ export default function StudentVideoPage() {
     )
   }
 
-  return (
-    <div className="max-w-5xl mx-auto px-6 md:px-12 pt-10 pb-16 flex flex-col">
-      <header className="relative z-20 flex flex-col gap-2 mb-8 animate-fade-in-up">
-        <div>
-          <Link
-            to={`/student/${courseId}`}
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to course content
-          </Link>
-          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary">
-            {video.title}
-          </h1>
-        </div>
-      </header>
+  const breadcrumbs = [
+    { label: 'Home', href: '/student' },
+    { label: 'Course', href: `/student/${courseId}` },
+    { label: video.title }
+  ]
 
+  return (
+    <PageShell
+      title={video.title}
+      subtitle={`Uploaded ${formatDate(video.createdAt)}`}
+      breadcrumbs={breadcrumbs}
+      maxWidthClass="max-w-5xl"
+    >
       {/* Centered Iframe Player Container */}
-      <main className="relative w-full flex justify-center items-center animate-fade-in-up animate-delay-100">
+      <main className="relative w-full flex justify-center items-center animate-fade-in-up">
         {/* Colorful glow effect sitting behind player */}
         <div className="absolute inset-0 bg-gradient-to-tr from-accent-indigo/10 via-accent-violet/5 to-accent-pink/5 rounded-2xl blur-3xl opacity-50 -z-10" />
 
@@ -101,6 +100,6 @@ export default function StudentVideoPage() {
           />
         </div>
       </main>
-    </div>
+    </PageShell>
   )
 }

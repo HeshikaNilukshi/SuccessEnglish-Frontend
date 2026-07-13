@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAttemptWithAnswers, type ExamAttemptDetail } from '@/actions/courses'
+import PageShell from '@/components/teacher/PageShell'
+import { formatDate } from '@/lib/utils'
 
 export default function StudentAttemptView() {
   const { attemptId } = useParams<{ attemptId: string }>()
@@ -38,7 +40,7 @@ export default function StudentAttemptView() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-6 pt-16 pb-8 animate-pulse">
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8 animate-pulse">
         <div className="h-4 w-32 bg-black/5 rounded mb-4" />
         <div className="h-10 w-96 bg-black/5 rounded mb-4" />
         <div className="h-4 w-48 bg-black/5 rounded mb-10" />
@@ -74,38 +76,29 @@ export default function StudentAttemptView() {
 
   const totalPossibleScore = attempt.answers.reduce((acc, curr) => acc + curr.question.marks, 0)
 
-  return (
-    <div className="max-w-3xl mx-auto px-6 pt-28 pb-16 relative">
-      {/* Sticky Score Banner */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle py-4 shadow-md animate-fade-in">
-        <div className="max-w-3xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex flex-col">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-text-muted">Exam Results View</span>
-            <span className="text-sm font-bold text-text-primary truncate max-w-[200px] md:max-w-md">{attempt.student.name}</span>
-          </div>
-          <div className="bg-bg-secondary border border-border-subtle rounded-xl px-4 py-2 text-right">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">Total Score</span>
-            <span className="text-lg font-extrabold text-emerald-900 font-medium">{attempt.score ?? 0} / {totalPossibleScore}</span>
-          </div>
-        </div>
-      </div>
+  const breadcrumbs = [
+    { label: 'Home', href: '/student' },
+    { label: 'Course', href: `/student/${attempt.exam.courseId}` },
+    { label: 'Attempt Review' }
+  ]
 
-      <header className="mb-10 border-b border-border-subtle pb-6">
-        <button
-          onClick={() => navigate(`/student/${attempt.exam.courseId}`)}
-          className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-0 outline-none"
-        >
-          &larr; Back to Course
-        </button>
-        <div className="space-y-4">
-          <h1 className="text-3xl font-extrabold tracking-tight text-text-primary mb-2">
-            View Graded Answersheet
-          </h1>
-          <p className="text-text-secondary text-sm">
-            Review answers for <span className="font-semibold text-text-primary">{attempt.exam.title}</span>.
-          </p>
+  return (
+    <PageShell
+      title="View Graded Answersheet"
+      subtitle={
+        <>
+          Review answers for <span className="font-semibold text-white">{attempt.exam.title}</span>
+        </>
+      }
+      infoText={
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-semibold">Score: {attempt.score ?? 0} / {totalPossibleScore}</span>
+          <span className="opacity-60">•</span>
+          <span>Date Taken: {formatDate(attempt.createdAt)}</span>
         </div>
-      </header>
+      }
+      breadcrumbs={breadcrumbs}
+    >
 
       <main className="space-y-6">
         {attempt.answers.map((ans, idx) => {
@@ -194,6 +187,6 @@ export default function StudentAttemptView() {
           )
         })}
       </main>
-    </div>
+    </PageShell>
   )
 }

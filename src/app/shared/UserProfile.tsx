@@ -117,7 +117,6 @@ export default function UserProfile() {
     <PageShell
       title={<>User <span className="text-accent-indigo">Profile</span></>}
       subtitle={isAdminView ? 'Manage user credentials and view system activity.' : 'View student details and enrollment status.'}
-      homeHref={currentUser?.role === 'TEACHER' ? '/teacher' : currentUser?.role === 'ADMIN' ? '/admin' : '/student'}
       breadcrumbs={[
         { label: isAdminView ? (isTeacher ? 'Teachers' : isStudent ? 'Students' : 'Admins') : 'Students', href: typeof backLink === 'string' ? backLink : '/teacher' },
         { label: profileUser?.name || 'User Profile' }

@@ -16,35 +16,39 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
     return (
       <Link
         to={`/student/${enrollment.course.id}`}
-        className="group relative flex flex-col justify-between rounded-2xl glass-panel glass-panel-hover p-7 text-left cursor-pointer"
+        className="group relative flex flex-col md:flex-row md:items-center justify-between rounded-2xl glass-panel glass-panel-hover p-8 md:p-10 text-left cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 min-h-[180px] gap-6"
       >
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-indigo via-accent-violet to-accent-pink rounded-t-2xl opacity-80 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-gradient-to-b from-accent-indigo via-accent-violet to-accent-pink rounded-l-2xl opacity-80 group-hover:opacity-100 transition-opacity" />
 
-        <div className="space-y-4">
-          <div className="flex items-start justify-between">
-            <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-2xl shadow-inner group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
-              {icon}
-            </div>
-
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide border bg-emerald-500/10 border-emerald-500/20 text-emerald-900">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              Active ✓
-            </div>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-6 flex-grow">
+          <div className="w-16 h-16 rounded-2xl bg-black/5 border border-border-subtle flex items-center justify-center text-3xl shadow-inner shrink-0 group-hover:bg-accent-indigo/10 group-hover:border-accent-indigo/30 transition-all duration-300">
+            {icon}
           </div>
 
-          <h3 className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300">
-            {enrollment.course.name}
-          </h3>
+          <div className="space-y-2 flex-grow">
+            <div className="flex flex-wrap items-center gap-3">
+              <h3 className="text-xl md:text-2xl font-bold text-text-primary tracking-tight group-hover:text-accent-indigo transition-colors duration-300">
+                {enrollment.course.name}
+              </h3>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide border bg-emerald-500/10 border-emerald-500/20 text-emerald-900">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Active ✓
+              </div>
+            </div>
 
-          <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
-            {enrollment.course.description || "Learn comprehensive English grammar, conversational speaking skills, and unlock academic excellence."}
-          </p>
+            <p className="text-text-secondary text-sm md:text-base leading-relaxed max-w-3xl">
+              {enrollment.course.description || "Learn comprehensive English grammar, conversational speaking skills, and unlock academic excellence."}
+            </p>
+            
+            <div className="text-[11px] md:text-xs text-text-muted">
+              Joined {formatDate(enrollment.createdAt)}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-8 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
-          <span>Joined {formatDate(enrollment.createdAt)}</span>
-          <div className="text-accent-indigo font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
-            Access Course <span className="text-sm">&rarr;</span>
+        <div className="flex items-center justify-between md:justify-end gap-4 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-white/[0.04]">
+          <div className="text-xs md:text-sm font-bold text-accent-indigo opacity-80 group-hover:opacity-100 group-hover:translate-x-1.5 transition-all flex items-center gap-1">
+            Access Course <span className="text-sm md:text-base">&rarr;</span>
           </div>
         </div>
       </Link>
@@ -53,34 +57,38 @@ export default function DashboardCourseCard({ enrollment, index }: DashboardCour
 
   return (
     <article
-      className="group relative flex flex-col justify-between rounded-2xl glass-panel p-7 text-left"
+      className="group relative flex flex-col md:flex-row md:items-center justify-between rounded-2xl glass-panel p-8 md:p-10 text-left min-h-[180px] gap-6"
     >
-      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-indigo via-accent-violet to-accent-pink rounded-t-2xl opacity-80" />
+      <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-gradient-to-b from-accent-indigo via-accent-violet to-accent-pink rounded-l-2xl opacity-60" />
 
-      <div className="space-y-4">
-        <div className="flex items-start justify-between">
-          <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-2xl shadow-inner">
-            {icon}
-          </div>
-
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide border bg-amber-500/10 border-amber-500/20 text-amber-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-            Pending Verification ⏳
-          </div>
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-6 flex-grow">
+        <div className="w-16 h-16 rounded-2xl bg-black/5 border border-border-subtle flex items-center justify-center text-3xl shadow-inner shrink-0">
+          {icon}
         </div>
 
-        <h3 className="text-xl font-bold text-text-primary tracking-tight">
-          {enrollment.course.name}
-        </h3>
+        <div className="space-y-2 flex-grow">
+          <div className="flex flex-wrap items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-bold text-text-primary tracking-tight">
+              {enrollment.course.name}
+            </h3>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold tracking-wide border bg-amber-500/10 border-amber-500/20 text-amber-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              Pending Verification ⏳
+            </div>
+          </div>
 
-        <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">
-          {enrollment.course.description || "Learn comprehensive English grammar, conversational speaking skills, and unlock academic excellence."}
-        </p>
+          <p className="text-text-secondary text-sm md:text-base leading-relaxed max-w-3xl">
+            {enrollment.course.description || "Learn comprehensive English grammar, conversational speaking skills, and unlock academic excellence."}
+          </p>
+          
+          <div className="text-[11px] md:text-xs text-text-muted">
+            Joined {formatDate(enrollment.createdAt)}
+          </div>
+        </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
-        <span>Joined {formatDate(enrollment.createdAt)}</span>
-        <span className="text-text-muted italic">Awaiting Approval</span>
+      <div className="flex items-center justify-between md:justify-end gap-4 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-white/[0.04]">
+        <span className="text-xs md:text-sm text-text-muted italic">Awaiting Approval</span>
       </div>
     </article>
   )

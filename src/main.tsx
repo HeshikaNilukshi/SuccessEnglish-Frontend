@@ -15,6 +15,9 @@ import StudentCourseContent from '@/app/student/courseContent'
 import StudentVideoPage from '@/app/student/video'
 import StudentExamFlow from '@/app/student/examFlow'
 import StudentAttemptView from '@/app/student/viewAttempt'
+import StudentCourseVideos from '@/app/student/courseVideos'
+import StudentCourseExams from '@/app/student/courseExams'
+import StudentCourseResults from '@/app/student/courseResults'
 import StudentResultsDashboard from '@/app/teacher/studentResultsDashboard'
 import TeacherLayout from '@/app/teacher/TeacherLayout'
 import TeacherDashboard from '@/app/teacher/dashboard'
@@ -55,6 +58,9 @@ createRoot(document.getElementById('root')!).render(
             <Route path="profile" element={<ProfilePage />} />
             <Route path="enrollment/:courseId" element={<StudentEnrollment />} />
             <Route path=":courseId" element={<StudentCourseContent />} />
+            <Route path=":courseId/videos" element={<StudentCourseVideos />} />
+            <Route path=":courseId/exams" element={<StudentCourseExams />} />
+            <Route path=":courseId/results" element={<StudentCourseResults />} />
             <Route path=":courseId/videos/:videoId" element={<StudentVideoPage />} />
             <Route path=":courseId/exams/:examId" element={<StudentExamFlow />} />
             <Route path="attempt/:attemptId" element={<StudentAttemptView />} />
