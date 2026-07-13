@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 
-export default function StudentProfileForm() {
+export default function ProfileForm() {
   const { user, updateUser } = useAuth()
   const [name, setName] = useState(user?.name || '')
   const [email, setEmail] = useState(user?.email || '')
@@ -65,8 +65,7 @@ export default function StudentProfileForm() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl h-full flex flex-col">
-      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
+    <div className="relative overflow-hidden rounded-2xl bg-bg-secondary border border-border-subtle p-8 shadow-sm h-full flex flex-col">
       {success && (
         <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-emerald-500/12 border border-emerald-500/25 text-emerald-900 font-medium text-sm animate-fade-in-up">
           <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,24 +200,9 @@ export default function StudentProfileForm() {
         </div>
         <div className="pt-4 mt-8 border-t border-border-subtle flex items-center justify-end gap-4">
           <button
-            type="button"
-            onClick={() => {
-              setName(user?.name || '')
-              setEmail(user?.email || '')
-              setPassword('')
-              setConfirmPassword('')
-              setError(null)
-              setSuccess(null)
-            }}
-            disabled={isSubmitting}
-            className="px-5 py-2.5 rounded-xl text-xs font-semibold text-text-secondary hover:text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 hover:border-border-subtle active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-          >
-            Reset Form
-          </button>
-          <button
             type="submit"
             disabled={isSubmitting}
-            className="relative inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold text-text-primary overflow-hidden rounded-xl transition-all duration-300 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] disabled:opacity-50 disabled:pointer-events-none cursor-pointer group/btn"
+            className="relative inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold text-white overflow-hidden rounded-xl transition-all duration-300 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] disabled:opacity-50 disabled:pointer-events-none cursor-pointer group/btn"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet" />
             <span className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 bg-[linear-gradient(105deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)] bg-[length:200%_100%]" />

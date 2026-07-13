@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { fetchUserById, updateUser } from '@/actions/users'
 import { formatDate } from '@/lib/utils'
+import PageShell from '@/components/teacher/PageShell'
 
 export default function UserProfile() {
   const { id } = useParams<{ id: string }>()
@@ -113,44 +114,26 @@ export default function UserProfile() {
     : -1
 
   return (
-    <div className="max-w-4xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          {typeof backLink === 'string' ? (
-            <Link
-              to={backLink}
-              className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-            >
-              <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back
-            </Link>
-          ) : (
-            <button
-              onClick={() => navigate(-1)}
-              className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer bg-transparent border-none outline-none"
-            >
-              <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back
-            </button>
-          )}
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-            User <span className="gradient-text-accent">Profile</span>
-          </h1>
-          <p className="text-text-secondary text-sm md:text-base mt-2">
-            {isAdminView ? 'Manage user credentials and view system activity.' : 'View student details and enrollment status.'}
-          </p>
-        </div>
-      </header>
-
+    <PageShell
+      title={<>User <span className="text-accent-indigo">Profile</span></>}
+      subtitle={isAdminView ? 'Manage user credentials and view system activity.' : 'View student details and enrollment status.'}
+      homeHref={currentUser?.role === 'TEACHER' ? '/teacher' : currentUser?.role === 'ADMIN' ? '/admin' : '/student'}
+      breadcrumbs={[
+        { label: isAdminView ? (isTeacher ? 'Teachers' : isStudent ? 'Students' : 'Admins') : 'Students', href: typeof backLink === 'string' ? backLink : '/teacher' },
+        { label: profileUser?.name || 'User Profile' }
+      ]}
+      maxWidthClass="max-w-7xl"
+    >
       <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
         {/* User Information & Form Area */}
-        <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl">
-          <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
+        <div className="relative overflow-hidden rounded-2xl bg-bg-secondary border border-border-subtle p-8 shadow-sm">
 
           {isAdminView ? (
             <div className="flex flex-col md:flex-row gap-8 items-start">
               {/* Avatar & Side Meta */}
               <div className="flex flex-col items-center shrink-0 w-full md:w-48 text-center border-b md:border-b-0 md:border-r border-border-subtle pb-6 md:pb-0 md:pr-8">
-                <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] mb-4">
-                  <span className="text-white font-extrabold text-2xl uppercase">
+                <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-accent-indigo/10 mb-4">
+                  <span className="text-accent-indigo font-extrabold text-2xl uppercase">
                     {profileUser.name?.charAt(0) ?? 'U'}
                   </span>
                 </div>
@@ -247,8 +230,8 @@ export default function UserProfile() {
             <div className="flex flex-col sm:flex-row gap-6 items-center justify-between w-full">
               <div className="flex flex-col sm:flex-row gap-6 items-center text-center sm:text-left">
                 {/* Left side: Avatar */}
-                <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)] shrink-0 mx-auto sm:mx-0">
-                  <span className="text-text-primary font-extrabold text-3xl uppercase">
+                <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-accent-indigo/10 shrink-0 mx-auto sm:mx-0">
+                  <span className="text-accent-indigo font-extrabold text-3xl uppercase">
                     {profileUser.name?.charAt(0) ?? 'U'}
                   </span>
                 </div>
@@ -290,8 +273,7 @@ export default function UserProfile() {
 
         {/* Courses Area (Shown Below Information) */}
         {isTeacher && (
-          <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl">
-            <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
+          <div className="relative overflow-hidden rounded-2xl bg-bg-secondary border border-border-subtle p-8 shadow-sm">
             <div className="space-y-6">
               <h3 className="text-lg font-bold text-text-primary tracking-tight flex items-center gap-2">
                 📚 Created Courses
@@ -322,8 +304,7 @@ export default function UserProfile() {
         )}
 
         {isStudent && (
-          <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl">
-            <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
+          <div className="relative overflow-hidden rounded-2xl bg-bg-secondary border border-border-subtle p-8 shadow-sm">
             <div className="space-y-6">
               <h3 className="text-lg font-bold text-text-primary tracking-tight flex items-center gap-2">
                 📚 Enrolled Courses
@@ -375,6 +356,6 @@ export default function UserProfile() {
           </div>
         )}
       </div>
-    </div>
+    </PageShell>
   )
 }

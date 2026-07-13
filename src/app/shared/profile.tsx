@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { formatDate } from '@/lib/utils'
-import StudentProfileForm from '@/components/student-profile-form'
+import ProfileForm from '@/components/profile-form'
 import SignOutModal from '@/components/ui/SignOutModal'
+import PageShell from '@/components/teacher/PageShell'
 
 export default function ProfilePage() {
   const { user } = useAuth()
@@ -13,38 +13,29 @@ export default function ProfilePage() {
   const isStudent = user?.role === 'STUDENT' || !user?.role
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-8">
-      <header className="relative z-20 flex flex-col gap-4 mb-12 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to={backTarget}
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Dashboard
-          </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-            My <span className="gradient-text-accent">Profile</span>
-          </h1>
-        </div>
-      </header>
-
+    <PageShell
+      title={<>My <span className="text-accent-indigo">Profile</span></>}
+      subtitle="Manage your personal details and account settings."
+      breadcrumbs={[
+        { label: 'Dashboard', href: backTarget },
+        { label: 'Profile' }
+      ]}
+      maxWidthClass="max-w-7xl"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-        
+
         <div className="lg:col-span-4">
-          <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl text-center group h-full flex flex-col justify-between">
-            <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
-            
+          <div className="relative overflow-hidden rounded-2xl bg-bg-secondary border border-border-subtle p-8 shadow-sm text-center group h-full flex flex-col justify-between">
             <div className="flex flex-col items-center">
-              <div className="relative w-24 h-24 mx-auto mb-6 flex items-center justify-center rounded-3xl bg-gradient-to-br from-accent-indigo via-accent-violet to-accent-pink shadow-[0_8px_32px_rgba(99,102,241,0.25)]">
-                <span className="text-white font-extrabold text-3xl uppercase">
+              <div className="relative w-24 h-24 mx-auto mb-6 flex items-center justify-center rounded-3xl bg-accent-indigo/10">
+                <span className="text-accent-indigo font-extrabold text-3xl uppercase">
                   {user?.name?.charAt(0) ?? 'U'}
                 </span>
-                <div className="absolute -inset-1.5 bg-gradient-to-tr from-accent-indigo/15 to-accent-pink/15 rounded-[28px] blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
 
               <div className="space-y-3 w-full">
                 <h2 className="text-2xl font-bold text-text-primary tracking-tight">{user?.name}</h2>
-                
+
                 <div className="space-y-1">
                   <div className="text-[10px] uppercase tracking-wider text-text-muted">
                     {isStudent ? 'Student ID' : 'User ID'}
@@ -86,7 +77,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="lg:col-span-8">
-          <StudentProfileForm />
+          <ProfileForm />
         </div>
 
       </div>
@@ -95,6 +86,6 @@ export default function ProfilePage() {
         isOpen={isSignOutModalOpen}
         onClose={() => setIsSignOutModalOpen(false)}
       />
-    </div>
+    </PageShell>
   )
 }

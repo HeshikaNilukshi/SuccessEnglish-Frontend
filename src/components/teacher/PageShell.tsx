@@ -14,6 +14,7 @@ interface PageShellProps {
   breadcrumbs: BreadcrumbItemType[]
   actions?: React.ReactNode
   maxWidthClass?: string
+  homeHref?: string
 }
 
 export default function PageShell({
@@ -23,6 +24,7 @@ export default function PageShell({
   breadcrumbs,
   actions,
   maxWidthClass = 'max-w-7xl',
+  homeHref,
 }: PageShellProps) {
   return (
     <div className="w-full flex flex-col min-h-screen bg-bg-primary">
@@ -46,32 +48,41 @@ export default function PageShell({
 
         {/* Content */}
         <div className={`relative mx-auto ${maxWidthClass} space-y-4 z-10`}>
-          {/* Breadcrumbs Row */}
-          <nav className="flex items-center gap-1.5 flex-wrap" aria-label="Breadcrumb">
-            <Link to="/teacher" className="text-white/40 hover:text-white/80 transition-colors">
-              <Home className="w-3.5 h-3.5" />
-            </Link>
-            {breadcrumbs.map((item, idx) => {
-              const isLast = idx === breadcrumbs.length - 1
-              return (
-                <React.Fragment key={idx}>
-                  <ChevronRight className="w-3 h-3 text-white/30 shrink-0" />
-                  {isLast || !item.href ? (
-                    <span className="text-xs font-bold text-white/90">
-                      {item.label}
-                    </span>
-                  ) : (
-                    <Link
-                      to={item.href}
-                      className="text-xs font-bold text-white/55 hover:text-white/90 transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </React.Fragment>
-              )
-            })}
-          </nav>
+          {/* Top Row: Breadcrumbs and Mobile Actions */}
+          <div className="flex items-center justify-between gap-4">
+            <nav className="flex items-center gap-1.5 flex-wrap" aria-label="Breadcrumb">
+              <Link to={homeHref || "/teacher"} className="text-white/40 hover:text-white/80 transition-colors">
+                <Home className="w-3.5 h-3.5" />
+              </Link>
+              {breadcrumbs.map((item, idx) => {
+                const isLast = idx === breadcrumbs.length - 1
+                return (
+                  <React.Fragment key={idx}>
+                    <ChevronRight className="w-3 h-3 text-white/30 shrink-0" />
+                    {isLast || !item.href ? (
+                      <span className="text-xs font-bold text-white/90">
+                        {item.label}
+                      </span>
+                    ) : (
+                      <Link
+                        to={item.href}
+                        className="text-xs font-bold text-white/55 hover:text-white/90 transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </React.Fragment>
+                )
+              })}
+            </nav>
+            
+            {/* Actions (Mobile Only) */}
+            {actions && (
+              <div className="flex md:hidden items-center gap-3 shrink-0">
+                {actions}
+              </div>
+            )}
+          </div>
 
           {/* Title Row */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -85,8 +96,10 @@ export default function PageShell({
                 </p>
               )}
             </div>
+            
+            {/* Actions (Desktop Only) */}
             {actions && (
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="hidden md:flex items-center gap-3 shrink-0">
                 {actions}
               </div>
             )}

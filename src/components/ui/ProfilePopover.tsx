@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { User, LogOut } from 'lucide-react'
 import SignOutModal from './SignOutModal'
 import {
   DropdownMenu,
@@ -27,15 +28,15 @@ export default function ProfilePopover() {
             <p className="text-xs font-medium text-text-secondary truncate">{user?.email}</p>
           </div>
           <Link to={user?.role === 'TEACHER' ? '/teacher/profile' : user?.role === 'ADMIN' ? '/admin/profile' : '/student/profile'}>
-            <DropdownMenuItem className="flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none w-full">
-              👤 Edit Profile
+            <DropdownMenuItem className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none w-full">
+              <User className="w-4 h-4" /> Edit Profile
             </DropdownMenuItem>
           </Link>
           <DropdownMenuItem
             onClick={() => setIsSignOutModalOpen(true)}
-            className="flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl text-red-600 hover:bg-red-500/10 transition-all cursor-pointer outline-none mt-1"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl text-red-600 hover:bg-red-500/10 transition-all cursor-pointer outline-none mt-1"
           >
-            🚪 Sign Out
+            <LogOut className="w-4 h-4" /> Sign Out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

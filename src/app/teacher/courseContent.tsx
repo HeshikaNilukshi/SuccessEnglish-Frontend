@@ -5,7 +5,7 @@ import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchStudentsByCo
 import PageShell from '@/components/teacher/PageShell'
 import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
 import { DeleteCourseModal } from '@/components/ui/DeleteCourseModal'
-import { MoreVertical, Video, FileText, Users } from 'lucide-react'
+import { MoreVertical, Video, FileText, Users, Pencil, Trash2 } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -111,15 +111,15 @@ export default function TeacherCourseContent() {
         <DropdownMenuContent align="end" className="w-48 bg-bg-secondary border border-border-subtle rounded-2xl shadow-xl p-1.5 animate-popover-in">
           <DropdownMenuItem
             onClick={() => setIsEditOpen(true)}
-            className="flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none"
           >
-            ✏️ Edit Course
+            <Pencil className="w-4 h-4" /> Edit Course
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setIsDeleteOpen(true)}
-            className="flex items-center px-4 py-2.5 text-sm font-semibold rounded-xl text-red-600 hover:bg-red-500/10 transition-all cursor-pointer outline-none"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl text-red-600 hover:bg-red-500/10 transition-all cursor-pointer outline-none"
           >
-            🗑️ Delete Course
+            <Trash2 className="w-4 h-4" /> Delete Course
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -195,7 +195,7 @@ export default function TeacherCourseContent() {
                     {card.count}
                   </span>
                   <span className="text-[10px] text-text-secondary uppercase tracking-wider font-bold">
-                    Items
+                    {card.title}
                   </span>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-black/5 group-hover:bg-accent-indigo/10 flex items-center justify-center text-text-primary group-hover:text-accent-indigo transition-all duration-200">
