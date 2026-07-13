@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchStudentsByCourse } from '@/actions/courses'
+import { fetchCourse, fetchVideosByCourse, fetchExamsByCourse, fetchStudentsByCourse, fetchAllResultsByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
 import { formatDate, formatPrice } from '@/lib/utils'
 import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
 import { DeleteCourseModal } from '@/components/ui/DeleteCourseModal'
-import { MoreVertical, Video, FileText, Users, Pencil, Trash2 } from 'lucide-react'
+import { MoreVertical, Video, FileText, Users, Pencil, Trash2, BarChart3 } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -23,6 +23,7 @@ export default function TeacherCourseContent() {
   const [videoCount, setVideoCount] = useState(0)
   const [examCount, setExamCount] = useState(0)
   const [studentCount, setStudentCount] = useState(0)
+  const [resultsCount, setResultsCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -39,17 +40,19 @@ export default function TeacherCourseContent() {
         throw new Error('Invalid Course ID')
       }
 
-      const [courseData, videosData, examsData, studentsData] = await Promise.all([
+      const [courseData, videosData, examsData, studentsData, resultsData] = await Promise.all([
         fetchCourse(id, token),
         fetchVideosByCourse(token, id),
         fetchExamsByCourse(token, id),
-        fetchStudentsByCourse(token, id)
+        fetchStudentsByCourse(token, id),
+        fetchAllResultsByCourse(token, id)
       ])
 
       setCourse(courseData)
       setVideoCount(videosData.length)
       setExamCount(examsData.length)
       setStudentCount(studentsData.length)
+      setResultsCount(resultsData.length)
     } catch (err: any) {
       console.error(err)
       setError(err.message || 'Failed to load course dashboard.')
@@ -70,7 +73,7 @@ export default function TeacherCourseContent() {
           <div className="h-10 w-80 bg-black/5 rounded mb-3 animate-pulse" />
         </header>
         <div className="flex flex-col gap-5 mt-10 w-full">
-          {[...Array(3)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <div key={i} className="h-28 bg-black/5 rounded-2xl border border-border-subtle p-6 animate-pulse" />
           ))}
         </div>
@@ -129,7 +132,7 @@ export default function TeacherCourseContent() {
 
   const cards = [
     {
-      title: 'Videos',
+      title: 'Lectures',
       description: 'Upload and manage course video lectures, lessons, and video content.',
       count: videoCount,
       link: `/teacher/${course.id}/videos`,
@@ -137,6 +140,16 @@ export default function TeacherCourseContent() {
       color: 'from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30',
       iconColor: 'text-blue-600 bg-blue-500/10 border-blue-500/20',
       accentColor: 'bg-gradient-to-r from-blue-500 to-indigo-500'
+    },
+    {
+      title: 'Students',
+      description: 'View student enrollments, exam answers, and grade exam attempts.',
+      count: studentCount,
+      link: `/teacher/${course.id}/students`,
+      icon: Users,
+      color: 'from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30',
+      iconColor: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20',
+      accentColor: 'bg-gradient-to-r from-emerald-500 to-teal-500'
     },
     {
       title: 'Exams',
@@ -149,14 +162,14 @@ export default function TeacherCourseContent() {
       accentColor: 'bg-gradient-to-r from-violet-500 to-pink-500'
     },
     {
-      title: 'Students',
-      description: 'View student enrollments, exam answers, and grade exam attempts.',
-      count: studentCount,
-      link: `/teacher/${course.id}/students`,
-      icon: Users,
-      color: 'from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30',
-      iconColor: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20',
-      accentColor: 'bg-gradient-to-r from-emerald-500 to-teal-500'
+      title: 'Exam Results',
+      description: 'Track student attempts, view test scores, and grade student submissions.',
+      count: resultsCount,
+      link: `/teacher/${course.id}/results`,
+      icon: BarChart3,
+      color: 'from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30',
+      iconColor: 'text-amber-600 bg-amber-500/10 border-amber-500/20',
+      accentColor: 'bg-gradient-to-r from-amber-500 to-orange-500'
     }
   ]
 
@@ -174,7 +187,7 @@ export default function TeacherCourseContent() {
       breadcrumbs={breadcrumbs}
       actions={headerActions}
     >
-      <div className="flex flex-col gap-5 mt-4 w-full">
+      <div className="flex flex-col gap-5 w-full">
         {cards.map((card, idx) => {
           const Icon = card.icon
           return (
