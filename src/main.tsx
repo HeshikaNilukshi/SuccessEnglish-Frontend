@@ -37,7 +37,7 @@ import UserProfile from '@/app/shared/UserProfile'
 import AdminAdminsList from '@/app/admin/users/admins'
 import AdminTeachersList from '@/app/admin/users/teachers'
 import AdminStudentsList from '@/app/admin/users/students'
-import UserCreateForm from '@/app/admin/users/UserCreateForm'
+import AdminUserForm from '@/app/admin/users/AdminUserForm'
 import AdminCoursesList from '@/app/admin/courses'
 import AdminEnrollments from '@/app/admin/enrollments'
 import AdminEnrollmentDetail from '@/app/admin/enrollmentDetail'
@@ -86,12 +86,12 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="admins" element={<AdminAdminsList />} />
-            <Route path="admins/new" element={<UserCreateForm role="ADMIN" />} />
+            <Route path="admins/new" element={<AdminUserForm role="ADMIN" />} />
             <Route path="teachers" element={<AdminTeachersList />} />
-            <Route path="teachers/new" element={<UserCreateForm role="TEACHER" />} />
+            <Route path="teachers/new" element={<AdminUserForm role="TEACHER" />} />
             <Route path="students" element={<AdminStudentsList />} />
-            <Route path="students/new" element={<UserCreateForm role="STUDENT" />} />
-            <Route path="user/:id" element={<UserProfile />} />
+            <Route path="students/new" element={<AdminUserForm role="STUDENT" />} />
+            <Route path="user/:id" element={<AdminUserForm />} />
             <Route path="courses" element={<AdminCoursesList />} />
             <Route path="enrollments" element={<AdminEnrollments />} />
             <Route path="enrollments/:id" element={<AdminEnrollmentDetail />} />

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAllEnrollments } from '@/actions/enrollments'
 import { formatDate } from '@/lib/utils'
+import PageShell from '@/components/teacher/PageShell'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 export default function AdminEnrollments() {
   const navigate = useNavigate()
@@ -30,36 +32,32 @@ export default function AdminEnrollments() {
     loadEnrollments()
   }, [token])
 
-  return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to="/admin"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            &larr; Back to Dashboard
-          </Link>
-          <div className="space-y-2">
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-              Verify <span className="gradient-text-accent">Enrollments</span>
-            </h1>
-            <p className="text-text-secondary text-sm md:text-base">
-              Verify student payments and receipts to approve course access.
-            </p>
-          </div>
-        </div>
-      </header>
+  const pageTitle = (
+    <>
+      Verify <span className="gradient-text-accent">Enrollments</span>
+    </>
+  )
 
-      <main className="animate-fade-in-up animate-delay-100">
+  const breadcrumbs = [
+    { label: 'Home', href: '/admin' },
+    { label: 'Verify Enrollments' }
+  ]
+
+  return (
+    <PageShell
+      title={pageTitle}
+      subtitle="Verify student payments and receipts to approve course access."
+      breadcrumbs={breadcrumbs}
+    >
+      <div className="flex-grow flex flex-col animate-fade-in-up">
         {loading && (
-          <div className="flex justify-center items-center py-20">
+          <div className="flex justify-center items-center py-20 flex-grow">
             <div className="w-8 h-8 rounded-full border-2 border-accent-indigo border-t-transparent animate-spin" />
           </div>
         )}
 
         {!loading && error && (
-          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4">
+          <div className="max-w-md mx-auto text-center p-8 rounded-2xl bg-red-500/12 border border-red-500/25 shadow-xl space-y-4 my-auto">
             <p className="text-sm text-red-900 font-medium">{error}</p>
             <button
               type="button"
@@ -72,7 +70,11 @@ export default function AdminEnrollments() {
         )}
 
         {!loading && !error && enrollments.length === 0 && (
-          <p className="text-center py-12 text-sm text-text-secondary">No enrollments or payment requests found.</p>
+          <EmptyState
+            icon="💳"
+            title="No Enrollments Found"
+            description="No enrollments or payment requests found in the platform."
+          />
         )}
 
         {!loading && !error && enrollments.length > 0 && (
@@ -121,7 +123,7 @@ export default function AdminEnrollments() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </PageShell>
   )
 }

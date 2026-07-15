@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourses } from '@/actions/courses'
-import TeacherCourseCard from '@/components/TeacherCourseCard'
+import CourseCard from '@/components/ui/CourseCard'
 import PageShell from '@/components/teacher/PageShell'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -123,7 +123,7 @@ export default function TeacherDashboard() {
         {!loading && !error && courses.length > 0 && (
           <div className="flex flex-col gap-5 w-full">
             {courses.map((course, idx) => (
-              <TeacherCourseCard key={course.id} course={course} index={idx} />
+              <CourseCard key={course.id} course={course} index={idx} to={`/teacher/${course.id}`} />
             ))}
           </div>
         )}

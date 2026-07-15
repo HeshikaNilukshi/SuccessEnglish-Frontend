@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import ProfilePopover from '@/components/ui/ProfilePopover'
+import PageShell from '@/components/teacher/PageShell'
 
 export default function AdminDashboard() {
   const { user } = useAuth()
@@ -50,31 +51,24 @@ export default function AdminDashboard() {
     },
   ]
 
-  return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-10 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to="/"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            &larr; Back to home portal
-          </Link>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-                Admin <span className="gradient-text-accent">Dashboard</span>
-              </h1>
-              <p className="text-text-secondary text-sm md:text-base">
-                Welcome back, {user?.name}. Manage users, courses, and verify enrollments.
-              </p>
-            </div>
-            <ProfilePopover />
-          </div>
-        </div>
-      </header>
+  const pageTitle = (
+    <>
+      Admin <span className="gradient-text-accent">Dashboard</span>
+    </>
+  )
 
-      <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up animate-delay-100">
+  const breadcrumbs = [
+    { label: 'Home' }
+  ]
+
+  return (
+    <PageShell
+      title={pageTitle}
+      subtitle={`Welcome back, ${user?.name || ''}. Manage users, courses, and verify enrollments.`}
+      breadcrumbs={breadcrumbs}
+      actions={<ProfilePopover />}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up">
         {navItems.map((item, idx) => (
           <Link
             key={idx}
@@ -102,7 +96,7 @@ export default function AdminDashboard() {
             </div>
           </Link>
         ))}
-      </main>
-    </div>
+      </div>
+    </PageShell>
   )
 }

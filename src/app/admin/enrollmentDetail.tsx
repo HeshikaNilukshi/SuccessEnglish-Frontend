@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchEnrollmentById, verifyEnrollment } from '@/actions/enrollments'
 import { formatDate, formatPrice } from '@/lib/utils'
+import PageShell from '@/components/teacher/PageShell'
 
 export default function AdminEnrollmentDetail() {
   const { id } = useParams<{ id: string }>()
@@ -91,28 +92,30 @@ export default function AdminEnrollmentDetail() {
 
   const { course, user: student, verified, receiptUrl, createdAt } = enrollment
 
-  return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-12">
-      <header className="relative z-20 flex flex-col gap-4 mb-12 border-b border-border-subtle pb-6 animate-fade-in-up">
-        <div>
-          <Link
-            to="/admin/enrollments"
-            className="text-xs text-text-muted hover:text-text-primary transition-colors duration-200 inline-flex items-center gap-1.5 mb-4 group cursor-pointer"
-          >
-            <span className="group-hover:-translate-x-0.5 transition-transform duration-200">&larr;</span> Back to Enrollments List
-          </Link>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-text-primary">
-            Enrollment <span className="gradient-text-accent">Verification</span>
-          </h1>
-        </div>
-      </header>
+  const pageTitle = (
+    <>
+      Enrollment <span className="gradient-text-accent">Verification</span>
+    </>
+  )
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch animate-fade-in-up animate-delay-100">
+  const breadcrumbs = [
+    { label: 'Home', href: '/admin' },
+    { label: 'Verify Enrollments', href: '/admin/enrollments' },
+    { label: `Enrollment #${enrollment.id}` }
+  ]
+
+  return (
+    <PageShell
+      title={pageTitle}
+      subtitle={`Verify enrollment request details and verify payment receipt.`}
+      breadcrumbs={breadcrumbs}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch animate-fade-in-up">
         {/* Left Column: Details */}
         <div className="lg:col-span-5">
           <div className="relative overflow-hidden rounded-2xl glass-panel border border-border-subtle p-8 shadow-xl h-full flex flex-col justify-between group">
             <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
-                      <div className="space-y-10">
+            <div className="space-y-10">
               {/* Course Block */}
               <div className="space-y-4">
                 <div className="space-y-1.5">
@@ -122,7 +125,7 @@ export default function AdminEnrollmentDetail() {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/5 border border-border-subtle">
                   <span className="text-xs font-mono font-bold text-text-secondary uppercase">Course ID</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-accent-indigo" />
-                  <span className="text-xs font-mono font-bold text-white select-all">#{course.id}</span>
+                  <span className="text-xs font-mono font-bold select-all">#{course.id}</span>
                 </div>
               </div>
 
@@ -145,12 +148,12 @@ export default function AdminEnrollmentDetail() {
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/5 border border-border-subtle w-fit">
                     <span className="text-xs font-mono font-bold text-text-secondary uppercase">Student ID</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-accent-violet" />
-                    <span className="text-xs font-mono font-bold text-white select-all">#{student.id}</span>
+                    <span className="text-xs font-mono font-bold select-all">#{student.id}</span>
                   </div>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/5 border border-border-subtle w-fit">
                     <span className="text-xs font-mono font-bold text-text-secondary uppercase">Submitted</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                    <span className="text-xs font-mono font-bold text-white">{formatDate(createdAt)}</span>
+                    <span className="text-xs font-mono font-bold">{formatDate(createdAt)}</span>
                   </div>
                 </div>
               </div>
@@ -189,7 +192,6 @@ export default function AdminEnrollmentDetail() {
                       alt="Submitted Receipt"
                       className="max-w-full max-h-[450px] object-contain rounded-lg shadow-lg"
                     />
-                    {/* Removed new tab link */}
                   </div>
                 ) : (
                   <div className="text-center py-12 text-sm text-text-secondary">
@@ -211,13 +213,13 @@ export default function AdminEnrollmentDetail() {
                   <button
                     onClick={() => handleVerifyToggle(false)}
                     disabled={submitting}
-                    className="py-3.5 px-6 rounded-xl text-xs font-bold text-white bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all cursor-pointer select-none active:scale-[0.99] disabled:opacity-50"
+                    className="py-3.5 px-6 rounded-xl text-xs font-bold text-text-secondary hover:text-text-primary bg-black/5 hover:bg-black/10 border border-border-subtle hover:border-border-hover transition-all cursor-pointer select-none active:scale-[0.99] disabled:opacity-50"
                   >
                     Mark as Pending
                   </button>
                   <button
                     type="button"
-                    className="py-3.5 px-8 rounded-xl text-xs text-emerald-900 font-medium bg-emerald-500/10 border border-emerald-500/20 cursor-default select-none"
+                    className="py-3.5 px-8 rounded-xl text-xs font-bold text-accent-indigo bg-accent-indigo/10 border border-accent-indigo/20 cursor-default select-none"
                   >
                     ✓ Payment Verified
                   </button>
@@ -238,6 +240,6 @@ export default function AdminEnrollmentDetail() {
           </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   )
 }

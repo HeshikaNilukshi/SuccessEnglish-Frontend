@@ -46,49 +46,6 @@
     background: linear-gradient(135deg, #d3e2f5 0%, #f0f5fc 100%) fixed;
     color: var(--color-text-primary);
   }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
-  input[type="url"],
-  textarea,
-  select {
-    background-color: rgba(15, 23, 42, 0.08) !important;
-    border-color: rgba(15, 23, 42, 0.16) !important;
-    color: var(--color-text-primary) !important;
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: var(--color-text-muted) !important;
-    opacity: 0.85 !important;
-  }
-
-  /* Custom premium scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--color-bg-primary);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(37, 99, 235, 0.15);
-    border-radius: 9999px;
-    border: 2px solid var(--color-bg-primary);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(37, 99, 235, 0.3);
-  }
-
-  /* Custom selection */
-  ::selection {
-    background-color: rgba(37, 99, 235, 0.15);
-    color: var(--color-text-primary);
-  }
 }
 
 /* Animations */

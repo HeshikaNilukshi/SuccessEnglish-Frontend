@@ -5,6 +5,10 @@ interface Course {
   price: number;
   createdBy: number;
   createdAt: string;
+  creator?: {
+    id: number;
+    name: string;
+  };
 }
 
 interface User {
