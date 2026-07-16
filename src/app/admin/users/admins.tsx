@@ -125,7 +125,6 @@ export default function AdminAdminsList() {
           </div>
         )}
       </div>
-
     </PageShell>
   )
 }

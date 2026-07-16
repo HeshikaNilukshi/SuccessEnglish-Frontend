@@ -126,7 +126,7 @@ export function CreateCourseModal({ isOpen, onClose, token, onSuccess, course = 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., General English Masterclass"
-                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-text-muted outline-none transition-all"
                 disabled={submitting}
                 required
               />
@@ -141,7 +141,7 @@ export function CreateCourseModal({ isOpen, onClose, token, onSuccess, course = 
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Provide a detailed description of the course curriculum and objectives..."
-                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-text-muted outline-none transition-all resize-none"
                 disabled={submitting}
               />
             </div>
@@ -156,7 +156,7 @@ export function CreateCourseModal({ isOpen, onClose, token, onSuccess, course = 
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="e.g., 49.99"
-                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-text-muted outline-none transition-all"
                 disabled={submitting}
                 required
               />

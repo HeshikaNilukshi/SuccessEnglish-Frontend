@@ -128,7 +128,7 @@ export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: A
                 value={newVideoTitle}
                 onChange={(e) => setNewVideoTitle(e.target.value)}
                 placeholder="e.g., Lesson 1: Present Perfect Tense"
-                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-text-muted outline-none transition-all"
                 disabled={isSavingVideo}
                 required
               />
