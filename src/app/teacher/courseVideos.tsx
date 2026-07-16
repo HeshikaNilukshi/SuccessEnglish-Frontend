@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchVideosByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -11,6 +11,8 @@ import { formatDate } from '@/lib/utils'
 export default function TeacherCourseVideos() {
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [course, setCourse] = useState<Course | null>(null)
   const [videos, setVideos] = useState<Video[]>([])
@@ -74,7 +76,7 @@ export default function TeacherCourseVideos() {
           <p className="text-text-secondary text-sm leading-relaxed">{error || 'Course videos unavailable.'}</p>
         </div>
         <Link
-          to={`/teacher/${courseId}`}
+          to={`${basePath}/${courseId}`}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
@@ -84,8 +86,8 @@ export default function TeacherCourseVideos() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: course.name, href: `/teacher/${course.id}` },
+    { label: 'Home', href: basePath },
+    { label: course.name, href: `${basePath}/${course.id}` },
     { label: 'Videos' }
   ]
 
@@ -118,7 +120,7 @@ export default function TeacherCourseVideos() {
             {videos.map((video) => (
               <Link
                 key={video.id}
-                to={`/teacher/${course.id}/videos/${video.id}`}
+                to={`${basePath}/${course.id}/videos/${video.id}`}
                 className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl glass-panel glass-panel-hover p-5 text-left cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-x-1"
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-accent-indigo to-accent-violet rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity" />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchStudentsByCourse, type CourseStudentResponse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -10,6 +10,8 @@ export default function CourseStudents() {
   const navigate = useNavigate()
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [students, setStudents] = useState<CourseStudentResponse[]>([])
   const [loading, setLoading] = useState(true)
@@ -65,7 +67,7 @@ export default function CourseStudents() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`/teacher/${courseId}`)}
+          onClick={() => navigate(`${basePath}/${courseId}`)}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-[#f8fafc] border border-[#e2e8f0] hover:bg-slate-50 transition-all cursor-pointer"
         >
           Back to Course
@@ -75,8 +77,8 @@ export default function CourseStudents() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${courseId}` },
     { label: 'Enrolled Students' }
   ]
 
@@ -107,7 +109,12 @@ export default function CourseStudents() {
                 {students.map((student) => (
                   <tr
                     key={student.id}
-                    onClick={() => navigate(`/teacher/student/${student.user.id}/profile`)}
+                    onClick={() => {
+                      const profilePath = basePath.startsWith('/admin') 
+                        ? `/admin/user/${student.user.id}` 
+                        : `/teacher/student/${student.user.id}/profile`
+                      navigate(profilePath)
+                    }}
                     className="hover:bg-slate-50 transition-colors duration-150 cursor-pointer text-[#0f172a]"
                   >
                     <td className="px-6 py-4 text-sm font-semibold">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { formatDate } from '@/lib/utils'
 import { ResultsChart, type AreaData } from '../../components/results-chart'
@@ -11,6 +11,8 @@ export default function StudentResultsDashboard() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { token } = useAuth()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
   const [data, setData] = useState<{ studentName: string; areaChartData: AreaData[] } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -74,7 +76,7 @@ export default function StudentResultsDashboard() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
+    { label: 'Home', href: basePath },
     { label: 'Student Progress' }
   ]
 
@@ -116,7 +118,7 @@ export default function StudentResultsDashboard() {
                       {data.areaChartData.map((item, index) => (
                         <tr
                           key={item.attemptId || index}
-                          onClick={() => navigate(`/teacher/attempt/${item.attemptId}`)}
+                          onClick={() => navigate(`${basePath}/attempt/${item.attemptId}`)}
                           className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
                         >
                           <td className="px-6 py-4 text-sm font-semibold text-text-primary">

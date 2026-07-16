@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAllResultsByCourse, type ExamAttemptResponse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -11,6 +11,8 @@ export default function CourseResults() {
   const navigate = useNavigate()
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [results, setResults] = useState<ExamAttemptResponse[]>([])
   const [loading, setLoading] = useState(true)
@@ -66,7 +68,7 @@ export default function CourseResults() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`/teacher/${courseId}`)}
+          onClick={() => navigate(`${basePath}/${courseId}`)}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
@@ -76,8 +78,8 @@ export default function CourseResults() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${courseId}` },
     { label: 'Exam Results' }
   ]
 
@@ -110,7 +112,7 @@ export default function CourseResults() {
                   {results.map((attempt) => (
                     <tr
                       key={attempt.id}
-                      onClick={() => navigate(`/teacher/attempt/${attempt.id}`)}
+                      onClick={() => navigate(`${basePath}/attempt/${attempt.id}`)}
                       className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
                     >
                       <td className="px-6 py-4 text-sm font-semibold text-text-primary">{attempt.student.name}</td>

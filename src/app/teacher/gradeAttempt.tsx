@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   fetchAttemptWithAnswers,
@@ -17,6 +17,8 @@ export default function GradeExamAttempt() {
   const { attemptId } = useParams<{ attemptId: string }>()
   const { token } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [attempt, setAttempt] = useState<ExamAttemptDetail | null>(null)
   const [grades, setGrades] = useState<Array<{
@@ -168,7 +170,7 @@ export default function GradeExamAttempt() {
       await updateAttemptMarks(token, attempt.id, payload)
       setSuccess('Grades updated successfully!')
       setTimeout(() => {
-        navigate(`/teacher/${attempt.exam.courseId}/results`)
+        navigate(`${basePath}/${attempt.exam.courseId}/results`)
       }, 1500)
     } catch (err: any) {
       console.error(err)
@@ -220,9 +222,9 @@ export default function GradeExamAttempt() {
   const totalPossibleScore = attempt.answers.reduce((acc, curr) => acc + curr.question.marks, 0)
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${attempt.exam.courseId}` },
-    { label: 'Results', href: `/teacher/${attempt.exam.courseId}/results` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${attempt.exam.courseId}` },
+    { label: 'Results', href: `${basePath}/${attempt.exam.courseId}/results` },
     { label: 'Grade Attempt' }
   ]
 

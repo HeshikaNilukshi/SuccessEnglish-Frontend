@@ -38,6 +38,7 @@ import AdminAdminsList from '@/app/admin/users/admins'
 import AdminTeachersList from '@/app/admin/users/teachers'
 import AdminStudentsList from '@/app/admin/users/students'
 import AdminUserForm from '@/app/admin/users/AdminUserForm'
+import AdminTeacherDashboard from '@/app/admin/users/AdminTeacherDashboard'
 import AdminCoursesList from '@/app/admin/courses'
 import AdminEnrollments from '@/app/admin/enrollments'
 import AdminEnrollmentDetail from '@/app/admin/enrollmentDetail'
@@ -68,7 +69,6 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/teacher" element={<TeacherLayout />}>
             <Route index element={<TeacherDashboard />} />
             <Route path="profile" element={<ProfilePage />} />
-
             <Route path=":courseId" element={<TeacherCourseContent />} />
             <Route path=":courseId/videos" element={<TeacherCourseVideos />} />
             <Route path=":courseId/exams" element={<TeacherCourseExams />} />
@@ -89,10 +89,23 @@ createRoot(document.getElementById('root')!).render(
             <Route path="admins/new" element={<AdminUserForm role="ADMIN" />} />
             <Route path="teachers" element={<AdminTeachersList />} />
             <Route path="teachers/new" element={<AdminUserForm role="TEACHER" />} />
+            <Route path="teachers/:id" element={<AdminTeacherDashboard />} />
             <Route path="students" element={<AdminStudentsList />} />
             <Route path="students/new" element={<AdminUserForm role="STUDENT" />} />
             <Route path="user/:id" element={<AdminUserForm />} />
+            <Route path="user/:id/edit" element={<AdminUserForm />} />
             <Route path="courses" element={<AdminCoursesList />} />
+            <Route path="courses/:courseId" element={<TeacherCourseContent />} />
+            <Route path="courses/:courseId/videos" element={<TeacherCourseVideos />} />
+            <Route path="courses/:courseId/exams" element={<TeacherCourseExams />} />
+            <Route path="courses/:courseId/videos/:videoId" element={<TeacherVideoPage />} />
+            <Route path="courses/:courseId/exams/new" element={<CreateExam />} />
+            <Route path="courses/:courseId/exams/:examId" element={<TeacherExamView />} />
+            <Route path="courses/:courseId/exams/:examId/edit" element={<CreateExam />} />
+            <Route path="courses/:courseId/students" element={<CourseStudents />} />
+            <Route path="courses/:courseId/results" element={<CourseResults />} />
+            <Route path="courses/:courseId/student/:studentId" element={<StudentSpecificResults />} />
+            <Route path="courses/attempt/:attemptId" element={<GradeExamAttempt />} />
             <Route path="enrollments" element={<AdminEnrollments />} />
             <Route path="enrollments/:id" element={<AdminEnrollmentDetail />} />
             <Route path="profile" element={<ProfilePage />} />
@@ -100,7 +113,5 @@ createRoot(document.getElementById('root')!).render(
         </Routes>
       </BrowserRouter>
     </AuthProvider>
-  </StrictMode>,
+  </StrictMode>
 )
-
-

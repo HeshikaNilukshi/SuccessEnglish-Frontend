@@ -112,7 +112,7 @@ export default function AdminTeachersList() {
                   {teachers.map(teacher => (
                     <tr
                       key={teacher.id}
-                      onClick={() => navigate(`/admin/user/${teacher.id}`)}
+                      onClick={() => navigate(`/admin/teachers/${teacher.id}`)}
                       className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
                     >
                       <td className="p-5 text-sm font-semibold text-text-primary font-mono">{teacher.id}</td>

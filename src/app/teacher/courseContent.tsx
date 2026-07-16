@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchCourseStats } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -18,6 +18,8 @@ export default function TeacherCourseContent() {
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [course, setCourse] = useState<Course | null>(null)
   const [videoCount, setVideoCount] = useState(0)
@@ -89,7 +91,7 @@ export default function TeacherCourseContent() {
           <p className="text-text-secondary text-sm leading-relaxed">{error || 'Course details unavailable.'}</p>
         </div>
         <Link
-          to="/teacher"
+          to={basePath}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Home
@@ -99,7 +101,7 @@ export default function TeacherCourseContent() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
+    { label: 'Home', href: basePath },
     { label: course.name }
   ]
 
@@ -132,7 +134,7 @@ export default function TeacherCourseContent() {
       title: 'Lectures',
       description: 'Upload and manage course video lectures, lessons, and video content.',
       count: videoCount,
-      link: `/teacher/${course.id}/videos`,
+      link: `${basePath}/${course.id}/videos`,
       icon: Video,
       color: 'from-blue-500/20 to-indigo-500/20 hover:from-blue-500/30 hover:to-indigo-500/30',
       iconColor: 'text-blue-600 bg-blue-500/10 border-blue-500/20',
@@ -142,7 +144,7 @@ export default function TeacherCourseContent() {
       title: 'Students',
       description: 'View student enrollments, exam answers, and grade exam attempts.',
       count: studentCount,
-      link: `/teacher/${course.id}/students`,
+      link: `${basePath}/${course.id}/students`,
       icon: Users,
       color: 'from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30',
       iconColor: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20',
@@ -152,7 +154,7 @@ export default function TeacherCourseContent() {
       title: 'Exams',
       description: 'Create assessments, compile question banks, and publish timed exams.',
       count: examCount,
-      link: `/teacher/${course.id}/exams`,
+      link: `${basePath}/${course.id}/exams`,
       icon: FileText,
       color: 'from-violet-500/20 to-pink-500/20 hover:from-violet-500/30 hover:to-pink-500/30',
       iconColor: 'text-violet-600 bg-violet-500/10 border-violet-500/20',
@@ -162,7 +164,7 @@ export default function TeacherCourseContent() {
       title: 'Exam Results',
       description: 'Track student attempts, view test scores, and grade student submissions.',
       count: resultsCount,
-      link: `/teacher/${course.id}/results`,
+      link: `${basePath}/${course.id}/results`,
       icon: BarChart3,
       color: 'from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30',
       iconColor: 'text-amber-600 bg-amber-500/10 border-amber-500/20',
@@ -239,7 +241,7 @@ export default function TeacherCourseContent() {
         token={token ?? ''}
         courseId={course.id}
         courseName={course.name}
-        onSuccess={() => navigate('/teacher')}
+        onSuccess={() => navigate(basePath)}
       />
     </PageShell>
   )

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchStudentResultsByCourse, type StudentAttemptResponse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -11,6 +11,8 @@ export default function StudentSpecificResults() {
   const navigate = useNavigate()
   const { courseId, studentId } = useParams<{ courseId: string; studentId: string }>()
   const { token } = useAuth()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [attempts, setAttempts] = useState<StudentAttemptResponse[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,7 +69,7 @@ export default function StudentSpecificResults() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`/teacher/${courseId}/students`)}
+          onClick={() => navigate(`${basePath}/${courseId}/students`)}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Students
@@ -77,9 +79,9 @@ export default function StudentSpecificResults() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${courseId}` },
-    { label: 'Students', href: `/teacher/${courseId}/students` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${courseId}` },
+    { label: 'Students', href: `${basePath}/${courseId}/students` },
     { label: 'Attempts' }
   ]
 
@@ -111,7 +113,7 @@ export default function StudentSpecificResults() {
                   {attempts.map((attempt) => (
                     <tr
                       key={attempt.id}
-                      onClick={() => navigate(`/teacher/attempt/${attempt.id}`)}
+                      onClick={() => navigate(`${basePath}/attempt/${attempt.id}`)}
                       className="hover:bg-black/5 transition-colors duration-150 cursor-pointer"
                     >
                       <td className="px-6 py-4 text-sm font-semibold text-text-primary">{attempt.exam.title}</td>

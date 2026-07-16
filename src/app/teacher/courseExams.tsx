@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchExamsByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -9,6 +9,8 @@ import { EmptyState } from '@/components/ui/EmptyState'
 export default function TeacherCourseExams() {
   const { courseId } = useParams<{ courseId: string }>()
   const { token } = useAuth()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [course, setCourse] = useState<Course | null>(null)
   const [exams, setExams] = useState<any[]>([])
@@ -71,7 +73,7 @@ export default function TeacherCourseExams() {
           <p className="text-[#64748b] text-sm leading-relaxed">{error || 'Course exams unavailable.'}</p>
         </div>
         <Link
-          to={`/teacher/${courseId}`}
+          to={`${basePath}/${courseId}`}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-[#f8fafc] border border-[#e2e8f0] hover:bg-slate-50 transition-all cursor-pointer"
         >
           Back to Course
@@ -81,14 +83,14 @@ export default function TeacherCourseExams() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: course.name, href: `/teacher/${course.id}` },
+    { label: 'Home', href: basePath },
+    { label: course.name, href: `${basePath}/${course.id}` },
     { label: 'Exams' }
   ]
 
   const headerActions = (
     <Link
-      to={`/teacher/${course.id}/exams/new`}
+      to={`${basePath}/${course.id}/exams/new`}
       className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm shadow-violet-500/10 inline-block"
     >
       + Add Exam
@@ -114,7 +116,7 @@ export default function TeacherCourseExams() {
             {exams.map((exam) => (
               <Link
                 key={exam.id}
-                to={`/teacher/${course.id}/exams/${exam.id}`}
+                to={`${basePath}/${course.id}/exams/${exam.id}`}
                 className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl glass-panel glass-panel-hover p-5 text-left cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-x-1"
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-accent-violet to-accent-pink rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity" />

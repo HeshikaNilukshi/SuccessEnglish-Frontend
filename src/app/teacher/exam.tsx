@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchExamDetails, deleteExam } from '@/actions/courses'
 import { createPortal } from 'react-dom'
@@ -13,6 +13,8 @@ export default function TeacherExamView() {
   const { courseId, examId } = useParams<{ courseId: string; examId: string }>()
   const { token } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [exam, setExam] = useState<(Exam & { questions: any[] }) | null>(null)
   const [loading, setLoading] = useState(true)
@@ -51,7 +53,7 @@ export default function TeacherExamView() {
     try {
       await deleteExam(token, parseInt(examId, 10))
       setIsDeleteOpen(false)
-      navigate(`/teacher/${courseId}`)
+      navigate(`${basePath}/${courseId}`)
     } catch (err: any) {
       console.error(err)
       alert(err.message || 'Failed to delete exam.')
@@ -89,7 +91,7 @@ export default function TeacherExamView() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`/teacher/${courseId}`)}
+          onClick={() => navigate(`${basePath}/${courseId}`)}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course
@@ -99,8 +101,8 @@ export default function TeacherExamView() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${courseId}` },
     { label: exam.title }
   ]
 
@@ -108,7 +110,7 @@ export default function TeacherExamView() {
     <div className="flex items-center gap-3 shrink-0">
       <button
         type="button"
-        onClick={() => navigate(`/teacher/${courseId}/exams/${examId}/edit`)}
+        onClick={() => navigate(`${basePath}/${courseId}/exams/${examId}/edit`)}
         className="px-4 py-2 text-xs font-bold text-text-primary rounded-xl bg-black/5 border border-border-subtle hover:bg-black/5 hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
       >
         ✏️ Edit Exam

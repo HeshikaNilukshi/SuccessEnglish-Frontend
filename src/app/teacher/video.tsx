@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchVideoDetails, updateVideo, deleteVideo, fetchUploadSignature } from '@/actions/courses'
 import { createPortal } from 'react-dom'
@@ -9,6 +9,8 @@ export default function TeacherVideoPage() {
   const { courseId, videoId } = useParams<{ courseId: string; videoId: string }>()
   const { token } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const [video, setVideo] = useState<Video | null>(null)
   const [loading, setLoading] = useState(true)
@@ -113,7 +115,7 @@ export default function TeacherVideoPage() {
     try {
       await deleteVideo(token, parseInt(videoId, 10))
       setIsDeleteOpen(false)
-      navigate(`/teacher/${courseId}`)
+      navigate(`${basePath}/${courseId}`)
     } catch (err: any) {
       console.error(err)
       alert(err.message || 'Failed to delete video.')
@@ -146,7 +148,7 @@ export default function TeacherVideoPage() {
         </div>
         <button
           type="button"
-          onClick={() => navigate(`/teacher/${courseId}`)}
+          onClick={() => navigate(`${basePath}/${courseId}`)}
           className="inline-block px-6 py-2.5 rounded-xl text-xs font-bold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
         >
           Back to Course Content
@@ -156,8 +158,8 @@ export default function TeacherVideoPage() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${courseId}` },
     { label: video.title }
   ]
 

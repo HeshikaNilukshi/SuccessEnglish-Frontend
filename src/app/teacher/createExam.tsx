@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { createExam, updateExam, fetchExamDetails, type CreateQuestionInput } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
@@ -11,6 +11,8 @@ export default function CreateExam() {
   const { courseId, examId } = useParams<{ courseId: string; examId?: string }>()
   const { token } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const basePath = location.pathname.startsWith('/admin') ? '/admin/courses' : '/teacher'
 
   const isEditing = !!examId
 
@@ -122,7 +124,7 @@ export default function CreateExam() {
           passMark: passMarkVal,
           questions,
         })
-        navigate(`/teacher/${courseId}/exams/${examId}`)
+        navigate(`${basePath}/${courseId}/exams/${examId}`)
       } else {
         await createExam(token, {
           title,
@@ -131,7 +133,7 @@ export default function CreateExam() {
           passMark: passMarkVal,
           questions,
         })
-        navigate(`/teacher/${courseId}`)
+        navigate(`${basePath}/${courseId}`)
       }
     } catch (err: any) {
       console.error(err)
@@ -141,8 +143,8 @@ export default function CreateExam() {
   }
 
   const breadcrumbs = [
-    { label: 'Home', href: '/teacher' },
-    { label: 'Course', href: `/teacher/${courseId}` },
+    { label: 'Home', href: basePath },
+    { label: 'Course', href: `${basePath}/${courseId}` },
     { label: isEditing ? 'Edit Exam' : 'Create Exam' }
   ]
 
