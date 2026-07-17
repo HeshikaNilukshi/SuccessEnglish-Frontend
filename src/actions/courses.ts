@@ -448,3 +448,35 @@ export async function submitExamAttempt(
   });
   return handleResponse(res);
 }
+
+export async function toggleExamApproval(
+  token: string,
+  examId: number,
+  isAdminApproved: boolean
+): Promise<any> {
+  const res = await fetch(`${API_BASE}/exams/${examId}/toggle-approval`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ isAdminApproved }),
+  });
+  return handleResponse(res);
+}
+
+export async function toggleVideoApproval(
+  token: string,
+  videoId: number,
+  isAdminApproved: boolean
+): Promise<any> {
+  const res = await fetch(`${API_BASE}/videos/${videoId}/toggle-approval`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ isAdminApproved }),
+  });
+  return handleResponse(res);
+}

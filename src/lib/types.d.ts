@@ -58,6 +58,7 @@ interface Video {
   title: string;
   videoUrl: string;
   publicId: string;
+  isAdminApproved?: boolean;
   createdAt: string;
 }
 
@@ -69,6 +70,7 @@ interface Exam {
   courseId: number;
   createdBy: number;
   createdAt: string;
+  isAdminApproved?: boolean;
   _count?: {
     questions: number;
   };

@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { fetchVideoDetails, updateVideo, deleteVideo, fetchUploadSignature } from '@/actions/courses'
+import { fetchVideoDetails, updateVideo, deleteVideo, fetchUploadSignature, toggleVideoApproval } from '@/actions/courses'
 import { createPortal } from 'react-dom'
+import { MoreVertical, Pencil, Trash2, ShieldAlert, ShieldCheck } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+import { Badge } from '@/components/ui/badge'
 import PageShell from '@/components/teacher/PageShell'
 
 export default function TeacherVideoPage() {
@@ -25,6 +33,9 @@ export default function TeacherVideoPage() {
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  const [isApprovalOpen, setIsApprovalOpen] = useState(false)
+  const [isTogglingApproval, setIsTogglingApproval] = useState(false)
 
   useEffect(() => {
     const loadVideo = async () => {
@@ -124,6 +135,22 @@ export default function TeacherVideoPage() {
     }
   }
 
+  const handleToggleApprovalConfirm = async () => {
+    if (!token || !videoId || !video) return
+    setIsTogglingApproval(true)
+    try {
+      const newStatus = !video.isAdminApproved
+      await toggleVideoApproval(token, parseInt(videoId, 10), newStatus)
+      setVideo({ ...video, isAdminApproved: newStatus })
+      setIsApprovalOpen(false)
+    } catch (err: any) {
+      console.error(err)
+      alert(err.message || 'Failed to update approval status.')
+    } finally {
+      setIsTogglingApproval(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-6 md:px-12 pt-10 pb-8 flex flex-col items-stretch">
@@ -164,33 +191,69 @@ export default function TeacherVideoPage() {
   ]
 
   const actions = (
-    <div className="flex items-center gap-3 shrink-0">
-      <button
-        type="button"
-        onClick={() => {
-          setEditTitle(video.title)
-          setEditFile(null)
-          setEditError(null)
-          setEditProgress(null)
-          setIsEditing(true)
-        }}
-        className="px-4 py-2 text-xs font-bold text-text-primary rounded-xl bg-black/5 border border-border-subtle hover:bg-black/5 hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
-      >
-        ✏️ Edit Video
-      </button>
-      <button
-        type="button"
-        onClick={() => setIsDeleteOpen(true)}
-        className="px-4 py-2 text-xs font-bold text-white rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/30 active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5"
-      >
-        🗑️ Delete Video
-      </button>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="px-4 py-2 text-xs font-bold text-text-primary rounded-xl bg-black/5 border border-border-subtle hover:bg-black/10 active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-1.5 focus:outline-none">
+        <MoreVertical className="w-4 h-4" />
+        Options
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48 bg-bg-secondary border border-border-subtle rounded-2xl shadow-xl p-1.5 animate-popover-in">
+        <DropdownMenuItem
+          onClick={() => {
+            setEditTitle(video.title)
+            setEditFile(null)
+            setEditError(null)
+            setEditProgress(null)
+            setIsEditing(true)
+          }}
+          className="flex items-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none"
+        >
+          <Pencil className="w-4 h-4 text-text-secondary" />
+          Edit Video
+        </DropdownMenuItem>
+        
+        {location.pathname.startsWith('/admin') && (
+          <DropdownMenuItem
+            onClick={() => setIsApprovalOpen(true)}
+            className="flex items-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl text-text-primary hover:bg-black/5 transition-all cursor-pointer outline-none"
+          >
+            {video.isAdminApproved ? (
+              <>
+                <ShieldAlert className="w-4 h-4 text-amber-500" />
+                Remove Approval
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                Approve Video
+              </>
+            )}
+          </DropdownMenuItem>
+        )}
+
+        <DropdownMenuItem
+          onClick={() => setIsDeleteOpen(true)}
+          className="flex items-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl text-red-900 hover:bg-red-500/10 transition-all cursor-pointer outline-none"
+        >
+          <Trash2 className="w-4 h-4 text-red-900" />
+          Delete Video
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 
   return (
     <PageShell
-      title={video.title}
+      title={
+        <div className="flex items-center gap-3">
+          {video.title}
+          {video.isAdminApproved === false && (
+            <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-xs px-2 py-0.5 shadow-sm">
+              <ShieldAlert className="w-3 h-3 mr-1 inline" />
+              Unapproved
+            </Badge>
+          )}
+        </div>
+      }
       subtitle="Lecture video viewer and course content details."
       breadcrumbs={breadcrumbs}
       actions={actions}
@@ -351,6 +414,71 @@ export default function TeacherVideoPage() {
                     className="flex-1 py-3 text-sm font-bold text-white rounded-2xl bg-red-500/80 hover:bg-red-500 border border-red-500/30 hover:border-red-500/60 transition-all duration-200 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(239,68,68,0.25)] cursor-pointer disabled:opacity-50"
                   >
                     {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        ,
+          document.body
+        )}
+
+        {/* Approval Modal */}
+        {isApprovalOpen && createPortal(
+          <>
+            <div
+              className="fixed inset-0 bg-[#060813]/70 backdrop-blur-md z-50 transition-opacity duration-300 animate-fade-in"
+              onClick={() => !isTogglingApproval && setIsApprovalOpen(false)}
+            />
+            <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
+              <div className="relative w-full max-w-md rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in text-center overflow-hidden">
+                <div className={`absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent ${video.isAdminApproved ? 'via-amber-500/35' : 'via-emerald-500/35'} to-transparent`} />
+                <div className={`absolute top-[-20%] left-[20%] w-[200px] h-[200px] ${video.isAdminApproved ? 'bg-amber-500/8' : 'bg-emerald-500/8'} rounded-full blur-[60px] pointer-events-none`} />
+
+                <button
+                  type="button"
+                  onClick={() => setIsApprovalOpen(false)}
+                  disabled={isTogglingApproval}
+                  className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                <div className={`relative w-20 h-20 mx-auto mb-6 rounded-2xl overflow-hidden flex items-center justify-center ${video.isAdminApproved ? 'bg-amber-500/10 border-amber-500/20 shadow-amber-500/10 text-amber-600' : 'bg-emerald-500/10 border-emerald-500/20 shadow-emerald-500/10 text-emerald-600'} border shadow-lg`}>
+                  {video.isAdminApproved ? <ShieldAlert className="w-9 h-9" /> : <ShieldCheck className="w-9 h-9" />}
+                </div>
+
+                <h3 className="text-xl font-bold text-text-primary mb-1">
+                  {video.isAdminApproved ? 'Remove Approval?' : 'Approve Video?'}
+                </h3>
+                <p className="text-sm text-text-secondary mb-8 leading-relaxed">
+                  {video.isAdminApproved 
+                    ? `Are you sure you want to remove approval for "${video.title}"? It will be hidden from students.` 
+                    : `Are you sure you want to approve "${video.title}"? It will become visible to enrolled students.`}
+                </p>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsApprovalOpen(false)}
+                    disabled={isTogglingApproval}
+                    className="flex-1 py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleToggleApprovalConfirm}
+                    disabled={isTogglingApproval}
+                    className={`flex-1 py-3 text-sm font-bold text-white rounded-2xl transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 ${
+                      video.isAdminApproved 
+                        ? 'bg-amber-600 hover:bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]' 
+                        : 'bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
+                    }`}
+                  >
+                    {isTogglingApproval ? 'Processing...' : 'Yes, Confirm'}
                   </button>
                 </div>
               </div>
