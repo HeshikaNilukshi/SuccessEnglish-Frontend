@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchUsers } from '@/actions/users'
@@ -7,6 +7,7 @@ import { UserRoundPlus } from 'lucide-react'
 import PageShell from '@/components/teacher/PageShell'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function AdminAdminsList() {
   const navigate = useNavigate()
@@ -14,25 +15,32 @@ export default function AdminAdminsList() {
   const [admins, setAdmins] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
-  const loadAdmins = async () => {
+  const loadAdmins = (searchQuery: string) => {
     if (!token) return
-    setLoading(true)
+    if (!hasLoadedOnce) setLoading(true)
     setError(null)
-    try {
-      const data = await fetchUsers(token, 'ADMIN')
-      setAdmins(data)
-    } catch (err: any) {
-      console.error(err)
-      setError(err.message || 'Failed to load administrators.')
-    } finally {
-      setLoading(false)
-    }
+    startTransition(async () => {
+      try {
+        const data = await fetchUsers(token, 'ADMIN', searchQuery)
+        setAdmins(data)
+        setHasLoadedOnce(true)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load administrators.')
+      } finally {
+        setLoading(false)
+      }
+    })
   }
 
   useEffect(() => {
-    loadAdmins()
-  }, [token])
+    loadAdmins(debouncedSearchTerm)
+  }, [token, debouncedSearchTerm])
 
   const pageTitle = (
     <>
@@ -54,7 +62,11 @@ export default function AdminAdminsList() {
       <div className="flex-grow flex flex-col animate-fade-in-up">
         <div className="flex w-full gap-4 mb-6">
           <div className="flex-grow">
-            <SearchInput placeholder="Search admins..." />
+            <SearchInput
+              placeholder="Search admins..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           <Link
             to="/admin/admins/new"
@@ -77,7 +89,7 @@ export default function AdminAdminsList() {
             <p className="text-sm text-red-900 font-medium">{error}</p>
             <button
               type="button"
-              onClick={loadAdmins}
+              onClick={() => loadAdmins(searchTerm)}
               className="px-5 py-2 rounded-xl text-xs font-semibold text-text-primary bg-black/5 border border-border-subtle hover:bg-black/5 transition-all cursor-pointer"
             >
               Try Again
@@ -94,7 +106,7 @@ export default function AdminAdminsList() {
         )}
 
         {!loading && !error && admins.length > 0 && (
-          <div className="relative overflow-hidden rounded-2xl border border-border-subtle glass-panel shadow-xl">
+          <div className={`relative overflow-hidden rounded-2xl border border-border-subtle glass-panel shadow-xl transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/25 to-transparent" />
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">

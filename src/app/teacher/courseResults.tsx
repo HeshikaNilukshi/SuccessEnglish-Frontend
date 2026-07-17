@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchAllResultsByCourse, type ExamAttemptResponse } from '@/actions/courses'
@@ -6,6 +6,8 @@ import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { formatDate } from '@/lib/utils'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function CourseResults() {
   const navigate = useNavigate()
@@ -17,30 +19,34 @@ export default function CourseResults() {
   const [results, setResults] = useState<ExamAttemptResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
-  useEffect(() => {
-    const loadResults = async () => {
-      if (!courseId || !token) return
+  const loadResults = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
       try {
-        setLoading(true)
-        setError(null)
         const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const data = await fetchAllResultsByCourse(token, id)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const data = await fetchAllResultsByCourse(token, id, searchQuery)
         setResults(data)
+        setHasLoadedOnce(true)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load course results.')
       } finally {
         setLoading(false)
       }
-    }
+    })
+  }
 
-    loadResults()
-  }, [courseId, token])
+  useEffect(() => {
+    loadResults(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -91,14 +97,32 @@ export default function CourseResults() {
     >
       <div className="w-full max-w-7xl mx-auto">
         <main>
+          <div className="flex w-full gap-4 mb-6">
+            <div className="flex-grow">
+              <SearchInput
+                placeholder="Search results by ID, student, or exam..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+
           {results.length === 0 ? (
-            <EmptyState
-              icon="📊"
-              title="No Exam Submissions"
-              description="No students have taken or submitted any exams for this course yet."
-            />
+            debouncedSearchTerm ? (
+              <EmptyState
+                icon="🔍"
+                title="No Matching Results"
+                description={`No exam results found matching "${debouncedSearchTerm}".`}
+              />
+            ) : (
+              <EmptyState
+                icon="📊"
+                title="No Exam Submissions"
+                description="No students have taken or submitted any exams for this course yet."
+              />
+            )
           ) : (
-            <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
+            <div className={`glass-panel rounded-2xl border border-border-subtle overflow-hidden transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-subtle bg-black/5">
@@ -123,11 +147,10 @@ export default function CourseResults() {
                       <td className="px-6 py-4 text-right">
                         <Badge
                           variant={!attempt.isGraded ? "secondary" : "outline"}
-                          className={`font-semibold ${
-                            !attempt.isGraded
+                          className={`font-semibold ${!attempt.isGraded
                               ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
                               : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-900 font-medium'
-                          }`}
+                            }`}
                         >
                           {!attempt.isGraded ? 'Pending Grading' : `${attempt.score} Marks`}
                         </Badge>

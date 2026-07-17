@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchVideosByCourse } from '@/actions/courses'
@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { AddVideoModal } from '@/components/ui/AddVideoModal'
 import { formatDate } from '@/lib/utils'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function TeacherCourseVideos() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -19,35 +21,50 @@ export default function TeacherCourseVideos() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isAddVideoOpen, setIsAddVideoOpen] = useState(false)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
-  const loadContent = async () => {
-    if (!courseId || !token) return
-    try {
-      setLoading(true)
-      setError(null)
-      const id = parseInt(courseId, 10)
-      if (isNaN(id)) {
-        throw new Error('Invalid Course ID')
+  useEffect(() => {
+    const loadCourse = async () => {
+      if (!courseId || !token) return
+      try {
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const courseData = await fetchCourse(id, token)
+        setCourse(courseData)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load course details.')
       }
-
-      const [courseData, videosData] = await Promise.all([
-        fetchCourse(id, token),
-        fetchVideosByCourse(token, id),
-      ])
-
-      setCourse(courseData)
-      setVideos(videosData)
-    } catch (err: any) {
-      console.error(err)
-      setError(err.message || 'Failed to load videos.')
-    } finally {
-      setLoading(false)
     }
+    loadCourse()
+  }, [courseId, token])
+
+  const loadVideos = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const videosData = await fetchVideosByCourse(token, id, searchQuery)
+        setVideos(videosData)
+        setHasLoadedOnce(true)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load videos.')
+      } finally {
+        setLoading(false)
+      }
+    })
   }
 
   useEffect(() => {
-    loadContent()
-  }, [courseId, token])
+    loadVideos(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -91,32 +108,49 @@ export default function TeacherCourseVideos() {
     { label: 'Videos' }
   ]
 
-  const headerActions = (
-    <button
-      type="button"
-      onClick={() => setIsAddVideoOpen(true)}
-      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:border-border-subtle active:scale-[0.98] transition-all cursor-pointer"
-    >
-      + Add Video
-    </button>
-  )
-
   return (
     <PageShell
       title={`${course.name} - Videos`}
       subtitle="Manage course video content and lectures."
       breadcrumbs={breadcrumbs}
-      actions={headerActions}
     >
       <div className="flex-grow flex flex-col">
+        <div className="flex w-full gap-4 mb-6">
+          <div className="flex-grow">
+            <SearchInput
+              placeholder="Search videos by ID or title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsAddVideoOpen(true)}
+            className="relative inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold text-white overflow-hidden rounded-xl transition-all duration-300 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] cursor-pointer group/btn whitespace-nowrap shrink-0"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet" />
+            <span className="relative flex items-center gap-1.5">
+              + Add Video
+            </span>
+          </button>
+        </div>
+
         {videos.length === 0 ? (
-          <EmptyState
-            icon="🎬"
-            title="No Videos Uploaded"
-            description="Add a lecture video to this course using the action button above."
-          />
+          debouncedSearchTerm ? (
+            <EmptyState
+              icon="🔍"
+              title="No Matching Videos"
+              description={`No videos found matching "${debouncedSearchTerm}".`}
+            />
+          ) : (
+            <EmptyState
+              icon="🎬"
+              title="No Videos Uploaded"
+              description="Add a lecture video to this course using the action button above."
+            />
+          )
         ) : (
-          <div className="flex flex-col gap-4 animate-fade-in-up">
+          <div className={`flex flex-col gap-4 animate-fade-in-up transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             {videos.map((video) => (
               <Link
                 key={video.id}
@@ -161,7 +195,7 @@ export default function TeacherCourseVideos() {
         onClose={() => setIsAddVideoOpen(false)}
         courseId={course.id.toString()}
         token={token ?? ''}
-        onSuccess={loadContent}
+        onSuccess={() => loadVideos(debouncedSearchTerm)}
       />
     </PageShell>
   )

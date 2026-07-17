@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchVideosByCourse } from '@/actions/courses'
 import { formatDate } from '@/lib/utils'
 import PageShell from '@/components/teacher/PageShell'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function StudentCourseVideos() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -14,35 +16,50 @@ export default function StudentCourseVideos() {
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    const loadVideos = async () => {
+    const loadCourse = async () => {
       if (!courseId || !token) return
       try {
-        setLoading(true)
-        setError(null)
         const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const [courseData, videosData] = await Promise.all([
-          fetchCourse(id, token),
-          fetchVideosByCourse(token, id),
-        ])
-
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const courseData = await fetchCourse(id, token)
         setCourse(courseData)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load course details.')
+      }
+    }
+    loadCourse()
+  }, [courseId, token])
+
+  const loadVideos = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const videosData = await fetchVideosByCourse(token, id, searchQuery)
         setVideos(videosData)
+        setHasLoadedOnce(true)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load videos.')
       } finally {
         setLoading(false)
       }
-    }
+    })
+  }
 
-    loadVideos()
-  }, [courseId, token])
+  useEffect(() => {
+    loadVideos(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -88,15 +105,33 @@ export default function StudentCourseVideos() {
       subtitle={`Course lecture videos for ${course.name}`}
       breadcrumbs={breadcrumbs}
     >
-      <div className="flex-grow flex flex-col animate-fade-in-up">
+      <div className="flex-grow flex flex-col">
+        <div className="flex w-full gap-4 mb-6">
+          <div className="flex-grow">
+            <SearchInput
+              placeholder="Search videos by ID or title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
         {videos.length === 0 ? (
-          <EmptyState
-            icon="🎬"
-            title="No Lecture Videos Yet"
-            description="Check back later! The teacher hasn't uploaded any videos for this course yet."
-          />
+          debouncedSearchTerm ? (
+            <EmptyState
+              icon="🔍"
+              title="No Matching Videos"
+              description={`No videos found matching "${debouncedSearchTerm}".`}
+            />
+          ) : (
+            <EmptyState
+              icon="🎬"
+              title="No Lecture Videos Yet"
+              description="Check back later! The teacher hasn't uploaded any videos for this course yet."
+            />
+          )
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className={`flex flex-col gap-4 animate-fade-in-up transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             {videos.map((video) => (
               <Link
                 key={video.id}

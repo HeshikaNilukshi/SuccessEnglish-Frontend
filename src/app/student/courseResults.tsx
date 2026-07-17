@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchMyResultsByCourse, type StudentAttemptResponse } from '@/actions/courses'
@@ -6,6 +6,8 @@ import { formatDate } from '@/lib/utils'
 import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function StudentCourseResults() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -16,35 +18,50 @@ export default function StudentCourseResults() {
   const [results, setResults] = useState<StudentAttemptResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    const loadResults = async () => {
+    const loadCourse = async () => {
       if (!courseId || !token) return
       try {
-        setLoading(true)
-        setError(null)
         const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const [courseData, resultsData] = await Promise.all([
-          fetchCourse(id, token),
-          fetchMyResultsByCourse(token, id),
-        ])
-
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const courseData = await fetchCourse(id, token)
         setCourse(courseData)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load course details.')
+      }
+    }
+    loadCourse()
+  }, [courseId, token])
+
+  const loadResults = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const resultsData = await fetchMyResultsByCourse(token, id, searchQuery)
         setResults(resultsData)
+        setHasLoadedOnce(true)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load results.')
       } finally {
         setLoading(false)
       }
-    }
+    })
+  }
 
-    loadResults()
-  }, [courseId, token])
+  useEffect(() => {
+    loadResults(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -86,15 +103,33 @@ export default function StudentCourseResults() {
       subtitle={`Graded answersheets and scores for ${course.name}`}
       breadcrumbs={breadcrumbs}
     >
-      <div className="flex-grow flex flex-col animate-fade-in-up">
+      <div className="flex-grow flex flex-col">
+        <div className="flex w-full gap-4 mb-6">
+          <div className="flex-grow">
+            <SearchInput
+              placeholder="Search results by ID or exam title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
         {results.length === 0 ? (
-          <EmptyState
-            icon="📊"
-            title="No Exam Attempts Yet"
-            description="You have not attempted any exams for this course yet."
-          />
+          debouncedSearchTerm ? (
+            <EmptyState
+              icon="🔍"
+              title="No Matching Results"
+              description={`No results found matching "${debouncedSearchTerm}".`}
+            />
+          ) : (
+            <EmptyState
+              icon="📊"
+              title="No Exam Attempts Yet"
+              description="You have not attempted any exams for this course yet."
+            />
+          )
         ) : (
-          <div className="glass-panel rounded-2xl border border-border-subtle overflow-hidden">
+          <div className={`glass-panel rounded-2xl border border-border-subtle overflow-hidden transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-border-subtle bg-black/5">

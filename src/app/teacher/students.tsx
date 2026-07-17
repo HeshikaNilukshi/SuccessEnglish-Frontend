@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchStudentsByCourse, type CourseStudentResponse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function CourseStudents() {
   const navigate = useNavigate()
@@ -16,30 +18,34 @@ export default function CourseStudents() {
   const [students, setStudents] = useState<CourseStudentResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
-  useEffect(() => {
-    const loadStudents = async () => {
-      if (!courseId || !token) return
+  const loadStudents = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
       try {
-        setLoading(true)
-        setError(null)
         const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const data = await fetchStudentsByCourse(token, id)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const data = await fetchStudentsByCourse(token, id, searchQuery)
         setStudents(data)
+        setHasLoadedOnce(true)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load students.')
       } finally {
         setLoading(false)
       }
-    }
+    })
+  }
 
-    loadStudents()
-  }, [courseId, token])
+  useEffect(() => {
+    loadStudents(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -89,14 +95,32 @@ export default function CourseStudents() {
       breadcrumbs={breadcrumbs}
     >
       <div className="w-full max-w-7xl mx-auto flex-grow flex flex-col">
+        <div className="flex w-full gap-4 mb-6">
+          <div className="flex-grow">
+            <SearchInput
+              placeholder="Search students by ID or name/email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
         {students.length === 0 ? (
-          <EmptyState
-            icon="👥"
-            title="No Students Enrolled"
-            description="No students have requested or been verified for enrollment in this course yet."
-          />
+          debouncedSearchTerm ? (
+            <EmptyState
+              icon="🔍"
+              title="No Matching Students"
+              description={`No students found matching "${debouncedSearchTerm}".`}
+            />
+          ) : (
+            <EmptyState
+              icon="👥"
+              title="No Students Enrolled"
+              description="No students have requested or been verified for enrollment in this course yet."
+            />
+          )
         ) : (
-          <div className="bg-[#fbfbfa] rounded-2xl border border-[#e2e8f0] shadow-sm overflow-hidden">
+          <div className={`bg-[#fbfbfa] rounded-2xl border border-[#e2e8f0] shadow-sm overflow-hidden transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-[#e2e8f0] bg-[#f8fafc]">
@@ -110,8 +134,8 @@ export default function CourseStudents() {
                   <tr
                     key={student.id}
                     onClick={() => {
-                      const profilePath = basePath.startsWith('/admin') 
-                        ? `/admin/user/${student.user.id}` 
+                      const profilePath = basePath.startsWith('/admin')
+                        ? `/admin/user/${student.user.id}`
                         : `/teacher/student/${student.user.id}/profile`
                       navigate(profilePath)
                     }}
@@ -124,11 +148,10 @@ export default function CourseStudents() {
                     <td className="px-6 py-4 text-right">
                       <Badge
                         variant={student.verified ? "outline" : "secondary"}
-                        className={`font-bold py-1 px-2.5 rounded-lg text-xs border ${
-                          student.verified
+                        className={`font-bold py-1 px-2.5 rounded-lg text-xs border ${student.verified
                             ? 'bg-emerald-50 border-emerald-100 text-emerald-700'
                             : 'bg-amber-50 border-amber-100 text-amber-700'
-                        }`}
+                          }`}
                       >
                         {student.verified ? 'Verified' : 'Pending'}
                       </Badge>

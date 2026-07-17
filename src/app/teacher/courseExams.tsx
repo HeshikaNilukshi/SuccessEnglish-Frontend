@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchExamsByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function TeacherCourseExams() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -16,35 +18,50 @@ export default function TeacherCourseExams() {
   const [exams, setExams] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    const loadContent = async () => {
+    const loadCourse = async () => {
       if (!courseId || !token) return
       try {
-        setLoading(true)
-        setError(null)
         const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const [courseData, examsData] = await Promise.all([
-          fetchCourse(id, token),
-          fetchExamsByCourse(token, id)
-        ])
-
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const courseData = await fetchCourse(id, token)
         setCourse(courseData)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load course details.')
+      }
+    }
+    loadCourse()
+  }, [courseId, token])
+
+  const loadExams = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const examsData = await fetchExamsByCourse(token, id, searchQuery)
         setExams(examsData)
+        setHasLoadedOnce(true)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load exams.')
       } finally {
         setLoading(false)
       }
-    }
+    })
+  }
 
-    loadContent()
-  }, [courseId, token])
+  useEffect(() => {
+    loadExams(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -88,31 +105,48 @@ export default function TeacherCourseExams() {
     { label: 'Exams' }
   ]
 
-  const headerActions = (
-    <Link
-      to={`${basePath}/${course.id}/exams/new`}
-      className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-violet-600 hover:bg-violet-700 transition-all shadow-sm shadow-violet-500/10 inline-block"
-    >
-      + Add Exam
-    </Link>
-  )
-
   return (
     <PageShell
       title={`${course.name} - Exams`}
       subtitle="Manage course examinations and assessments."
       breadcrumbs={breadcrumbs}
-      actions={headerActions}
     >
       <div className="flex-grow flex flex-col">
+        <div className="flex w-full gap-4 mb-6">
+          <div className="flex-grow">
+            <SearchInput
+              placeholder="Search exams by ID or title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Link
+            to={`${basePath}/${course.id}/exams/new`}
+            className="relative inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold text-white overflow-hidden rounded-xl transition-all duration-300 active:scale-[0.98] hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] cursor-pointer group/btn whitespace-nowrap shrink-0"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-accent-indigo to-accent-violet" />
+            <span className="relative flex items-center gap-1.5">
+              + Add Exam
+            </span>
+          </Link>
+        </div>
+
         {exams.length === 0 ? (
-          <EmptyState
-            icon="✍️"
-            title="No Exams Created"
-            description="Create a course assessment using the Add Exam button above."
-          />
+          debouncedSearchTerm ? (
+            <EmptyState
+              icon="🔍"
+              title="No Matching Exams"
+              description={`No exams found matching "${debouncedSearchTerm}".`}
+            />
+          ) : (
+            <EmptyState
+              icon="✍️"
+              title="No Exams Created"
+              description="Create a course assessment using the Add Exam button above."
+            />
+          )
         ) : (
-          <div className="flex flex-col gap-4 animate-fade-in-up">
+          <div className={`flex flex-col gap-4 animate-fade-in-up transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             {exams.map((exam) => (
               <Link
                 key={exam.id}
@@ -120,12 +154,12 @@ export default function TeacherCourseExams() {
                 className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl glass-panel glass-panel-hover p-5 text-left cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-x-1"
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-accent-violet to-accent-pink rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                
+
                 <div className="flex items-center gap-4 flex-grow">
                   <div className="w-12 h-12 rounded-xl bg-black/5 border border-border-subtle flex items-center justify-center text-xl shrink-0 group-hover:bg-accent-violet/10 group-hover:border-accent-violet/30 transition-all duration-300">
                     📝
                   </div>
-                  
+
                   <div className="space-y-1">
                     <div className="flex items-center gap-2.5 flex-wrap">
                       <h3 className="text-base font-bold text-text-primary tracking-tight group-hover:text-accent-violet transition-colors duration-300">

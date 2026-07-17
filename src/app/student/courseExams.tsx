@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchCourse, fetchExamsByCourse } from '@/actions/courses'
 import PageShell from '@/components/teacher/PageShell'
 import { Badge } from '@/components/ui/badge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useDebounce } from '@/hooks/useDebounce'
 
 export default function StudentCourseExams() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -14,35 +16,50 @@ export default function StudentCourseExams() {
   const [exams, setExams] = useState<Exam[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    const loadExams = async () => {
+    const loadCourse = async () => {
       if (!courseId || !token) return
       try {
-        setLoading(true)
-        setError(null)
         const id = parseInt(courseId, 10)
-        if (isNaN(id)) {
-          throw new Error('Invalid Course ID')
-        }
-
-        const [courseData, examsData] = await Promise.all([
-          fetchCourse(id, token),
-          fetchExamsByCourse(token, id),
-        ])
-
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const courseData = await fetchCourse(id, token)
         setCourse(courseData)
+      } catch (err: any) {
+        console.error(err)
+        setError(err.message || 'Failed to load course details.')
+      }
+    }
+    loadCourse()
+  }, [courseId, token])
+
+  const loadExams = (searchQuery: string) => {
+    if (!courseId || !token) return
+    if (!hasLoadedOnce) setLoading(true)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const id = parseInt(courseId, 10)
+        if (isNaN(id)) throw new Error('Invalid Course ID')
+        const examsData = await fetchExamsByCourse(token, id, searchQuery)
         setExams(examsData)
+        setHasLoadedOnce(true)
       } catch (err: any) {
         console.error(err)
         setError(err.message || 'Failed to load exams.')
       } finally {
         setLoading(false)
       }
-    }
+    })
+  }
 
-    loadExams()
-  }, [courseId, token])
+  useEffect(() => {
+    loadExams(debouncedSearchTerm)
+  }, [courseId, token, debouncedSearchTerm])
 
   if (loading) {
     return (
@@ -88,15 +105,33 @@ export default function StudentCourseExams() {
       subtitle={`Assessments and Timed Exams for ${course.name}`}
       breadcrumbs={breadcrumbs}
     >
-      <div className="flex-grow flex flex-col animate-fade-in-up">
+      <div className="flex-grow flex flex-col">
+        <div className="flex w-full gap-4 mb-6">
+          <div className="flex-grow">
+            <SearchInput
+              placeholder="Search exams by ID or title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
         {exams.length === 0 ? (
-          <EmptyState
-            icon="✍️"
-            title="No Exams Scheduled Yet"
-            description="Great news! There are no exams or assessments scheduled for this course at the moment."
-          />
+          debouncedSearchTerm ? (
+            <EmptyState
+              icon="🔍"
+              title="No Matching Exams"
+              description={`No exams found matching "${debouncedSearchTerm}".`}
+            />
+          ) : (
+            <EmptyState
+              icon="✍️"
+              title="No Exams Scheduled Yet"
+              description="Great news! There are no exams or assessments scheduled for this course at the moment."
+            />
+          )
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className={`flex flex-col gap-4 animate-fade-in-up transition-opacity duration-200 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
             {exams.map((exam) => (
               <Link
                 key={exam.id}

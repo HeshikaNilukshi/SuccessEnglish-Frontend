@@ -41,8 +41,11 @@ export async function fetchCourseStats(token: string, courseId: number): Promise
   return handleResponse(res);
 }
 
-export async function fetchVideosByCourse(token: string, courseId: number): Promise<Video[]> {
-  const res = await fetch(`${API_BASE}/videos/course/${courseId}`, {
+export async function fetchVideosByCourse(token: string, courseId: number, search?: string): Promise<Video[]> {
+  const url = search 
+    ? `${API_BASE}/videos/course/${courseId}?search=${encodeURIComponent(search)}` 
+    : `${API_BASE}/videos/course/${courseId}`;
+  const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -61,8 +64,11 @@ export async function fetchVideoDetails(token: string, videoId: number): Promise
   return handleResponse(res);
 }
 
-export async function fetchExamsByCourse(token: string, courseId: number): Promise<Exam[]> {
-  const res = await fetch(`${API_BASE}/exams/course/${courseId}`, {
+export async function fetchExamsByCourse(token: string, courseId: number, search?: string): Promise<Exam[]> {
+  const url = search 
+    ? `${API_BASE}/exams/course/${courseId}?search=${encodeURIComponent(search)}` 
+    : `${API_BASE}/exams/course/${courseId}`;
+  const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -197,8 +203,11 @@ export interface CourseStudentResponse {
   };
 }
 
-export async function fetchStudentsByCourse(token: string, courseId: number): Promise<CourseStudentResponse[]> {
-  const res = await fetch(`${API_BASE}/courses/${courseId}/students`, {
+export async function fetchStudentsByCourse(token: string, courseId: number, search?: string): Promise<CourseStudentResponse[]> {
+  const url = search 
+    ? `${API_BASE}/courses/${courseId}/students?search=${encodeURIComponent(search)}` 
+    : `${API_BASE}/courses/${courseId}/students`;
+  const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -225,8 +234,11 @@ export interface ExamAttemptResponse {
   };
 }
 
-export async function fetchAllResultsByCourse(token: string, courseId: number): Promise<ExamAttemptResponse[]> {
-  const res = await fetch(`${API_BASE}/exams/course/${courseId}/results`, {
+export async function fetchAllResultsByCourse(token: string, courseId: number, search?: string): Promise<ExamAttemptResponse[]> {
+  const url = search 
+    ? `${API_BASE}/exams/course/${courseId}/results?search=${encodeURIComponent(search)}` 
+    : `${API_BASE}/exams/course/${courseId}/results`;
+  const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -264,9 +276,13 @@ export async function fetchStudentResultsByCourse(
 
 export async function fetchMyResultsByCourse(
   token: string,
-  courseId: number
+  courseId: number,
+  search?: string
 ): Promise<StudentAttemptResponse[]> {
-  const res = await fetch(`${API_BASE}/exams/course/${courseId}/my-results`, {
+  const url = search 
+    ? `${API_BASE}/exams/course/${courseId}/my-results?search=${encodeURIComponent(search)}` 
+    : `${API_BASE}/exams/course/${courseId}/my-results`;
+  const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',

@@ -1,7 +1,12 @@
 import { API_BASE, handleResponse } from './api';
 
-export async function fetchUsers(token: string, role?: string): Promise<User[]> {
-  const url = role ? `${API_BASE}/users?role=${role}` : `${API_BASE}/users`;
+export async function fetchUsers(token: string, role?: string, search?: string): Promise<User[]> {
+  const params = new URLSearchParams();
+  if (role) params.append('role', role);
+  if (search) params.append('search', search);
+
+  const queryString = params.toString();
+  const url = queryString ? `${API_BASE}/users?${queryString}` : `${API_BASE}/users`;
   const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
