@@ -1,56 +1,56 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
-import { fetchUploadSignature, saveVideoDetails } from '@/actions/courses'
+import { fetchUploadSignature } from '@/actions/courses'
+import { saveMaterialDetails } from '@/actions/materials'
 
-interface AddVideoModalProps {
+interface AddMaterialModalProps {
   isOpen: boolean;
   onClose: () => void;
-  courseId: string;
+  videoId: string;
   token: string;
-  onSuccess: (video: any) => void;
+  onSuccess: (material: any) => void;
 }
 
-export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: AddVideoModalProps) {
-  const [newVideoTitle, setNewVideoTitle] = useState('')
-  const [newVideoDescription, setNewVideoDescription] = useState('')
-  const [newVideoFile, setNewVideoFile] = useState<File | null>(null)
-  const [isSavingVideo, setIsSavingVideo] = useState(false)
-  const [addVideoProgress, setAddVideoProgress] = useState<string | null>(null)
-  const [addVideoError, setAddVideoError] = useState<string | null>(null)
+export function AddMaterialModal({ isOpen, onClose, videoId, token, onSuccess }: AddMaterialModalProps) {
+  const [newMaterialName, setNewMaterialName] = useState('')
+  const [newMaterialFile, setNewMaterialFile] = useState<File | null>(null)
+  const [isSavingMaterial, setIsSavingMaterial] = useState(false)
+  const [addMaterialProgress, setAddMaterialProgress] = useState<string | null>(null)
+  const [addMaterialError, setAddMaterialError] = useState<string | null>(null)
 
   if (!isOpen) return null
 
-  const handleAddVideoSubmit = async (e: React.FormEvent) => {
+  const handleAddMaterialSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!token || !courseId) return
+    if (!token || !videoId) return
 
-    if (!newVideoTitle.trim()) {
-      setAddVideoError('Title is required')
+    if (!newMaterialName.trim()) {
+      setAddMaterialError('Name is required')
       return
     }
 
-    if (!newVideoFile) {
-      setAddVideoError('Please select a video file')
+    if (!newMaterialFile) {
+      setAddMaterialError('Please select a file')
       return
     }
 
-    setIsSavingVideo(true)
-    setAddVideoError(null)
-    setAddVideoProgress('Requesting upload signature...')
+    setIsSavingMaterial(true)
+    setAddMaterialError(null)
+    setAddMaterialProgress('Requesting upload signature...')
 
     try {
       const signatureData = await fetchUploadSignature(token)
 
-      setAddVideoProgress('Uploading video to cloud...')
+      setAddMaterialProgress('Uploading file to cloud...')
       const formData = new FormData()
-      formData.append('file', newVideoFile)
+      formData.append('file', newMaterialFile)
       formData.append('api_key', signatureData.api_key)
       formData.append('timestamp', signatureData.timestamp.toString())
       formData.append('signature', signatureData.signature)
       formData.append('folder', signatureData.folder)
 
       const cloudRes = await fetch(
-        `https://api.cloudinary.com/v1_1/${signatureData.cloud_name}/video/upload`,
+        `https://api.cloudinary.com/v1_1/${signatureData.cloud_name}/auto/upload`,
         {
           method: 'POST',
           body: formData,
@@ -63,26 +63,24 @@ export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: A
 
       const cloudData = await cloudRes.json()
 
-      setAddVideoProgress('Saving video details...')
-      const newVideo = await saveVideoDetails(token, {
-        courseId: parseInt(courseId, 10),
-        title: newVideoTitle,
-        description: newVideoDescription,
-        videoUrl: cloudData.secure_url,
+      setAddMaterialProgress('Saving material details...')
+      const newMaterial = await saveMaterialDetails(token, {
+        videoId: parseInt(videoId, 10),
+        name: newMaterialName,
+        url: cloudData.secure_url,
         publicId: cloudData.public_id,
       })
 
-      onSuccess(newVideo)
-      setNewVideoTitle('')
-      setNewVideoDescription('')
-      setNewVideoFile(null)
+      onSuccess(newMaterial)
+      setNewMaterialName('')
+      setNewMaterialFile(null)
       onClose()
     } catch (err: any) {
       console.error(err)
-      setAddVideoError(err.message || 'An error occurred during upload.')
+      setAddMaterialError(err.message || 'An error occurred during upload.')
     } finally {
-      setIsSavingVideo(false)
-      setAddVideoProgress(null)
+      setIsSavingMaterial(false)
+      setAddMaterialProgress(null)
     }
   }
 
@@ -90,7 +88,7 @@ export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: A
     <>
       <div
         className="fixed inset-0 bg-[#060813]/70 backdrop-blur-md z-50 transition-opacity duration-300 animate-fade-in"
-        onClick={() => !isSavingVideo && onClose()}
+        onClick={() => !isSavingMaterial && onClose()}
       />
       <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
         <div className="relative w-full max-w-lg rounded-3xl bg-bg-secondary/95 backdrop-blur-xl border border-border-subtle shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 md:p-8 animate-popover-in overflow-hidden">
@@ -99,7 +97,7 @@ export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: A
           <button
             type="button"
             onClick={() => onClose()}
-            disabled={isSavingVideo}
+            disabled={isSavingMaterial}
             className="absolute top-4 right-4 text-text-muted hover:text-text-primary p-2 rounded-full hover:bg-black/5 transition-all cursor-pointer disabled:opacity-50"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,70 +105,57 @@ export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: A
             </svg>
           </button>
 
-          <h3 className="text-xl font-bold text-text-primary mb-6">Upload Lecture Video</h3>
+          <h3 className="text-xl font-bold text-text-primary mb-6">Upload Lecture Material</h3>
 
-          <form onSubmit={handleAddVideoSubmit} className="space-y-6">
-            {addVideoError && (
+          <form onSubmit={handleAddMaterialSubmit} className="space-y-6">
+            {addMaterialError && (
               <div className="p-4 rounded-xl bg-red-500/12 border border-red-500/25 text-xs text-red-900 font-medium">
-                {addVideoError}
+                {addMaterialError}
               </div>
             )}
 
-            {addVideoProgress && (
+            {addMaterialProgress && (
               <div className="p-4 rounded-xl bg-accent-indigo/5 border border-accent-indigo/10 text-xs text-accent-indigo animate-pulse">
-                {addVideoProgress}
+                {addMaterialProgress}
               </div>
             )}
 
             <div className="space-y-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
-                Video Title
+                Material Name
               </label>
               <input
                 type="text"
-                value={newVideoTitle}
-                onChange={(e) => setNewVideoTitle(e.target.value)}
-                placeholder="e.g., Lesson 1: Present Perfect Tense"
+                value={newMaterialName}
+                onChange={(e) => setNewMaterialName(e.target.value)}
+                placeholder="e.g., Chapter 1 Notes (PDF)"
                 className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-text-muted outline-none transition-all"
-                disabled={isSavingVideo}
+                disabled={isSavingMaterial}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
-                Description (Optional)
-              </label>
-              <textarea
-                value={newVideoDescription}
-                onChange={(e) => setNewVideoDescription(e.target.value)}
-                placeholder="Write a brief description..."
-                className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-text-muted outline-none transition-all min-h-[80px] resize-y"
-                disabled={isSavingVideo}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
-                Video File
+                File Document
               </label>
               <input
                 type="file"
-                accept="video/*"
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip"
                 onDrop={(e) => {
                   e.preventDefault();
                   if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                    setNewVideoFile(e.dataTransfer.files[0])
+                    setNewMaterialFile(e.dataTransfer.files[0])
                   }
                 }}
                 onDragOver={(e) => e.preventDefault()}
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
-                    setNewVideoFile(e.target.files[0])
+                    setNewMaterialFile(e.target.files[0])
                   }
                 }}
                 className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-black/5 file:text-text-primary hover:file:bg-black/5"
-                disabled={isSavingVideo}
+                disabled={isSavingMaterial}
               />
             </div>
 
@@ -178,17 +163,17 @@ export function AddVideoModal({ isOpen, onClose, courseId, token, onSuccess }: A
               <button
                 type="button"
                 onClick={() => onClose()}
-                disabled={isSavingVideo}
+                disabled={isSavingMaterial}
                 className="flex-grow py-3 text-sm font-bold text-text-secondary hover:text-text-primary rounded-2xl border border-border-subtle hover:border-border-subtle bg-black/5 hover:bg-black/5 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                disabled={isSavingVideo}
+                disabled={isSavingMaterial}
                 className="flex-grow py-3 text-sm font-bold text-white rounded-2xl bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50"
               >
-                {isSavingVideo ? 'Uploading...' : 'Upload Video'}
+                {isSavingMaterial ? 'Uploading...' : 'Upload Material'}
               </button>
             </div>
           </form>

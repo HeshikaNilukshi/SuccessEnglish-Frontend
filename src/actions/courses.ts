@@ -139,7 +139,7 @@ export async function fetchUploadSignature(token: string): Promise<UploadSignatu
 
 export async function saveVideoDetails(
   token: string,
-  data: { courseId: number; title: string; videoUrl: string; publicId: string }
+  data: { courseId: number; title: string; description?: string; videoUrl: string; publicId: string }
 ): Promise<Video> {
   const res = await fetch(`${API_BASE}/videos`, {
     method: 'POST',
@@ -381,7 +381,7 @@ export async function evaluateAnswerWithAI(token: string, answerId: number): Pro
 export async function updateVideo(
   token: string,
   videoId: number,
-  data: { title?: string; videoUrl?: string; publicId?: string }
+  data: { title?: string; description?: string; videoUrl?: string; publicId?: string }
 ): Promise<Video> {
   const res = await fetch(`${API_BASE}/videos/${videoId}`, {
     method: 'PUT',

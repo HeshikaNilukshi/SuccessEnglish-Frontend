@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { fetchVideoDetails, updateVideo, deleteVideo, fetchUploadSignature, toggleVideoApproval } from '@/actions/courses'
 import { createPortal } from 'react-dom'
@@ -26,6 +26,7 @@ export default function TeacherVideoPage() {
 
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState('')
+  const [editDescription, setEditDescription] = useState('')
   const [editFile, setEditFile] = useState<File | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [editProgress, setEditProgress] = useState<string | null>(null)
@@ -74,8 +75,9 @@ export default function TeacherVideoPage() {
     setEditError(null)
 
     try {
-      let updatePayload: { title?: string; videoUrl?: string; publicId?: string } = {
+      let updatePayload: { title?: string; description?: string; videoUrl?: string; publicId?: string } = {
         title: editTitle,
+        description: editDescription,
       }
 
       if (editFile) {
@@ -200,6 +202,7 @@ export default function TeacherVideoPage() {
         <DropdownMenuItem
           onClick={() => {
             setEditTitle(video.title)
+            setEditDescription(video.description || '')
             setEditFile(null)
             setEditError(null)
             setEditProgress(null)
@@ -259,7 +262,7 @@ export default function TeacherVideoPage() {
       actions={actions}
     >
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
-        <main className="relative w-full aspect-video rounded-2xl overflow-hidden glass-panel border border-border-subtle shadow-2xl bg-black/60">
+        <main className="relative w-full aspect-video rounded-2xl overflow-hidden glass-panel border border-border-subtle shadow-2xl bg-black/60 mb-8">
           <iframe
             src={video.videoUrl}
             title={video.title}
@@ -268,6 +271,28 @@ export default function TeacherVideoPage() {
             allowFullScreen
           />
         </main>
+
+        <div className="w-full glass-panel rounded-2xl border border-border-subtle p-6 md:p-8 text-left space-y-6">
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-secondary mb-3">Description</h3>
+            {video.description ? (
+              <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap">
+                {video.description}
+              </p>
+            ) : (
+              <p className="text-text-muted text-sm italic">No Description</p>
+            )}
+          </div>
+          
+          <div className="pt-6 border-t border-white/[0.04]">
+            <Link
+              to={`${basePath}/${courseId}/videos/${videoId}/materials`}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all active:scale-[0.98]"
+            >
+              📄 Manage Lecture Materials
+            </Link>
+          </div>
+        </div>
 
         {/* Edit Video Modal */}
         {isEditing && createPortal(
@@ -321,11 +346,30 @@ export default function TeacherVideoPage() {
 
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+                      Description (Optional)
+                    </label>
+                    <textarea
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-black/5 border border-border-subtle focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo text-sm text-text-primary placeholder-white/20 outline-none transition-all min-h-[80px] resize-y"
+                      disabled={isSaving}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
                       Replace Video File (Optional)
                     </label>
                     <input
                       type="file"
                       accept="video/*"
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                          setEditFile(e.dataTransfer.files[0])
+                        }
+                      }}
+                      onDragOver={(e) => e.preventDefault()}
                       onChange={(e) => {
                         if (e.target.files && e.target.files.length > 0) {
                           setEditFile(e.target.files[0])

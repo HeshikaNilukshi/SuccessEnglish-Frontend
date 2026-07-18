@@ -56,9 +56,19 @@ interface Video {
   id: number;
   courseId: number;
   title: string;
+  description?: string | null;
   videoUrl: string;
   publicId: string;
   isAdminApproved?: boolean;
+  createdAt: string;
+}
+
+interface Material {
+  id: number;
+  videoId: number;
+  name: string;
+  url: string;
+  publicId: string;
   createdAt: string;
 }
 

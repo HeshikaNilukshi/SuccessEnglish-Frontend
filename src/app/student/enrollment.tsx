@@ -226,7 +226,6 @@ export default function StudentEnrollment() {
                   className="absolute inset-0 opacity-0 cursor-pointer"
                   onChange={handleInputChange}
                   accept="image/*"
-                  required
                 />
 
                 {receiptPreview ? (

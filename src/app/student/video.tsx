@@ -85,8 +85,7 @@ export default function StudentVideoPage() {
       breadcrumbs={breadcrumbs}
       maxWidthClass="max-w-5xl"
     >
-      {/* Centered Iframe Player Container */}
-      <main className="relative w-full flex justify-center items-center animate-fade-in-up">
+      <main className="relative w-full flex flex-col items-center animate-fade-in-up gap-8">
         {/* Colorful glow effect sitting behind player */}
         <div className="absolute inset-0 bg-gradient-to-tr from-accent-indigo/10 via-accent-violet/5 to-accent-pink/5 rounded-2xl blur-3xl opacity-50 -z-10" />
 
@@ -98,6 +97,28 @@ export default function StudentVideoPage() {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
+        </div>
+
+        <div className="w-full glass-panel rounded-2xl border border-border-subtle p-6 md:p-8 text-left space-y-6">
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-secondary mb-3">Description</h3>
+            {video.description ? (
+              <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap">
+                {video.description}
+              </p>
+            ) : (
+              <p className="text-text-muted text-sm italic">No Description</p>
+            )}
+          </div>
+          
+          <div className="pt-6 border-t border-white/[0.04]">
+            <Link
+              to={`/student/${courseId}/videos/${videoId}/materials`}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-indigo to-accent-violet hover:shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all active:scale-[0.98]"
+            >
+              📄 View Lecture Materials
+            </Link>
+          </div>
         </div>
       </main>
     </PageShell>

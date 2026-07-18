@@ -31,6 +31,8 @@ import CourseStudents from '@/app/teacher/students'
 import CourseResults from '@/app/teacher/courseResults'
 import StudentSpecificResults from '@/app/teacher/studentResults'
 import GradeExamAttempt from '@/app/teacher/gradeAttempt'
+import StudentVideoMaterials from '@/app/student/videoMaterials'
+import TeacherVideoMaterials from '@/app/teacher/videoMaterials'
 import AdminLayout from '@/app/admin/AdminLayout'
 import AdminDashboard from '@/app/admin/dashboard'
 import UserProfile from '@/app/shared/UserProfile'
@@ -63,6 +65,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path=":courseId/exams" element={<StudentCourseExams />} />
             <Route path=":courseId/results" element={<StudentCourseResults />} />
             <Route path=":courseId/videos/:videoId" element={<StudentVideoPage />} />
+            <Route path=":courseId/videos/:videoId/materials" element={<StudentVideoMaterials />} />
             <Route path=":courseId/exams/:examId" element={<StudentExamFlow />} />
             <Route path="attempt/:attemptId" element={<StudentAttemptView />} />
           </Route>
@@ -73,6 +76,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path=":courseId/videos" element={<TeacherCourseVideos />} />
             <Route path=":courseId/exams" element={<TeacherCourseExams />} />
             <Route path=":courseId/videos/:videoId" element={<TeacherVideoPage />} />
+            <Route path=":courseId/videos/:videoId/materials" element={<TeacherVideoMaterials />} />
             <Route path=":courseId/exams/new" element={<CreateExam />} />
             <Route path=":courseId/exams/:examId" element={<TeacherExamView />} />
             <Route path=":courseId/exams/:examId/edit" element={<CreateExam />} />
@@ -99,6 +103,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="courses/:courseId/videos" element={<TeacherCourseVideos />} />
             <Route path="courses/:courseId/exams" element={<TeacherCourseExams />} />
             <Route path="courses/:courseId/videos/:videoId" element={<TeacherVideoPage />} />
+            <Route path="courses/:courseId/videos/:videoId/materials" element={<TeacherVideoMaterials />} />
             <Route path="courses/:courseId/exams/new" element={<CreateExam />} />
             <Route path="courses/:courseId/exams/:examId" element={<TeacherExamView />} />
             <Route path="courses/:courseId/exams/:examId/edit" element={<CreateExam />} />
