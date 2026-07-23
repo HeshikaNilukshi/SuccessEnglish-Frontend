@@ -4,6 +4,17 @@ import PageShell from '@/components/teacher/PageShell'
 import { EmptyState } from '@/components/ui/EmptyState'
 import CourseCard from '@/components/ui/CourseCard'
 
+const pageTitle = (
+  <>
+    System <span className="gradient-text-accent">Courses</span>
+  </>
+)
+
+const breadcrumbs = [
+  { label: 'Home', href: '/admin' },
+  { label: 'Courses' }
+]
+
 export default function AdminCoursesList() {
   const [courses, setCourses] = useState<Course[]>([])
   const [loadingCourses, setLoadingCourses] = useState(true)
@@ -26,17 +37,6 @@ export default function AdminCoursesList() {
   useEffect(() => {
     loadCourses()
   }, [])
-
-  const pageTitle = (
-    <>
-      System <span className="gradient-text-accent">Courses</span>
-    </>
-  )
-
-  const breadcrumbs = [
-    { label: 'Home', href: '/admin' },
-    { label: 'Courses' }
-  ]
 
   return (
     <PageShell

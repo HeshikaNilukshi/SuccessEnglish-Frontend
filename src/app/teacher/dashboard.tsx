@@ -8,6 +8,10 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import { CreateCourseModal } from '@/components/ui/CreateCourseModal'
 import ProfilePopover from '@/components/ui/ProfilePopover'
 
+const breadcrumbs = [
+  { label: 'Home' }
+]
+
 export default function TeacherDashboard() {
   const { user, token } = useAuth()
   const [courses, setCourses] = useState<Course[]>([])
@@ -41,9 +45,7 @@ export default function TeacherDashboard() {
     </>
   )
 
-  const breadcrumbs = [
-    { label: 'Home' },
-  ]
+
 
   return (
     <PageShell

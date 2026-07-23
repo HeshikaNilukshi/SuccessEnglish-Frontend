@@ -5,6 +5,10 @@ import DashboardCourseCard from '@/components/DashboardCourseCard'
 import ProfilePopover from '@/components/ui/ProfilePopover'
 import PageShell from '@/components/teacher/PageShell'
 
+const breadcrumbs = [
+  { label: 'Home' }
+]
+
 export default function StudentDashboard() {
   const { user, token } = useAuth()
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
@@ -36,10 +40,6 @@ export default function StudentDashboard() {
       Welcome, <span className="gradient-text-accent">{firstName}</span>!
     </>
   )
-
-  const breadcrumbs = [
-    { label: 'Home' }
-  ]
 
   return (
     <PageShell

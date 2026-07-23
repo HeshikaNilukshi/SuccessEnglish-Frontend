@@ -6,6 +6,17 @@ import { formatDate } from '@/lib/utils'
 import PageShell from '@/components/teacher/PageShell'
 import { EmptyState } from '@/components/ui/EmptyState'
 
+const pageTitle = (
+  <>
+    Verify <span className="gradient-text-accent">Enrollments</span>
+  </>
+)
+
+const breadcrumbs = [
+  { label: 'Home', href: '/admin' },
+  { label: 'Verify Enrollments' }
+]
+
 export default function AdminEnrollments() {
   const navigate = useNavigate()
   const { token } = useAuth()
@@ -31,17 +42,6 @@ export default function AdminEnrollments() {
   useEffect(() => {
     loadEnrollments()
   }, [token])
-
-  const pageTitle = (
-    <>
-      Verify <span className="gradient-text-accent">Enrollments</span>
-    </>
-  )
-
-  const breadcrumbs = [
-    { label: 'Home', href: '/admin' },
-    { label: 'Verify Enrollments' }
-  ]
 
   return (
     <PageShell
@@ -108,11 +108,10 @@ export default function AdminEnrollments() {
                       <td className="p-5 text-sm text-text-primary font-medium">{enrollment.course.name}</td>
                       <td className="p-5 text-sm text-text-muted">{formatDate(enrollment.createdAt)}</td>
                       <td className="p-5 text-sm text-right">
-                        <span className={`inline-block text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${
-                          enrollment.verified 
-                             ? 'bg-emerald-500/10 text-emerald-900 font-medium border border-emerald-500/20' 
-                             : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                        }`}>
+                        <span className={`inline-block text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full ${enrollment.verified
+                            ? 'bg-emerald-500/10 text-emerald-900 font-medium border border-emerald-500/20'
+                            : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                          }`}>
                           {enrollment.verified ? 'Verified' : 'Pending'}
                         </span>
                       </td>

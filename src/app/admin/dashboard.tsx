@@ -3,63 +3,63 @@ import { useAuth } from '@/contexts/AuthContext'
 import ProfilePopover from '@/components/ui/ProfilePopover'
 import PageShell from '@/components/teacher/PageShell'
 
+const navItems = [
+  {
+    title: 'Verify Enrollments',
+    desc: 'Verify student receipts and approve enrollment requests.',
+    path: '/admin/enrollments',
+    icon: '💳',
+    color: 'from-accent-violet to-accent-indigo',
+  },
+  {
+    title: 'Manage Admins',
+    desc: 'Create, update, and delete administrative accounts.',
+    path: '/admin/admins',
+    icon: '🔐',
+    color: 'from-accent-indigo to-accent-violet',
+  },
+  {
+    title: 'Manage Teachers',
+    desc: 'Create, update, and delete teacher accounts.',
+    path: '/admin/teachers',
+    icon: '👨‍🏫',
+    color: 'from-accent-violet to-accent-pink',
+  },
+  {
+    title: 'Manage Students',
+    desc: 'Create, update, and delete student accounts.',
+    path: '/admin/students',
+    icon: '🎓',
+    color: 'from-accent-pink to-accent-indigo',
+  },
+  {
+    title: 'View Courses',
+    desc: 'View all courses and enrolled students.',
+    path: '/admin/courses',
+    icon: '📚',
+    color: 'from-accent-indigo to-accent-pink',
+  },
+  {
+    title: 'My Profile',
+    desc: 'View and update your personal information.',
+    path: '/admin/profile',
+    icon: '👤',
+    color: 'from-accent-pink to-accent-violet',
+  },
+]
+
+const pageTitle = (
+  <>
+    Admin <span className="gradient-text-accent">Dashboard</span>
+  </>
+)
+
+const breadcrumbs = [
+  { label: 'Home' }
+]
+
 export default function AdminDashboard() {
   const { user } = useAuth()
-
-  const navItems = [
-    {
-      title: 'Verify Enrollments',
-      desc: 'Verify student receipts and approve enrollment requests.',
-      path: '/admin/enrollments',
-      icon: '💳',
-      color: 'from-accent-violet to-accent-indigo',
-    },
-    {
-      title: 'Manage Admins',
-      desc: 'Create, update, and delete administrative accounts.',
-      path: '/admin/admins',
-      icon: '🔐',
-      color: 'from-accent-indigo to-accent-violet',
-    },
-    {
-      title: 'Manage Teachers',
-      desc: 'Create, update, and delete teacher accounts.',
-      path: '/admin/teachers',
-      icon: '👨‍🏫',
-      color: 'from-accent-violet to-accent-pink',
-    },
-    {
-      title: 'Manage Students',
-      desc: 'Create, update, and delete student accounts.',
-      path: '/admin/students',
-      icon: '🎓',
-      color: 'from-accent-pink to-accent-indigo',
-    },
-    {
-      title: 'View Courses',
-      desc: 'View all courses and enrolled students.',
-      path: '/admin/courses',
-      icon: '📚',
-      color: 'from-accent-indigo to-accent-pink',
-    },
-    {
-      title: 'My Profile',
-      desc: 'View and update your personal information.',
-      path: '/admin/profile',
-      icon: '👤',
-      color: 'from-accent-pink to-accent-violet',
-    },
-  ]
-
-  const pageTitle = (
-    <>
-      Admin <span className="gradient-text-accent">Dashboard</span>
-    </>
-  )
-
-  const breadcrumbs = [
-    { label: 'Home' }
-  ]
 
   return (
     <PageShell
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
             className="group relative flex flex-col justify-between rounded-2xl glass-panel p-7 text-left hover:-translate-y-1 hover:border-border-subtle active:scale-[0.98] transition-all duration-300 shadow-xl cursor-pointer"
           >
             <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-indigo/20 to-transparent" />
-            
+
             <div className="space-y-4">
               <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-2xl shadow-lg shadow-accent-indigo/10`}>
                 {item.icon}

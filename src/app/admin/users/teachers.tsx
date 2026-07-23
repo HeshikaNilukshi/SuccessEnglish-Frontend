@@ -9,6 +9,17 @@ import { SearchInput } from '@/components/ui/SearchInput'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { useDebounce } from '@/hooks/useDebounce'
 
+const pageTitle = (
+  <>
+    Manage <span className="gradient-text-accent">Teachers</span>
+  </>
+)
+
+const breadcrumbs = [
+  { label: 'Home', href: '/admin' },
+  { label: 'Manage Teachers' }
+]
+
 export default function AdminTeachersList() {
   const navigate = useNavigate()
   const { token } = useAuth()
@@ -41,17 +52,6 @@ export default function AdminTeachersList() {
   useEffect(() => {
     loadTeachers(debouncedSearchTerm)
   }, [token, debouncedSearchTerm])
-
-  const pageTitle = (
-    <>
-      Manage <span className="gradient-text-accent">Teachers</span>
-    </>
-  )
-
-  const breadcrumbs = [
-    { label: 'Home', href: '/admin' },
-    { label: 'Manage Teachers' }
-  ]
 
   return (
     <PageShell

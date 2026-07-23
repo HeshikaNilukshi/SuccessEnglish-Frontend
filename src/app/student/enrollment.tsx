@@ -6,6 +6,11 @@ import { requestEnrollment } from '@/actions/enrollments'
 import { formatPrice } from '@/lib/utils'
 import PageShell from '@/components/teacher/PageShell'
 
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Enrollment' }
+]
+
 export default function StudentEnrollment() {
   const { courseId } = useParams<{ courseId: string }>()
   const { user, token } = useAuth()
@@ -130,10 +135,7 @@ export default function StudentEnrollment() {
     )
   }
 
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Enrollment' }
-  ]
+
 
   return (
     <PageShell

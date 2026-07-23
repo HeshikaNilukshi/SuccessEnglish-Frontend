@@ -5,10 +5,15 @@ import { fetchEnrollmentById, verifyEnrollment } from '@/actions/enrollments'
 import { formatDate, formatPrice } from '@/lib/utils'
 import PageShell from '@/components/teacher/PageShell'
 
+const pageTitle = (
+  <>
+    Enrollment <span className="gradient-text-accent">Verification</span>
+  </>
+)
+
 export default function AdminEnrollmentDetail() {
   const { id } = useParams<{ id: string }>()
   const { token } = useAuth()
-
   const [enrollment, setEnrollment] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -91,12 +96,6 @@ export default function AdminEnrollmentDetail() {
   }
 
   const { course, user: student, verified, receiptUrl, createdAt } = enrollment
-
-  const pageTitle = (
-    <>
-      Enrollment <span className="gradient-text-accent">Verification</span>
-    </>
-  )
 
   const breadcrumbs = [
     { label: 'Home', href: '/admin' },
