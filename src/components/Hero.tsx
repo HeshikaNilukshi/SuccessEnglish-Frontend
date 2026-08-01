@@ -46,20 +46,20 @@ export default function Hero() {
 
         <div className="mt-20 w-full max-w-5xl border-t border-border-subtle pt-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-text-primary">99%</div>
-            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Success Rate</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-text-primary">100+</div>
+            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Interactive Sessions</div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-text-primary">10K+</div>
-            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Happy Alumni</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-text-primary">24/7</div>
+            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Study Materials</div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-extrabold text-text-primary">25+</div>
-            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Elite Curriculums</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-text-primary">15+</div>
+            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Expert Tutors</div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-extrabold text-text-primary">100%</div>
-            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Online Materials</div>
+            <div className="text-xs md:text-sm text-text-muted mt-1 font-medium tracking-wide uppercase">Personalized Attention</div>
           </div>
         </div>
       </div>
